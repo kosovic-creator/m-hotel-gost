@@ -15,7 +15,7 @@ export const ucitajRezervacije = async () => {
   } finally {
     await prisma.$disconnect();
   }
-// }
+}
 // export const ucitajRezervacijuId = async (searchParams: { rezervacijaId: number }) => {
 //   try {
 //     const rezervacija = await prisma.rezervacija.findUnique({
@@ -151,7 +151,7 @@ export const ucitajRezervacije = async () => {
 // };
 
 
-export async function obrisiSobu(formData: FormData) {
+export async function obrisiRezervaciju(formData: FormData) {
   const id = Number(formData.get('id'));
   const lang = (formData.get('lang') as string) || 'mn';
   try {
@@ -161,15 +161,15 @@ export async function obrisiSobu(formData: FormData) {
     }
     await prisma.rezervacija.delete({ where: { id } });
   } catch (error: any) {
-    revalidatePath('/sobe');
+    revalidatePath('/rezervacije');
     const params = new URLSearchParams();
     params.append('error', 'error');
-    redirect(`/sobe?${params.toString()}`);
+    redirect(`/rezervacije?${params.toString()}`);
     return;
   }
-  revalidatePath('/sobe');
+  revalidatePath('/rezervacije');
   const params = new URLSearchParams();
   params.append('success', 'deleted');
-  redirect(`/sobe?${params.toString()}`);
+  redirect(`/rezervacije?${params.toString()}`);
 }
 
