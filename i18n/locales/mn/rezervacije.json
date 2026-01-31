@@ -21,5 +21,7 @@
     "number_of_guests_label": "Broj Gostiju",
     "removeReservation": "Ukloni Rezervaciju",
     "editReservation": "Izmeni Rezervaciju",
-    "addReservation": "Dodaj Rezervaciju"
+    "addReservation": "Dodaj Rezervaciju",
+    "cancel": "Otkaži",
+    "status_error": "Status je obavezan."
 }
