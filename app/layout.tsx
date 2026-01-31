@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    template: `%s | M-HOTEL Admin`,
-    default: "M-HOTEL Admin",
+    template: `%s | M-HOTEL `,
+    default: "M-HOTEL ",
   },
   description: "Aplikacija za upravljanje M-HOTEL sistemom",
   metadataBase: new URL("http://localhost:3000"),
