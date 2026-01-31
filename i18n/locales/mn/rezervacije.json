@@ -1,0 +1,12 @@
+{
+    "title": "Rezervacije",
+    "book_now": "Rezerviši Sada",
+    "check_in": "Prijava",
+    "check_out": "Odjava",
+    "number_of_guests": "Broj Gostiju",
+    "select_room": "Izaberi Sobu",
+    "special_requests": "Posebni Zahtevi",
+    "submit": "Pošalji Rezervaciju",
+    "reservation_success": "Vaša rezervacija je uspešno poslata!",
+    "reservation_error": "Došlo je do greške prilikom slanja vaše rezervacije. Molimo pokušajte ponovo."
+}

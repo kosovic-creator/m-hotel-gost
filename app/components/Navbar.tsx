@@ -41,14 +41,14 @@ export default function Navbar() {
       <div className="flex flex-col items-start gap-1">
         <Link href={`/?lang=${i18n.language}`} className="text-xl font-bold">
           <span className="font-bold text-sm sm:text-base truncate ">
-            <span className="text-black">⭕️ </span>
-            <span className="text-black">{'M-HOTEL '.slice(0, 7)}</span>
-            <span className="text-red-600">{'M-HOTEL'.slice(7)}</span>
+            <span className="text-black">📔 </span>
+            <span className="text-black">{'M-HOTEL '.slice(0,2)}</span>
+            <span className="text-yellow-500">{'M-HOTEL'.slice(2)}</span>
           </span>
         </Link>
         <div className="hidden sm:block">
           <Button variant="ghost" size="sm" asChild>
-            <Link href={`/sobe?lang=${i18n.language}`}>{t("rooms")}</Link>
+            <Link href={`/rezervacije?lang=${i18n.language}`}>{t("title")}</Link>
           </Button>
         </div>
       </div>
@@ -73,7 +73,7 @@ export default function Navbar() {
             &times;
           </button>
           <Button variant="ghost" size="sm" asChild onClick={() => setMenuOpen(false)}>
-            <Link href={`/sobe?lang=${i18n.language}`}>{t("rooms")}</Link>
+            <Link href={`/rezervacije?lang=${i18n.language}`}>{t("title")}</Link>
           </Button>
           {/* Auth buttons: show only one, with icon */}
           {session?.user ? (

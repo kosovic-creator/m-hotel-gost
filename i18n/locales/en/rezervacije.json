@@ -1,0 +1,13 @@
+{
+"title": "Reservations",
+"book_now": "Book Now",
+"check_in": "Check-in",
+"check_out": "Check-out",
+"number_of_guests": "Number of Guests",
+"select_room": "Select Room",
+"special_requests": "Special Requests",
+"submit": "Submit Reservation",
+"reservation_success": "Your reservation has been successfully submitted!",
+"reservation_error": "There was an error submitting your reservation. Please try again."
+
+}
