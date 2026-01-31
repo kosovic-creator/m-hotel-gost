@@ -20,5 +20,6 @@
     "checkout_date": "Datum Odjave",
     "number_of_guests_label": "Broj Gostiju",
     "removeReservation": "Ukloni Rezervaciju",
-    "editReservation": "Izmeni Rezervaciju"
+    "editReservation": "Izmeni Rezervaciju",
+    "addReservation": "Dodaj Rezervaciju"
 }

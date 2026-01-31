@@ -61,7 +61,7 @@ export default function RezervacijeTable({ rezervacije }: { rezervacije: Rezerva
       <div className="mb-4">
         <Link href="/sobe/dodaj" passHref>
           <Button asChild variant="default" className="w-full sm:w-auto">
-            <span>{t("add")}</span>
+            <span>{t("addReservation")}</span>
           </Button>
         </Link>
       </div>

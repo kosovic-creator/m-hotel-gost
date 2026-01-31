@@ -20,7 +20,8 @@
 "checkout_date": "Check-out Date",
 "number_of_guests_label": "Number of Guests",
 "removeReservation": "Remove Reservation",
-"editReservation": "Edit Reservation"
+"editReservation": "Edit Reservation",
+"addReservation": "Add Reservation"
 
 
 }
