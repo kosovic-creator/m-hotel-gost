@@ -8,6 +8,19 @@
 "special_requests": "Special Requests",
 "submit": "Submit Reservation",
 "reservation_success": "Your reservation has been successfully submitted!",
-"reservation_error": "There was an error submitting your reservation. Please try again."
+"reservation_error": "There was an error submitting your reservation. Please try again.",
+"soba_error": "Room is required.",
+"gost_error": "Guest name is required.",
+"datum_prijave_error": "Check-in date is required.",
+"datum_odjave_error": "Check-out date is required.",
+"broj_osoba_error": "Number of guests must be at least 1.",
+"room": "Room",
+"guest_name": "Guest Name",
+"checkin_date": "Check-in Date",
+"checkout_date": "Check-out Date",
+"number_of_guests_label": "Number of Guests",
+"removeReservation": "Remove Reservation",
+"editReservation": "Edit Reservation"
+
 
 }

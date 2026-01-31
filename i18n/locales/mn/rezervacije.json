@@ -8,5 +8,17 @@
     "special_requests": "Posebni Zahtevi",
     "submit": "Pošalji Rezervaciju",
     "reservation_success": "Vaša rezervacija je uspešno poslata!",
-    "reservation_error": "Došlo je do greške prilikom slanja vaše rezervacije. Molimo pokušajte ponovo."
+    "reservation_error": "Došlo je do greške prilikom slanja vaše rezervacije. Molimo pokušajte ponovo.",
+    "soba_error": "Soba je obavezna.",
+    "gost_error": "Ime gosta je obavezno.",
+    "datum_prijave_error": "Datum prijave je obavezan.",
+    "datum_odjave_error": "Datum odjave je obavezan.",
+    "broj_osoba_error": "Broj gostiju mora biti najmanje 1.",
+    "room": "Soba",
+    "guest_name": "Ime Gosta",
+    "checkin_date": "Datum Prijave",
+    "checkout_date": "Datum Odjave",
+    "number_of_guests_label": "Broj Gostiju",
+    "removeReservation": "Ukloni Rezervaciju",
+    "editReservation": "Izmeni Rezervaciju"
 }

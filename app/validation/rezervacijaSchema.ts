@@ -1,13 +1,12 @@
 import { z } from "zod";
 export type TranslateFn = (key: string) => string;
 
-export const sobaSchema = (t: TranslateFn) => z.object({
-  broj: z.string().min(1, { message: t("broj_error") }),
-  tip: z.string().min(1, { message: t("tip_error") }),
-  kapacitet: z.coerce.number().int().min(1, { message: t("kapacitet_error") }),
-  cena: z.coerce.number().min(0, { message: t("cena_error") }),
-  opis: z.string().min(1, { message: t("opis_error") }),
-  slike: z.array(z.string()).min(1, { message: t("slike_error") }),
-  tip_en: z.string().min(1, { message: t("tip_en_error") }),
-  opis_en: z.string().min(1, { message: t("opis_en_error") }),
+export const rezervacijaSchema = (t: TranslateFn) => z.object({
+  soba: z.string().min(1, { message: t("soba_error") }),
+  gost: z.string().min(1, { message: t("gost_error") }),
+  datum_prijave: z.string().min(1, { message: t("datum_prijave_error") }),
+  datum_odjave: z.string().min(1, { message: t("datum_odjave_error") }),
+  broj_osoba: z.coerce.number().int().min(1, { message: t("broj_osoba_error") }),
+  
 });
+

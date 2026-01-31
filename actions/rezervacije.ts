@@ -7,7 +7,12 @@ import { redirect } from 'next/navigation';
 
 export const ucitajRezervacije = async () => {
   try {
-    const rezervacija = await prisma.rezervacija.findMany();
+    const rezervacija = await prisma.rezervacija.findMany({
+      include: {
+        gost: true,
+        soba: true,
+      },
+    });
     return rezervacija;
   } catch (error) {
     console.error("Greška pri učitavanju rezervacija:", error);
