@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { ReactNode } from 'react';
 
 type FormWrapperProps = {
@@ -25,10 +26,15 @@ export function FormWrapper({
   className = '',
 }: FormWrapperProps) {
   return (
-    <div className={`flex flex-col items-center justify-center min-h-screen px-2 sm:px-0 bg-gray-50 ${className}`}>
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-4 sm:p-8 mt-8">
-        <h1 className="text-xl sm:text-2xl font-bold mb-4 text-center">{title}</h1>
-        <form action={action} className="mb-8 flex gap-4 flex-col max-w-md mt-4 w-full" noValidate={noValidate}>
+    <div className={`flex flex-col items-center justify-center min-h-screen px-4 py-8 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 ${className}`}>
+      <div className="w-full max-w-2xl bg-white dark:bg-gray-950 rounded-xl shadow-lg border border-gray-200 dark:border-gray-800 p-6 sm:p-8">
+        <div className="mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">{title}</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+            Popunite sva obavezna polja označena sa *
+          </p>
+        </div>
+        <form action={action} className="space-y-6" noValidate={noValidate}>
           {children}
           <FormActions
             submitLabel={submitLabel}
@@ -49,14 +55,19 @@ type FormActionsProps = {
 
 export function FormActions({ submitLabel, cancelLabel, cancelHref }: FormActionsProps) {
   return (
-    <div className="flex flex-col sm:flex-row sm:gap-x-0 gap-y-3 mt-1 pt-3 border-t">
-      <a
-        href={cancelHref}
-        className="flex-1 py-2 text-base text-gray-600 hover:text-blue-900 border rounded text-center flex items-center justify-center"
-      >
-        {cancelLabel}
+    <div className="flex flex-col sm:flex-row gap-3 mt-4 pt-4 border-t">
+      <a href={cancelHref} className="flex-1">
+        <Button type="button" variant="outline" className="w-full">
+          <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          {cancelLabel}
+        </Button>
       </a>
-      <Button type="submit">
+      <Button type="submit" className="flex-1">
+        <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        </svg>
         {submitLabel}
       </Button>
     </div>
@@ -73,16 +84,23 @@ type FormFieldProps = {
 
 export function FormField({ label, error, required, className = '', children }: FormFieldProps) {
   return (
-    <label className={className}>
+    <div className={className}>
       {label && (
-        <span className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
-        </span>
+        </label>
       )}
       {children}
-      {error && <span className="text-red-600 text-xs block mt-1">{error}</span>}
-    </label>
+      {error && (
+        <p className="text-red-600 dark:text-red-400 text-sm mt-1 flex items-center gap-1">
+          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          {error}
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -111,14 +129,15 @@ export function InputField({
 }: InputFieldProps) {
   return (
     <FormField label={label} error={error} required={required}>
-      <input
+      <Input
         name={name}
         type={type}
         placeholder={placeholder}
         defaultValue={defaultValue}
         required={required}
         readOnly={readOnly}
-        className={`border rounded px-2 py-1 w-full ${className} ${readOnly ? 'bg-gray-100' : ''}`}
+        aria-invalid={!!error}
+        className={className}
       />
     </FormField>
   );
@@ -154,9 +173,10 @@ export function SelectField({
     <FormField label={label} error={error} required={required}>
       <select
         name={name}
-        className={`border rounded px-2 py-1 w-full ${className}`}
+        className={`h-9 w-full rounded-md border border-Input bg-transparent px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive disabled:cursor-not-allowed disabled:opacity-50 dark:bg-Input/30 ${className}`}
         required={required}
         defaultValue={defaultValue}
+        aria-invalid={!!error}
       >
         {placeholder && <option value="">{placeholder}</option>}
         {options.map((option) => (
