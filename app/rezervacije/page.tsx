@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title: 'Rezervacije'
 };
 
-export default async function SobeStrana({ searchParams }: { searchParams: Promise<{ lang?: string;[key: string]: string | undefined }> }) {
+export default async function RezervacijeStrana({ searchParams }: { searchParams: Promise<{ lang?: string;[key: string]: string | undefined }> }) {
   const rawRezervacije = await ucitajRezervacije();
   const rezervacije = (rawRezervacije ?? []).map((r: any) => ({
     ...r,
