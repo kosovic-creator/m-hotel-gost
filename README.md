@@ -5,3 +5,5 @@ Učitaj promjene:
 direnv allow
 source ~/.zshrc
 code ~/.zshrc     ovo otvara
+
+x
