@@ -19,7 +19,7 @@ Sve komponente rade ispravno! ✓
 ### 2. Typed SearchParams (`lib/types/searchParams.ts`)
 ✅ `RezervacijaSearchParams`
 ✅ `AuthSearchParams`
-✅ `ValidationSearchParams<T>`
+✅ `validacijaSearchParams<T>`
 
 ### 3. Form Komponente (`components/form/FormComponents.tsx`)
 ✅ `FormWrapper`
@@ -28,7 +28,7 @@ Sve komponente rade ispravno! ✓
 ✅ `HiddenField`
 ✅ `FormActions`
 
-### 4. Validation Middleware (`lib/middleware/validation.ts`)
+### 4. validacija Middleware (`lib/middleware/validacija.ts`)
 ✅ `validateFormData`
 ✅ `validateWithRedirect`
 ✅ `extractFormData`
@@ -52,7 +52,7 @@ lib/
 │   ├── form.ts            ✓ Form tipovi
 │   └── index.ts           ✓ Exports
 ├── middleware/
-│   └── validation.ts       ✓ Validacija
+│   └── validacija.ts       ✓ Validacija
 └── constants/
     └── messages.ts         ✓ Poruke
 
@@ -119,7 +119,7 @@ components/
 **1. Definiši tipove**
 ```typescript
 // lib/types/searchParams.ts
-export type YourEntitySearchParams = ValidationSearchParams<
+export type YourEntitySearchParams = validacijaSearchParams<
   'field1' | 'field2'
 >;
 ```
@@ -136,7 +136,7 @@ export type YourEntitySearchParams = ValidationSearchParams<
 ```typescript
 const result = validateFormData(schema, data);
 if (!result.success) {
-  redirectWithValidationErrors('/path', result.errors, data, lang);
+  redirectWithvalidacijaErrors('/path', result.errors, data, lang);
 }
 // ... logika
 redirectWithSuccess('/path', SuccessMessage.ADDED, lang);
@@ -180,7 +180,7 @@ export default {
 2. ✅ Dodaj unit testove
 3. ✅ Dodaj E2E testove
 4. ✅ Kreiraj Storybook dokumentaciju
-5. ✅ Dodaj više validation rules
+5. ✅ Dodaj više validacija rules
 
 ---
 

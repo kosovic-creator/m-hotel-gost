@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 /**
  * Kreira URL sa greškama i vrijednostima polja za ponovno popunjavanje forme
  */
-export function buildValidationErrorUrl(
+export function buildvalidacijaErrorUrl(
   basePath: string,
   fieldErrors: Record<string, string[] | undefined>,
   formValues: Record<string, unknown>,
@@ -76,13 +76,13 @@ export function buildErrorUrl(
 /**
  * Redirect sa validacionim greškama
  */
-export function redirectWithValidationErrors(
+export function redirectWithvalidacijaErrors(
   basePath: string,
   fieldErrors: Record<string, string[] | undefined>,
   formValues: Record<string, unknown>,
   lang?: string
 ): never {
-  const url = buildValidationErrorUrl(basePath, fieldErrors, formValues, lang);
+  const url = buildvalidacijaErrorUrl(basePath, fieldErrors, formValues, lang);
   redirect(url);
 }
 

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ucitajRezervacije } from '@/actions/rezervacije';
 import { obrisiRezervaciju } from '@/actions/rezervacije';
-import ObavještenjeUspjeha from '../components/ObavještenjeUspjeha';
 import { getLocaleMessages } from '@/i18n/i18n';
 import { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
@@ -14,6 +13,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import Link from 'next/link';
+import { ErrorMessage, SuccessMessage } from '@/components/messages/MessageComponents';
 
 export const metadata: Metadata = {
   title: 'Rezervacije'
@@ -57,10 +57,10 @@ export default async function RezervacijeStrana({ searchParams }: { searchParams
   return (
     <>
       {successParam && (
-        <ObavještenjeUspjeha message={successParam} type="success" />
+        <SuccessMessage message={successParam} />
       )}
       {errorParam && (
-        <ObavještenjeUspjeha message={errorParam} type="error" />
+        <ErrorMessage message={errorParam} />
       )}
 
       <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8 max-w-7xl">
@@ -119,7 +119,7 @@ export default async function RezervacijeStrana({ searchParams }: { searchParams
                     </TableCell>
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-sm font-semibold">
+                        <div className="h-8 w-8 rounded-full bg-linear-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-sm font-semibold">
                           {rezervacija.gost?.ime?.[0]}{rezervacija.gost?.prezime?.[0]}
                         </div>
                         <span>{rezervacija.gost?.ime} {rezervacija.gost?.prezime}</span>
@@ -192,10 +192,10 @@ export default async function RezervacijeStrana({ searchParams }: { searchParams
           ) : (
             rezervacije.map((rezervacija: any) => (
               <div key={rezervacija.id} className="bg-white dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
-                <div className="p-4 border-b border-gray-100 dark:border-gray-800 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20">
+                <div className="p-4 border-b border-gray-100 dark:border-gray-800 bg-linear-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
+                      <div className="h-10 w-10 rounded-full bg-linear-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
                         {rezervacija.gost?.ime?.[0]}{rezervacija.gost?.prezime?.[0]}
                       </div>
                       <div>

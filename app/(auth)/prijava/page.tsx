@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
-import { loginSchema } from "@/app/validation/authSchemas";
+import { loginSchema } from "@/app/validacija/authSchemas";
 import { useTranslation } from "react-i18next";
 
 export default function SignInPage() {

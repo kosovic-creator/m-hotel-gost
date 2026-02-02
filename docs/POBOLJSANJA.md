@@ -14,7 +14,7 @@ lib/
 │   ├── form.ts            # Form tipovi
 │   └── index.ts
 ├── middleware/
-│   └── validation.ts       # Centralizovana validacija
+│   └── validacija.ts       # Centralizovana validacija
 └── constants/
     └── messages.ts         # Standardizovane poruke
 
@@ -34,10 +34,10 @@ components/
 **Lokacija:** `lib/helpers/url.ts`
 
 **Funkcije:**
-- `buildValidationErrorUrl()` - Kreira URL sa greškama i vrijednostima forme
+- `buildvalidacijaErrorUrl()` - Kreira URL sa greškama i vrijednostima forme
 - `buildSuccessUrl()` - Kreira URL sa success porukom
 - `buildErrorUrl()` - Kreira URL sa error porukom
-- `redirectWithValidationErrors()` - Redirect sa validacionim greškama
+- `redirectWithvalidacijaErrors()` - Redirect sa validacionim greškama
 - `redirectWithSuccess()` - Redirect sa success porukom
 - `redirectWithError()` - Redirect sa error porukom
 - `toDateInput()` - Konvertuje datum u YYYY-MM-DD format
@@ -57,7 +57,7 @@ params.append('gost', gost ? String(gost) : '');
 redirect(`/rezervacije/dodaj?${params.toString()}`);
 
 // Poslije
-redirectWithValidationErrors('/rezervacije/dodaj', result.errors, formValues, lang);
+redirectWithvalidacijaErrors('/rezervacije/dodaj', result.errors, formValues, lang);
 ```
 
 ### 2. Typed SearchParams
@@ -65,7 +65,7 @@ redirectWithValidationErrors('/rezervacije/dodaj', result.errors, formValues, la
 **Lokacija:** `lib/types/searchParams.ts`
 
 **Tipovi:**
-- `ValidationSearchParams<T>` - Opšti tip za search params sa validacionim greškama
+- `validacijaSearchParams<T>` - Opšti tip za search params sa validacionim greškama
 - `RezervacijaSearchParams` - Search params za rezervacije
 - `AuthSearchParams` - Search params za auth
 - `AsyncSearchParams<T>` - Async search params wrapper
@@ -144,14 +144,14 @@ export default async function Page({
 
 ### 4. Middleware za Validaciju
 
-**Lokacija:** `lib/middleware/validation.ts`
+**Lokacija:** `lib/middleware/validacija.ts`
 
 **Funkcije:**
 - `validateFormData()` - Validira form data sa Zod schema
 - `validateWithRedirect()` - Middleware funkcija za validaciju i automatski redirect
 - `extractFormData()` - Ekstrauje FormData u object
-- `prepareFormDataForValidation()` - Priprema form data za validaciju
-- `createValidationErrorResponse()` - Kreira error response
+- `prepareFormDataForvalidacija()` - Priprema form data za validaciju
+- `createvalidacijaErrorResponse()` - Kreira error response
 - `validateWithAsyncRules()` - Async validacija sa custom async rules
 
 **Primjer upotrebe:**
@@ -183,7 +183,7 @@ const result = validateFormData(rezervacijaSchema(t), {
 });
 
 if (!result.success) {
-  redirectWithValidationErrors('/rezervacije/dodaj', result.errors, formValues, lang);
+  redirectWithvalidacijaErrors('/rezervacije/dodaj', result.errors, formValues, lang);
 }
 ```
 
@@ -251,7 +251,7 @@ if (params.success === 'added') {
 ### 4. Skalabilnost (Lakše Dodavanje Novih Entiteta)
 - Template pattern za forme
 - Jednostavno dodavanje novih tipova search params
-- Reusable validation middleware
+- Reusable validacija middleware
 - Standardizovan način rukovanja porukama
 
 ## 📊 Prije i Poslije
@@ -307,8 +307,8 @@ export default async function NovaFormaPage({
 ### Kreiranje Nove Action Funkcije
 
 ```typescript
-import { validateFormData } from '@/lib/middleware/validation';
-import { redirectWithValidationErrors, redirectWithSuccess, redirectWithError } from '@/lib/helpers';
+import { validateFormData } from '@/lib/middleware/validacija';
+import { redirectWithvalidacijaErrors, redirectWithSuccess, redirectWithError } from '@/lib/helpers';
 import { SuccessMessage, ErrorMessage } from '@/lib/constants/messages';
 
 export async function yourAction(formData: FormData) {
@@ -318,7 +318,7 @@ export async function yourAction(formData: FormData) {
   const result = validateFormData(yourSchema(t), data);
 
   if (!result.success) {
-    redirectWithValidationErrors('/your/path', result.errors, data, lang);
+    redirectWithvalidacijaErrors('/your/path', result.errors, data, lang);
   }
 
   try {

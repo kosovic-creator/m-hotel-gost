@@ -1,16 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
-import {
-  redirectWithValidationErrors,
-  redirectWithSuccess,
-  redirectWithError,
-  toDateInput
-} from '@/lib/helpers/url';
-import { validateFormData } from '@/lib/middleware/validation';
-import { SuccessMessage, ErrorMessage } from '@/lib/constants/messages';
+import { redirect } from 'next/navigation';
+import { rezervacijaSchema } from '@/app/validacija/rezervacijaSchema';
+import { getLocaleMessages } from '@/i18n/i18n';
+import { createErrorRedirect, createSuccessRedirect, createFailureRedirect, toDateInput } from '@/lib/formHelpers';
+import type { Lang } from '@/types/searchParams';
 
 export const ucitajRezervacije = async () => {
   try {
@@ -30,22 +26,16 @@ export const ucitajRezervacije = async () => {
 }
 
 export async function dodajRezervaciju(formData: FormData) {
-  console.log("action called");
-
   const soba = formData.get('soba');
   const gost = formData.get('gost');
   const prijava = formData.get('prijava');
   const odjava = formData.get('odjava');
   const status = formData.get('status');
-  const lang = (formData.get('lang') as string) || 'mn';
+  const lang: Lang = (formData.get('lang') as string) === 'en' ? 'en' : 'mn';
 
-  // Zod validacija sa lokalizacijom
-  const { rezervacijaSchema } = await import('@/app/validation/rezervacijaSchema');
-  const { getLocaleMessages } = await import('@/i18n/i18n');
   const messages = getLocaleMessages(lang, 'rezervacije');
   const t = (key: string) => messages[key] || key;
-
-  const result = validateFormData(rezervacijaSchema(t), {
+  const result = rezervacijaSchema(t).safeParse({
     soba,
     gost,
     prijava,
@@ -54,6 +44,7 @@ export async function dodajRezervaciju(formData: FormData) {
   });
 
   if (!result.success) {
+    const errors = result.error.flatten().fieldErrors;
     const formValues = {
       soba: soba ? String(soba) : '',
       gost: gost ? String(gost) : '',
@@ -61,12 +52,11 @@ export async function dodajRezervaciju(formData: FormData) {
       odjava: toDateInput(odjava),
       status: status ? String(status) : ''
     };
-
-    redirectWithValidationErrors('/rezervacije/dodaj', result.errors, formValues, lang);
+    redirect(createErrorRedirect('/rezervacije/dodaj', errors, formValues, lang));
   }
 
   try {
-    const rezultat = await prisma.rezervacija.create({
+    await prisma.rezervacija.create({
       data: {
         soba: { connect: { id: Number(soba) } },
         gost: { connect: { id: Number(gost) } },
@@ -75,20 +65,14 @@ export async function dodajRezervaciju(formData: FormData) {
         status: status as string
       },
     });
-    console.log('Rezervacija uspješno dodana:', rezultat);
   } catch (error: any) {
-    console.error('Greška pri dodavanju rezervacije:', error);
     revalidatePath('/rezervacije');
-
-    if (error.code === 'P2002') {
-      redirectWithError('/rezervacije', ErrorMessage.ALREADY_EXISTS, lang);
-    } else {
-      redirectWithError('/rezervacije', ErrorMessage.DATABASE_ERROR, lang);
-    }
+    const message = error.code === 'P2002' ? 'errorExists' : 'errorGeneral';
+    redirect(createFailureRedirect('/rezervacije', message, lang));
   }
 
   revalidatePath('/rezervacije');
-  redirectWithSuccess('/rezervacije', SuccessMessage.ADDED, lang);
+  redirect(createSuccessRedirect('/rezervacije', 'successAdded', lang));
 }
 
 export async function getRezervacijaById(searchParams: { rezervacijaId: number }) {
@@ -120,33 +104,23 @@ export async function izmeniRezervaciju(formData: FormData) {
   const prijava = formData.get('prijava');
   const odjava = formData.get('odjava');
   const status = formData.get('status');
-  const lang = (formData.get('lang') as string) || 'mn';
+  const lang: Lang = (formData.get('lang') as string) === 'en' ? 'en' : 'mn';
 
-  // Zod validacija sa lokalizacijom
-  const { rezervacijaSchema } = await import('@/app/validation/rezervacijaSchema');
-  const { getLocaleMessages } = await import('@/i18n/i18n');
   const messages = getLocaleMessages(lang, 'rezervacije');
   const t = (key: string) => messages[key] || key;
-
-  const result = validateFormData(rezervacijaSchema(t), {
-    soba,
-    gost,
-    prijava,
-    odjava,
-    status
-  });
+  const result = rezervacijaSchema(t).safeParse({ soba, gost, prijava, odjava, status });
 
   if (!result.success) {
+    const errors = result.error.flatten().fieldErrors;
     const formValues = {
-      id: id.toString(),
+      id,
       soba: soba ? String(soba) : '',
       gost: gost ? String(gost) : '',
       prijava: toDateInput(prijava),
       odjava: toDateInput(odjava),
       status: status ? String(status) : ''
     };
-
-    redirectWithValidationErrors('/rezervacije/izmeni', result.errors, formValues, lang);
+    redirect(createErrorRedirect('/rezervacije/izmeni', errors, formValues, lang));
   }
 
   try {
@@ -160,31 +134,31 @@ export async function izmeniRezervaciju(formData: FormData) {
         status: status as string
       },
     });
-  } catch (error: any) {
+  } catch {
     revalidatePath('/rezervacije');
-    redirectWithError('/rezervacije', ErrorMessage.DATABASE_ERROR, lang);
+    redirect(createFailureRedirect('/rezervacije', 'errorGeneral', lang));
   }
 
   revalidatePath('/rezervacije');
-  redirectWithSuccess('/rezervacije', SuccessMessage.UPDATED, lang);
+  redirect(createSuccessRedirect('/rezervacije', 'successUpdated', lang));
 }
 
 export async function obrisiRezervaciju(formData: FormData) {
   const id = Number(formData.get('id'));
-  const lang = (formData.get('lang') as string) || 'mn';
+  const lang: Lang = (formData.get('lang') as string) === 'en' ? 'en' : 'mn';
 
   try {
     const rezervacija = await prisma.rezervacija.findUnique({ where: { id } });
     if (!rezervacija) {
-      throw new Error('notfound');
+      throw new Error('errorNotFound');
     }
     await prisma.rezervacija.delete({ where: { id } });
-  } catch (error: any) {
+  } catch {
     revalidatePath('/rezervacije');
-    redirectWithError('/rezervacije', ErrorMessage.DATABASE_ERROR, lang);
+    redirect(createFailureRedirect('/rezervacije', 'errorGeneral', lang));
   }
 
   revalidatePath('/rezervacije');
-  redirectWithSuccess('/rezervacije', SuccessMessage.DELETED, lang);
+  redirect(createSuccessRedirect('/rezervacije', 'successDeleted', lang));
 }
 

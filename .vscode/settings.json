@@ -1,5 +1,5 @@
 {
-    "workbench.colorTheme": "beautiful",
+    // "workbench.colorTheme": "beautiful",
     "files.autoSave": "afterDelay",
     "files.autoSaveDelay": 2000
 }

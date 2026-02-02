@@ -151,8 +151,8 @@ if (!result.success) {
 ### ✅ POSLIJE (3 linije - 90% manje!)
 
 \`\`\`typescript
-import { validateFormData } from '@/lib/middleware/validation';
-import { redirectWithValidationErrors, toDateInput } from '@/lib/helpers';
+import { validateFormData } from '@/lib/middleware/validacija';
+import { redirectWithvalidacijaErrors, toDateInput } from '@/lib/helpers';
 
 const result = validateFormData(rezervacijaSchema(t), { soba, gost, prijava, odjava, status });
 
@@ -165,7 +165,7 @@ if (!result.success) {
     status: status ? String(status) : ''
   };
 
-  redirectWithValidationErrors('/rezervacije/dodaj', result.errors, formValues, lang);
+  redirectWithvalidacijaErrors('/rezervacije/dodaj', result.errors, formValues, lang);
 }
 \`\`\`
 

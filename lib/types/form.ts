@@ -85,5 +85,5 @@ export type FormState<T> = {
 export type FormConfig<T> = {
   initialValues: T;
   onSubmit: (values: T) => void | Promise<void>;
-  validation?: (values: T) => Record<keyof T, string>;
+  validacija?: (values: T) => Record<keyof T, string>;
 };

@@ -23,7 +23,11 @@
 "editReservation": "Edit Reservation",
 "addReservation": "Add Reservation",
 "cancel": "Cancel",
-"status_error": "Status is required."
+"status_error": "Status is required.",
+"successAdded": "Reservation successfully added.",
+"successUpdated": "Reservation successfully updated.",
+"successDeleted": "Reservation successfully deleted."
+
 
 
 

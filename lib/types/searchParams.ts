@@ -5,7 +5,7 @@
 /**
  * Opšti tip za search params sa validacionim greškama
  */
-export type ValidationSearchParams<T extends string> = {
+export type validacijaSearchParams<T extends string> = {
   lang?: 'en' | 'mn';
   success?: string;
   error?: string;
@@ -18,7 +18,7 @@ export type ValidationSearchParams<T extends string> = {
 /**
  * Search params za rezervacije
  */
-export type RezervacijaSearchParams = ValidationSearchParams<
+export type RezervacijaSearchParams = validacijaSearchParams<
   'soba' | 'gost' | 'prijava' | 'odjava' | 'status'
 > & {
   id?: string;
@@ -27,7 +27,7 @@ export type RezervacijaSearchParams = ValidationSearchParams<
 /**
  * Search params za auth
  */
-export type AuthSearchParams = ValidationSearchParams<
+export type AuthSearchParams = validacijaSearchParams<
   'ime' | 'prezime' | 'email' | 'lozinka'
 >;
 

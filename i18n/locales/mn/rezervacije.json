@@ -23,5 +23,8 @@
     "editReservation": "Izmeni Rezervaciju",
     "addReservation": "Dodaj Rezervaciju",
     "cancel": "Otkaži",
-    "status_error": "Status je obavezan."
+    "status_error": "Status je obavezan.",
+    "successAdded": "Rezervacija je uspešno dodata.",
+    "successUpdated": "Rezervacija je uspešno ažurirana.",
+    "successDeleted": "Rezervacija je uspešno obrisana."
 }

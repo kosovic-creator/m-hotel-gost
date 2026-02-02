@@ -8,7 +8,7 @@ Aplikacija sada koristi DRY (Don't Repeat Yourself) princip sa reusable komponen
 
 ### ✅ Helper Funkcije
 - **Lokacija:** `lib/helpers/url.ts`
-- Sve URL manipulacije (`redirectWithValidationErrors`, `redirectWithSuccess`, `redirectWithError`)
+- Sve URL manipulacije (`redirectWithvalidacijaErrors`, `redirectWithSuccess`, `redirectWithError`)
 - Date formatting (`toDateInput`)
 - Ekstrakcija podataka iz params (`extractErrors`, `extractFormValues`, `getFieldValue`)
 
@@ -16,7 +16,7 @@ Aplikacija sada koristi DRY (Don't Repeat Yourself) princip sa reusable komponen
 - **Lokacija:** `lib/types/searchParams.ts`
 - `RezervacijaSearchParams` - za rezervacije
 - `AuthSearchParams` - za autentifikaciju
-- `ValidationSearchParams<T>` - opšti tip
+- `validacijaSearchParams<T>` - opšti tip
 
 ### ✅ Form Komponente
 - **Lokacija:** `components/form/FormComponents.tsx`
@@ -26,8 +26,8 @@ Aplikacija sada koristi DRY (Don't Repeat Yourself) princip sa reusable komponen
 - `HiddenField` - hidden polja
 - `FormActions` - submit/cancel dugmad
 
-### ✅ Validation Middleware
-- **Lokacija:** `lib/middleware/validation.ts`
+### ✅ validacija Middleware
+- **Lokacija:** `lib/middleware/validacija.ts`
 - `validateFormData` - Zod validacija
 - `validateWithRedirect` - validacija sa auto-redirect
 
@@ -68,8 +68,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<You
 ### Kreiranje Action Funkcije
 
 \`\`\`typescript
-import { validateFormData } from '@/lib/middleware/validation';
-import { redirectWithValidationErrors, redirectWithSuccess } from '@/lib/helpers';
+import { validateFormData } from '@/lib/middleware/validacija';
+import { redirectWithvalidacijaErrors, redirectWithSuccess } from '@/lib/helpers';
 import { SuccessMessage, ErrorMessage } from '@/lib/constants/messages';
 
 export async function yourAction(formData: FormData) {
@@ -77,7 +77,7 @@ export async function yourAction(formData: FormData) {
   const result = validateFormData(yourSchema, data);
 
   if (!result.success) {
-    redirectWithValidationErrors('/path', result.errors, data, lang);
+    redirectWithvalidacijaErrors('/path', result.errors, data, lang);
   }
 
   try {

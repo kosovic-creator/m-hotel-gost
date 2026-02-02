@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { registerSchema } from "@/app/validation/authSchemas";
+import { registerSchema } from "@/app/validacija/authSchemas";
 import { useTranslation } from "react-i18next";
 
 export default function RegisterPage() {

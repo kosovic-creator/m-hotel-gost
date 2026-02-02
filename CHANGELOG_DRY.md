@@ -12,7 +12,7 @@
 - `lib/types/index.ts` - Export tipova
 
 ### Middleware
-- `lib/middleware/validation.ts` - Centralizovana validacija
+- `lib/middleware/validacija.ts` - Centralizovana validacija
 
 ### Constants
 - `lib/constants/messages.ts` - Standardizovane poruke
@@ -33,7 +33,7 @@
 
 ### Actions
 - `actions/rezervacije.ts`
-  - Dodati importi: `redirectWithValidationErrors`, `redirectWithSuccess`, `redirectWithError`, `toDateInput`, `validateFormData`
+  - Dodati importi: `redirectWithvalidacijaErrors`, `redirectWithSuccess`, `redirectWithError`, `toDateInput`, `validateFormData`
   - `dodajRezervaciju()` - Refaktorisano sa helper funkcijama (sa ~30 linija na ~3 linije za redirect)
   - `izmeniRezervaciju()` - Refaktorisano sa helper funkcijama
   - `obrisiRezervaciju()` - Refaktorisano sa helper funkcijama
@@ -90,4 +90,4 @@
 2. Dodati unit testove za helper funkcije
 3. Dodati E2E testove za forme
 4. Kreirati Storybook za form komponente
-5. Dodati više validation rules u middleware
+5. Dodati više validacija rules u middleware
