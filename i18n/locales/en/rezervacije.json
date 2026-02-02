@@ -6,7 +6,7 @@
 "number_of_guests": "Number of Guests",
 "select_room": "Select Room",
 "special_requests": "Special Requests",
-"submit": "Submit Reservation",
+
 "reservation_success": "Your reservation has been successfully submitted!",
 "reservation_error": "There was an error submitting your reservation. Please try again.",
 "soba_error": "Room is required.",
@@ -19,15 +19,15 @@
 "checkin_date": "Check-in Date",
 "checkout_date": "Check-out Date",
 "number_of_guests_label": "Number of Guests",
-"removeReservation": "Remove Reservation",
-"editReservation": "Edit Reservation",
-"addReservation": "Add Reservation",
+"status": "Status",
+"removeReservation": "Remove",
+"editReservation": "Edit",
+
 "cancel": "Cancel",
 "status_error": "Status is required.",
 "successAdded": "Reservation successfully added.",
 "successUpdated": "Reservation successfully updated.",
 "successDeleted": "Reservation successfully deleted."
-
 
 
 

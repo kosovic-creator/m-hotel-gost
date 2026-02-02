@@ -35,7 +35,7 @@ const IzmeniStrana = async ({
 
     return (
       <FormWrapper
-          title={`Izmeni rezervaciju ID: ${rezervacije?.id}`}
+          title={`${messages.editReservation} ID: ${rezervacije?.id}`}
           action={izmeniRezervaciju}
           submitLabel="Sačuvaj izmene"
           cancelLabel="Otkaži"

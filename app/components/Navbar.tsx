@@ -5,7 +5,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 
 export default function Navbar() {
@@ -34,7 +34,14 @@ export default function Navbar() {
       signOut({ callbackUrl: `/prijava?lang=${i18n.language}` });
     }, 100);
   };
-
+  useEffect(() => {
+    const urlLang = searchParams.get("lang");
+    if (urlLang === "en" || urlLang === "mn") {
+      if (i18n.language !== urlLang) {
+        i18n.changeLanguage(urlLang);
+      }
+    }
+  }, [searchParams, i18n]);
   return (
     <nav className="w-full bg-white shadow px-4 py-3 flex justify-between items-center md:px-6 md:py-4 relative z-20">
       {/* Logo & desktop nav */}
@@ -42,7 +49,7 @@ export default function Navbar() {
         <Link href={`/?lang=${i18n.language}`} className="text-xl font-bold">
           <span className="font-bold text-sm sm:text-base truncate ">
             <span className="text-black">📔 </span>
-            <span className="text-black">{'M-HOTEL '.slice(0,2)}</span>
+            <span className="text-black">{'M-HOTEL '.slice(0, 2)}</span>
             <span className="text-yellow-500">{'M-HOTEL'.slice(2)}</span>
           </span>
         </Link>
@@ -82,7 +89,7 @@ export default function Navbar() {
               {t("logout")}
             </Button>
           ) : (
-              <Button variant="ghost" onClick={handleprijava} className="w-full flex items-center gap-2 mt-2">
+            <Button variant="ghost" onClick={handleprijava} className="w-full flex items-center gap-2 mt-2">
               <FaSignInAlt />
               {t("login")}
             </Button>
@@ -143,10 +150,10 @@ export default function Navbar() {
             </Button>
           </>
         ) : (
-            <Button variant="ghost" onClick={handleprijava} className="flex items-center gap-2">
-              <FaSignInAlt />
-              {t("login")}
-            </Button>
+          <Button variant="ghost" onClick={handleprijava} className="flex items-center gap-2">
+            <FaSignInAlt />
+            {t("login")}
+          </Button>
         )}
         {/* Language buttons: both ghost, with icon, highlight selected */}
         <Button

@@ -6,7 +6,7 @@
     "number_of_guests": "Broj Gostiju",
     "select_room": "Izaberi Sobu",
     "special_requests": "Posebni Zahtevi",
-    "submit": "Pošalji Rezervaciju",
+
     "reservation_success": "Vaša rezervacija je uspešno poslata!",
     "reservation_error": "Došlo je do greške prilikom slanja vaše rezervacije. Molimo pokušajte ponovo.",
     "soba_error": "Soba je obavezna.",
@@ -19,12 +19,13 @@
     "checkin_date": "Datum Prijave",
     "checkout_date": "Datum Odjave",
     "number_of_guests_label": "Broj Gostiju",
-    "removeReservation": "Ukloni Rezervaciju",
-    "editReservation": "Izmeni Rezervaciju",
-    "addReservation": "Dodaj Rezervaciju",
+    "status": "Status",
+    "removeReservation": "Ukloni",
+    "editReservation": "Izmeni ",
+
     "cancel": "Otkaži",
     "status_error": "Status je obavezan.",
     "successAdded": "Rezervacija je uspešno dodata.",
-    "successUpdated": "Rezervacija je uspešno ažurirana.",
+    "successUpdated": "Rezervacija je uspešno izmenjena.",
     "successDeleted": "Rezervacija je uspešno obrisana."
 }
