@@ -1,0 +1,4 @@
+insert into "Rezervacija"(id,"sobaId","gostId",prijava,odjava,status,kreirano,azurirano) values(17,1,1,'2026-02-23 00:00:00','2026-02-28 00:00:00','ZAVRSENO','2026-02-02 05:20:36.168','2026-02-02 06:14:41.082');
+insert into "Rezervacija"(id,"sobaId","gostId",prijava,odjava,status,kreirano,azurirano) values(13,1,1,'2026-02-02 00:00:00','2026-02-04 00:00:00','NA_CEKANJU','2026-02-01 19:56:55.139','2026-02-02 14:22:33.642');
+insert into "Rezervacija"(id,"sobaId","gostId",prijava,odjava,status,kreirano,azurirano) values(12,1,1,'2026-02-02 00:00:00','2026-02-04 00:00:00','POTVRDJENO','2026-02-01 19:50:58.583','2026-02-02 14:22:55.206');
+insert into "Rezervacija"(id,"sobaId","gostId",prijava,odjava,status,kreirano,azurirano) values(18,1,1,'2026-02-03 00:00:00','2026-02-05 00:00:00','ZAVRSENO','2026-02-02 15:44:54.791','2026-02-02 15:45:16.663');

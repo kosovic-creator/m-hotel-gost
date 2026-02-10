@@ -1,0 +1,6 @@
+{
+    // "workbench.colorTheme": "Cobalt2",
+     "workbench.colorTheme": "beautiful",
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 2000
+}
