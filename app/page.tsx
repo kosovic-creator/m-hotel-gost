@@ -1,12 +1,10 @@
-''
-import { getLocaleMessages } from "@/i18n/i18n";
+
 import Link from "next/link";
-import Navbar from "./components/Navbar";
+
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
   const params = await searchParams;
   const lang: "en" | "mn" = params?.lang === "mn" ? "mn" : "en";
-  const t = getLocaleMessages(lang, 'common');
 
   return (
     <>
@@ -20,7 +18,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
               <h1 className="text-6xl md:text-7xl font-bold mb-4 drop-shadow-lg">
                 M-HOTEL
               </h1>
-              <div className="h-1 w-24 bg-gradient-to-r from-yellow-400 to-yellow-600 mx-auto rounded-full"></div>
+              <div className="h-1 w-24 bg-linear-to-r from-yellow-400 to-yellow-600 mx-auto rounded-full"></div>
             </div>
 
             {/* Main Heading */}
@@ -41,7 +39,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <Link
                 href="/rezervacije"
-                className="px-8 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-semibold rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="px-8 py-3 bg-linear-to-r from-yellow-500 to-yellow-600 text-gray-900 font-semibold rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 {lang === "mn" ? "Rezerviriši sada" : "Book Now"}
               </Link>

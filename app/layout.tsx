@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/app/components/Navbar";
-import { Providers } from "./providers";
 import { Suspense } from "react";
 
 const geistSans = Geist({
@@ -46,14 +45,13 @@ export default function RootLayout({
           minHeight: '100vh',
         }}
       >
-        <Providers>
+
           <Suspense fallback={null}>
             <div className="absolute top-0 left-0 right-0 z-50">
               <Navbar />
             </div>
           </Suspense>
           {children}
-        </Providers>
       </body>
     </html>
   );

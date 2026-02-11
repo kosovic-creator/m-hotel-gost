@@ -1,54 +1,59 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
-
+import { useState } from "react";
 
 export default function Navbar() {
-  const { data: session } = useSession();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { t, i18n } = useTranslation("navbar");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [mounted] = useState(true);
 
-  useEffect(() => {
-    const urlLang = searchParams.get("lang");
-    if (urlLang === "en" || urlLang === "mn") {
-      if (i18n.language !== urlLang) {
-        i18n.changeLanguage(urlLang);
-      }
-    }
-  }, [searchParams, i18n]);
+  const currentLang =
+    searchParams?.get("lang") === "en" || searchParams?.get("lang") === "mn"
+      ? (searchParams.get("lang") as "en" | "mn")
+      : "mn";
 
   const handleChangeLanguage = (lng: "en" | "mn") => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString());
     params.set("lang", lng);
     router.push(`${pathname}?${params.toString()}`);
-    i18n.changeLanguage(lng);
     setMenuOpen(false);
   };
-
 
   return (
     <nav className="w-full bg-transparent px-4 py-3 flex justify-between items-center md:px-6 md:py-4 relative z-20 print:hidden">
       {/* Logo & desktop nav */}
       <div className="flex flex-row items-center gap-4">
-         <Link href={`/?lang=${i18n.language}`} className="text-xl font-bold">
+        <Link href={`/?lang=${currentLang}`} className="text-xl font-bold">
           <span className="font-bold text-sm sm:text-base truncate ">
             <span className="text-black">⭕️ </span>
-            <span className="text-black">{'M-HOTEL Gost'.slice(0, 7)}</span>
-            <span className="text-red-600">{'M-HOTEL Gost'.slice(7)}</span>
+            <span className="text-black">{"M-HOTEL Gost".slice(0, 7)}</span>
+            <span className="text-red-600">{"M-HOTEL Gost".slice(7)}</span>
           </span>
         </Link>
         <div className="hidden sm:block">
-          <Button variant="ghost" size="sm" asChild className="text-white hover:text-gray-200">
-            <Link href={`/sobe?lang=${i18n.language}`}>{t("rooms")}</Link>
+          <Button
+            variant="ghost"
+            size="sm"
+            asChild
+            className="text-amber-500 hover:text-gray-600"
+          >
+            <Link href={`/sobe?lang=${currentLang}`}>
+              {currentLang === "mn" ? "Sobe" : "Rooms"}
+            </Link>
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            asChild
+            className="text-amber-500 hover:text-gray-600"
+          >
+            <Link href={`/o_hotelu?lang=${currentLang}`}>
+              {currentLang === "mn" ? "O hotelu" : "About"}
+            </Link>
           </Button>
         </div>
       </div>
@@ -64,50 +69,42 @@ export default function Navbar() {
         style={{ willChange: "transform" }}
       >
         <div className="flex flex-col h-full p-4 gap-2">
-          <Button variant="ghost" size="sm" asChild onClick={() => setMenuOpen(false)} className="text-white hover:text-gray-300">
-            <Link href={`/sobe?lang=${i18n.language}`}>{t("rooms")}</Link>
+          <Button
+            variant="ghost"
+            size="sm"
+            asChild
+            onClick={() => setMenuOpen(false)}
+            className="text-amber-500 hover:text-gray-300"
+          >
+            <Link href={`/o_hotelu?lang=${currentLang}`}>
+              {currentLang === "mn" ? "O hotelu" : "About"}
+            </Link>
           </Button>
-          {/* <Button variant="ghost" size="sm" asChild onClick={() => setMenuOpen(false)}>
-            <Link href={`/rezervacije?lang=${i18n.language}`}>{t("reservations")}</Link>
-          </Button>
-          <Button variant="ghost" size="sm" asChild onClick={() => setMenuOpen(false)}>
-            <Link href={`/rezervacije?lang=${i18n.language}`}>{t("reservations")}</Link>
-          </Button>
-          <Button variant="ghost" size="sm" asChild onClick={() => setMenuOpen(false)}>
-            <Link href={`/gosti?lang=${i18n.language}`}>{t("guests")}</Link>
-          </Button> */}
 
-          {/* Auth buttons: show only one, with icon */}
-          {/* {mounted && (session?.user ? (
-            <Button variant="ghost" onClick={handleSignOut} className="w-full flex items-center gap-2 mt-2">
-              <FaSignOutAlt />
-              {t("logout")}
-            </Button>
-          ) : (
-              <Button variant="ghost" onClick={handleprijava} className="w-full flex items-center gap-2 mt-2">
-              <FaSignInAlt />
-              {t("login")}
-            </Button>
-          ))} */}
           {/* Language buttons */}
           <div className="flex flex-col gap-2 border-t border-gray-700 pt-4 mt-4">
             <Button
               variant="ghost"
               onClick={() => handleChangeLanguage("en")}
-              className={`flex items-center gap-1 text-white hover:text-gray-300 ${i18n.language === "en" ? "font-bold" : ""}`}
+              className={`flex items-center gap-1 text-white hover:text-gray-400 ${currentLang === "en" ? "font-bold" : ""}`}
             >
-              <span role="img" aria-label="English">🇬🇧</span> EN
+              <span role="img" aria-label="English">
+                🇬🇧
+              </span>
             </Button>
             <Button
               variant="ghost"
               onClick={() => handleChangeLanguage("mn")}
-              className={`flex items-center gap-1 text-white hover:text-gray-300 ${i18n.language === "mn" ? "font-bold" : ""}`}
+              className={`flex items-center gap-1 text-white hover:text-gray-400 ${currentLang === "mn" ? "font-bold" : ""}`}
             >
-              <span role="img" aria-label="Montenegrin">🇲🇪</span> MN
+              <span role="img" aria-label="Montenegrin">
+                🇲🇪
+              </span>
             </Button>
           </div>
         </div>
       </div>
+
       {/* Overlay for sidebar */}
       {menuOpen && (
         <div
@@ -115,6 +112,7 @@ export default function Navbar() {
           onClick={() => setMenuOpen(false)}
         />
       )}
+
       {/* Hamburger icon for mobile */}
       <button
         className="sm:hidden flex flex-col justify-center items-center w-10 h-10 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
@@ -128,24 +126,27 @@ export default function Navbar() {
 
       {/* Desktop nav */}
       <div className="hidden sm:flex items-center gap-4">
-        {/* Language buttons */}
         <Button
           variant="ghost"
           onClick={() => handleChangeLanguage("en")}
-          className={`flex items-center gap-1 text-white hover:text-gray-300 ${i18n.language === "en" ? "font-bold" : ""}`}
+          className={`flex items-center gap-1 text-white hover:text-gray-400 ${currentLang === "en" ? "font-bold" : ""}`}
         >
-          <span role="img" aria-label="English">🇬🇧</span> EN
+          <span role="img" aria-label="English">
+            🇬🇧
+          </span>{" "}
+          EN
         </Button>
         <Button
           variant="ghost"
           onClick={() => handleChangeLanguage("mn")}
-          className={`flex items-center gap-1 text-white hover:text-gray-300 ${i18n.language === "mn" ? "font-bold" : ""}`}
+          className={`flex items-center gap-1 text-white hover:text-gray-400 ${currentLang === "mn" ? "font-bold" : ""}`}
         >
-          <span role="img" aria-label="Montenegrin">🇲🇪</span> MN
+          <span role="img" aria-label="Montenegrin">
+            🇲🇪
+          </span>{" "}
+          MN
         </Button>
       </div>
-
-
     </nav>
   );
 }
