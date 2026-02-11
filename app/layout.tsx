@@ -40,7 +40,9 @@ export default function RootLayout({
       >
         <Providers>
           <Suspense fallback={null}>
-            <Navbar />
+            <div className="absolute top-0 left-0 right-0 z-50">
+              <Navbar />
+            </div>
           </Suspense>
           {children}
         </Providers>

@@ -12,8 +12,6 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import RezervacijeKalendar from './RezervacijeKalendar';
 import { ConfirmDialog } from '@/components/ui/dialog';
 import { useMemo, useState, useTransition } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
@@ -252,362 +250,149 @@ export default function RezervacijeContent({
         </div>
       </div>
 
-      <Tabs defaultValue="table" className="w-full">
-        <TabsList className="grid w-full max-w-2xl grid-cols-3">
-          <TabsTrigger value="table">
-            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-            </svg>
-            {t.table_view}
-          </TabsTrigger>
-          <TabsTrigger value="calendar">
-            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            {t.calendar_view}
-          </TabsTrigger>
-          <TabsTrigger value="free-rooms">
-            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-            </svg>
-            {t.free_rooms_tab || t.free_rooms}
-          </TabsTrigger>
-        </TabsList>
+      <div className="rounded-lg border bg-card shadow-sm p-4 sm:p-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
+          <div className="flex-1">
+            <label className="mb-1 block text-sm font-medium" htmlFor="free-rooms-start">
+              {t.start_date || t.checkin_date}
+            </label>
+            <Input
+              id="free-rooms-start"
+              type="date"
+              value={periodStart}
+              min={new Date().toISOString().split('T')[0]}
+              onChange={(event) => {
+                setPeriodStart(event.target.value);
+                if (periodEnd && event.target.value > periodEnd) {
+                  setPeriodEnd('');
+                }
+              }}
+            />
+          </div>
+          <div className="flex-1">
+            <label className="mb-1 block text-sm font-medium" htmlFor="free-rooms-end">
+              {t.end_date || t.checkout_date}
+            </label>
+            <Input
+              id="free-rooms-end"
+              type="date"
+              value={periodEnd}
+              min={periodStart || undefined}
+              onChange={(event) => setPeriodEnd(event.target.value)}
+            />
+          </div>
+          <div className="flex-1 sm:max-w-40">
+            <label className="mb-1 block text-sm font-medium" htmlFor="free-rooms-guests">
+              {t.number_of_guests_label || 'Broj osoba'}
+            </label>
+            <Input
+              id="free-rooms-guests"
+              type="number"
+              min="1"
+              max="10"
+              value={numberOfGuestsInput}
+              onChange={(event) => {
+                setNumberOfGuestsInput(event.target.value);
+                const newValue = parseInt(event.target.value) || 1;
+                setNumberOfGuests(Math.max(1, Math.min(10, newValue)));
+              }}
+              onBlur={() => {
+                const newValue = parseInt(numberOfGuestsInput) || 1;
+                const validValue = Math.max(1, Math.min(10, newValue));
+                setNumberOfGuests(validValue);
+                setNumberOfGuestsInput(validValue.toString());
+              }}
+            />
+          </div>
+        </div>
 
-        <TabsContent value="table" className="mt-6">
-          {/* Desktop table */}
-          <div className="hidden sm:block rounded-lg border bg-card shadow-sm">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-16 text-center">ID</TableHead>
-                  <TableHead className="text-center">{t.guest_name}</TableHead>
-                  <TableHead className="text-center">{t.room}</TableHead>
-                  <TableHead className="text-center">{t.checkin_date}</TableHead>
-                  <TableHead className="text-center">{t.checkout_date}</TableHead>
-                  <TableHead className="text-center">{t.number_of_guests_label}</TableHead>
-                  <TableHead className="text-center">{t.popust}</TableHead>
-                  <TableHead className="text-center">{t.ukupna_cena}</TableHead>
-                  <TableHead className="text-center">{t.status}</TableHead>
-                  <TableHead className="w-40 text-center"></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {rezervacije.map((rezervacija: any) => {
-                  const ukupnaCena = rascunajUkupnuCenu(
-                    rezervacija.soba?.cena || 0,
-                    new Date(rezervacija.datum_prijave || rezervacija.prijava),
-                    new Date(rezervacija.datum_odjave || rezervacija.odjava),
-                    rezervacija.popust || 0
-                  );
-
-                  return (
-                    <TableRow key={rezervacija.id}>
-                      <TableCell className="text-center font-mono">
-                        <Link
-                          href={`/rezervacije/${rezervacija.id}?lang=${lang}`}
-                          className="text-blue-600 hover:text-blue-800 hover:underline font-medium"
-                        >
-                          #{rezervacija.id}
-                        </Link>
-                      </TableCell>
-                      <TableCell className="text-center">{rezervacija.gost?.ime} {rezervacija.gost?.prezime}</TableCell>
-                      <TableCell className="text-center">{rezervacija.soba?.broj}</TableCell>
-                      <TableCell className="text-center">{rezervacija.datum_prijave ? new Date(rezervacija.datum_prijave).toISOString().slice(0, 10) : new Date(rezervacija.prijava).toISOString().slice(0, 10)}</TableCell>
-                      <TableCell className="text-center">{rezervacija.datum_odjave ? new Date(rezervacija.datum_odjave).toISOString().slice(0, 10) : new Date(rezervacija.odjava).toISOString().slice(0, 10)}</TableCell>
-                      <TableCell className="text-center">{rezervacija.broj_osoba}</TableCell>
-                      <TableCell className="text-center">{rezervacija.popust || 0}%</TableCell>
-                      <TableCell className="text-center font-semibold">€{formatPrice(ukupnaCena)}</TableCell>
+        {!periodStart || !periodEnd ? (
+          <p className="mt-4 text-sm text-muted-foreground">
+            {t.select_period || t.free_rooms}
+          </p>
+        ) : isStartInPast ? (
+          <p className="mt-4 text-sm text-destructive">
+            {t.select_future_date || 'Molimo odaberite budući datum za pretragu dostupnih soba.'}
+          </p>
+        ) : !isRangeValid ? (
+          <p className="mt-4 text-sm text-destructive">
+            {t.invalid_period || t.checkout_date}
+          </p>
+        ) : freeRooms.length === 0 ? (
+          <p className="mt-4 text-sm text-muted-foreground">{t.no_free_rooms}</p>
+        ) : (
+          <>
+            <div className="mt-6 hidden sm:block rounded-lg border bg-card shadow-sm">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-center">{t.room}</TableHead>
+                    <TableHead className="text-center">{t.room_type || t.type}</TableHead>
+                    <TableHead className="text-center">{t.capacity || t.number_of_guests_label}</TableHead>
+                    <TableHead className="text-center">{t.price || t.cena}</TableHead>
+                    <TableHead className="text-center"></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {freeRooms.map((soba) => (
+                    <TableRow key={soba.id}>
+                      <TableCell className="text-center font-medium">{soba.broj}</TableCell>
                       <TableCell className="text-center">
-                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${getStatusBadge(rezervacija.status)}`}>
-                          {getStatusLabel(rezervacija.status)}
-                        </span>
+                        {lang === 'en' ? soba.tip_en || soba.tip : soba.tip}
                       </TableCell>
-                      <TableCell>
-                        <div className="flex items-center justify-center gap-1">
-                          <Button asChild variant="outline" size="sm" aria-label={"View Details"} title={"View Details"}>
-                            <Link href={`/rezervacije/${rezervacija.id}?lang=${lang}`}>
-                              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                              </svg>
-                            </Link>
+                      <TableCell className="text-center">{soba.kapacitet}</TableCell>
+                      <TableCell className="text-center">{formatPrice(soba.cena)}</TableCell>
+                      <TableCell className="text-center">
+                        {canBookFromRange ? (
+                          <Button asChild size="sm">
+                            <Link href={getBookingUrl(soba.broj)}>{t.book_room || t.book_now}</Link>
                           </Button>
-                          <Button asChild variant="secondary" size="sm" aria-label={t.editReservation} title={t.editReservation}>
-                            <a href={`/rezervacije/izmeni?id=${rezervacija.id}&lang=${lang}`}>
-                              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                              </svg>
-                            </a>
+                        ) : (
+                          <Button size="sm" disabled title={t.invalid_period || t.checkout_date}>
+                            {t.book_room || t.book_now}
                           </Button>
-                          <Button
-                            onClick={() => handleDeleteClick(rezervacija.id)}
-                            variant="destructive"
-                            size="sm"
-                            aria-label={t.removeReservation}
-                            title={t.removeReservation}
-                          >
-                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                          </Button>
-                        </div>
+                        )}
                       </TableCell>
                     </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Mobile cards */}
-          <div className="flex flex-col gap-4 sm:hidden">
-            {rezervacije.map((rezervacija: any) => (
-              <div key={rezervacija.id} className="rounded-lg border bg-card shadow-sm p-4 flex flex-col gap-2">
-                {/* ID - clickable header */}
-                <div className="flex justify-between items-center border-b pb-2 mb-2">
-                  <span className="font-semibold text-sm text-gray-500">Rezervacija</span>
-                  <Link
-                    href={`/rezervacije/${rezervacija.id}?lang=${lang}`}
-                    className="text-blue-600 hover:text-blue-800 hover:underline font-mono font-bold"
-                  >
-                    #{rezervacija.id}
-                  </Link>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-semibold">{t.guest_name}:</span>
-                  <span>{rezervacija.gost?.ime} {rezervacija.gost?.prezime}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-semibold">{t.room}:</span>
-                  <span>{rezervacija.soba?.broj}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-semibold">{t.checkin_date}:</span>
-                  <span>{rezervacija.datum_prijave ? new Date(rezervacija.datum_prijave).toISOString().slice(0, 10) : ''}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-semibold">{t.checkout_date}:</span>
-                  <span>{rezervacija.datum_odjave ? new Date(rezervacija.datum_odjave).toISOString().slice(0, 10) : ''}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-semibold">{t.number_of_guests_label}:</span>
-                  <span>{rezervacija.broj_osoba}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-semibold">{t.status}:</span>
-                  <span>
-                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${getStatusBadge(rezervacija.status)}`}>
-                      {getStatusLabel(rezervacija.status)}
-                    </span>
-                  </span>
-                </div>
-                <div className="p-4 bg-gray-50 dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 flex gap-2">
-                  <Link href={`/rezervacije/${rezervacija.id}?lang=${lang}`} className="flex-1">
-                    <Button variant="outline" className="w-full" size="sm" aria-label="View Details" title="View Details">
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
-                    </Button>
-                  </Link>
-                  <Link href={`/rezervacije/izmeni?id=${rezervacija.id}&lang=${lang}`} className="flex-1">
-                    <Button variant="outline" className="w-full" size="sm" aria-label={t.editReservation} title={t.editReservation}>
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                    </Button>
-                  </Link>
-                  <div className="flex-1">
-                    <Button
-                      onClick={() => handleDeleteClick(rezervacija.id)}
-                      variant="destructive"
-                      className="w-full"
-                      size="sm"
-                      aria-label={t.removeReservation}
-                      title={t.removeReservation}
-                    >
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="calendar" className="mt-6">
-          <RezervacijeKalendar
-            rezervacije={rezervacije}
-            lang={lang}
-            translations={{
-              calendar_view: t.calendar_view,
-              reservations_on: t.reservations_on,
-              guest_name: t.guest_name,
-              room: t.room,
-              checkin_date: t.checkin_date,
-              checkout_date: t.checkout_date,
-              number_of_guests_label: t.number_of_guests_label,
-              status: t.status,
-              no_reservations: t.no_reservations,              confirmed: t.confirmed,
-              pending: t.pending,
-              cancelled: t.cancelled,
-              completed: t.completed,
-              free_rooms: t.free_rooms,
-              no_free_rooms: t.no_free_rooms,
-              cannot_book_past_date: t.cannot_book_past_date,
-            }}
-          />
-        </TabsContent>
-
-        <TabsContent value="free-rooms" className="mt-6">
-          <div className="rounded-lg border bg-card shadow-sm p-4 sm:p-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
-              <div className="flex-1">
-                <label className="mb-1 block text-sm font-medium" htmlFor="free-rooms-start">
-                  {t.start_date || t.checkin_date}
-                </label>
-                <Input
-                  id="free-rooms-start"
-                  type="date"
-                  value={periodStart}
-                  min={new Date().toISOString().split('T')[0]}
-                  onChange={(event) => {
-                    setPeriodStart(event.target.value);
-                    if (periodEnd && event.target.value > periodEnd) {
-                      setPeriodEnd('');
-                    }
-                  }}
-                />
-              </div>
-              <div className="flex-1">
-                <label className="mb-1 block text-sm font-medium" htmlFor="free-rooms-end">
-                  {t.end_date || t.checkout_date}
-                </label>
-                <Input
-                  id="free-rooms-end"
-                  type="date"
-                  value={periodEnd}
-                  min={periodStart || undefined}
-                  onChange={(event) => setPeriodEnd(event.target.value)}
-                />
-              </div>
-              <div className="flex-1 sm:max-w-40">
-                <label className="mb-1 block text-sm font-medium" htmlFor="free-rooms-guests">
-                  {t.number_of_guests_label || 'Broj osoba'}
-                </label>
-                <Input
-                  id="free-rooms-guests"
-                  type="number"
-                  min="1"
-                  max="10"
-                  value={numberOfGuestsInput}
-                  onChange={(event) => {
-                    setNumberOfGuestsInput(event.target.value);
-                    const newValue = parseInt(event.target.value) || 1;
-                    setNumberOfGuests(Math.max(1, Math.min(10, newValue)));
-                  }}
-                  onBlur={() => {
-                    const newValue = parseInt(numberOfGuestsInput) || 1;
-                    const validValue = Math.max(1, Math.min(10, newValue));
-                    setNumberOfGuests(validValue);
-                    setNumberOfGuestsInput(validValue.toString());
-                  }}
-                />
-              </div>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
 
-            {!periodStart || !periodEnd ? (
-              <p className="mt-4 text-sm text-muted-foreground">
-                {t.select_period || t.free_rooms}
-              </p>
-            ) : isStartInPast ? (
-              <p className="mt-4 text-sm text-destructive">
-                {t.select_future_date || 'Molimo odaberite budući datum za pretragu dostupnih soba.'}
-              </p>
-            ) : !isRangeValid ? (
-              <p className="mt-4 text-sm text-destructive">
-                {t.invalid_period || t.checkout_date}
-              </p>
-            ) : freeRooms.length === 0 ? (
-              <p className="mt-4 text-sm text-muted-foreground">{t.no_free_rooms}</p>
-            ) : (
-              <>
-                <div className="mt-6 hidden sm:block rounded-lg border bg-card shadow-sm">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="text-center">{t.room}</TableHead>
-                        <TableHead className="text-center">{t.room_type || t.type}</TableHead>
-                        <TableHead className="text-center">{t.capacity || t.number_of_guests_label}</TableHead>
-                        <TableHead className="text-center">{t.price || t.cena}</TableHead>
-                        <TableHead className="text-center"></TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {freeRooms.map((soba) => (
-                        <TableRow key={soba.id}>
-                          <TableCell className="text-center font-medium">{soba.broj}</TableCell>
-                          <TableCell className="text-center">
-                            {lang === 'en' ? soba.tip_en || soba.tip : soba.tip}
-                          </TableCell>
-                          <TableCell className="text-center">{soba.kapacitet}</TableCell>
-                          <TableCell className="text-center">{formatPrice(soba.cena)}</TableCell>
-                          <TableCell className="text-center">
-                            {canBookFromRange ? (
-                              <Button asChild size="sm">
-                                <Link href={getBookingUrl(soba.broj)}>{t.book_room || t.book_now}</Link>
-                              </Button>
-                            ) : (
-                              <Button size="sm" disabled title={t.invalid_period || t.checkout_date}>
-                                {t.book_room || t.book_now}
-                              </Button>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+            <div className="mt-4 flex flex-col gap-4 sm:hidden">
+              {freeRooms.map((soba) => (
+                <div key={soba.id} className="rounded-lg border bg-card shadow-sm p-4 flex flex-col gap-2">
+                  <div className="flex justify-between">
+                    <span className="font-semibold">{t.room}:</span>
+                    <span>{soba.broj}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-semibold">{t.room_type || t.type}:</span>
+                    <span>{lang === 'en' ? soba.tip_en || soba.tip : soba.tip}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-semibold">{t.capacity || t.number_of_guests_label}:</span>
+                    <span>{soba.kapacitet}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-semibold">{t.price || t.cena}:</span>
+                    <span>{formatPrice(soba.cena)}</span>
+                  </div>
+                  {canBookFromRange ? (
+                    <Button asChild size="sm" className="mt-2">
+                      <Link href={getBookingUrl(soba.broj)}>{t.book_room || t.book_now}</Link>
+                    </Button>
+                  ) : (
+                    <Button size="sm" className="mt-2" disabled title={t.invalid_period || t.checkout_date}>
+                      {t.book_room || t.book_now}
+                    </Button>
+                  )}
                 </div>
-
-                <div className="mt-4 flex flex-col gap-4 sm:hidden">
-                  {freeRooms.map((soba) => (
-                    <div key={soba.id} className="rounded-lg border bg-card shadow-sm p-4 flex flex-col gap-2">
-                      <div className="flex justify-between">
-                        <span className="font-semibold">{t.room}:</span>
-                        <span>{soba.broj}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="font-semibold">{t.room_type || t.type}:</span>
-                        <span>{lang === 'en' ? soba.tip_en || soba.tip : soba.tip}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="font-semibold">{t.capacity || t.number_of_guests_label}:</span>
-                        <span>{soba.kapacitet}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="font-semibold">{t.price || t.cena}:</span>
-                        <span>{formatPrice(soba.cena)}</span>
-                      </div>
-                      {canBookFromRange ? (
-                        <Button asChild size="sm" className="mt-2">
-                          <Link href={getBookingUrl(soba.broj)}>{t.book_room || t.book_now}</Link>
-                        </Button>
-                      ) : (
-                        <Button size="sm" className="mt-2" disabled title={t.invalid_period || t.checkout_date}>
-                          {t.book_room || t.book_now}
-                        </Button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-        </TabsContent>
-      </Tabs>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
 
       <ConfirmDialog
         isOpen={isDeleteModalOpen}
