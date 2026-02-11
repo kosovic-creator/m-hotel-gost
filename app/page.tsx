@@ -30,19 +30,19 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
               <h1 className="text-6xl md:text-7xl font-bold mb-4 drop-shadow-lg">
                 M-HOTEL
               </h1>
-              <div className="h-1 w-24 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto rounded-full"></div>
+              <div className="h-1 w-24 bg-linear-to-r from-blue-400 to-blue-600 mx-auto rounded-full"></div>
             </div>
 
             {/* Main Heading */}
             <div className="mb-8">
               <h2 className="text-3xl md:text-5xl font-light mb-4 drop-shadow-lg leading-tight">
                 {lang === "mn"
-                  ? "Таны үзсэн шилдэг урхилгын туршлага"
+                  ? "Uživajte luksuz i udobnost"
                   : "Experience Luxury & Comfort"}
               </h2>
               <p className="text-lg md:text-xl font-light drop-shadow-lg text-gray-200">
                 {lang === "mn"
-                  ? "Манай гадаадын сорилтай байранд тохиримжтай байж, ухаалаг үйлчилгээ авна"
+                  ? "Otkrijte savršenu kombinaciju udobnosti, elegancije i vrhunske usluge"
                   : "Discover the perfect blend of comfort, elegance, and world-class service"}
               </p>
             </div>
@@ -51,14 +51,14 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <Link
                 href="/rezervacije"
-                className="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+               className="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-900 transition-all duration-300 hover:shadow-lg"
               >
-                {lang === "mn" ? "Одоо захиалах" : "Book Now"}
+                {lang === "mn" ? "Rezerviriši sada" : "Book Now"}
               </Link>
               <button
                 className="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-900 transition-all duration-300 hover:shadow-lg"
               >
-                {lang === "mn" ? "Дэлгэрэнгүй мэдээлэл" : "Learn More"}
+                {lang === "mn" ? "Saznajte više" : "Learn More"}
               </button>
             </div>
 
@@ -67,19 +67,19 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
               <div>
                 <p className="text-3xl md:text-4xl font-bold">25+</p>
                 <p className="text-sm text-gray-200">
-                  {lang === "mn" ? "Өрөөнүүд" : "Rooms"}
+                  {lang === "mn" ? "Sobe" : "Rooms"}
                 </p>
               </div>
               <div>
                 <p className="text-3xl md:text-4xl font-bold">4.8★</p>
                 <p className="text-sm text-gray-200">
-                  {lang === "mn" ? "Үнэлгээ" : "Rating"}
+                  {lang === "mn" ? "Ocjene" : "Rating"}
                 </p>
               </div>
               <div>
                 <p className="text-3xl md:text-4xl font-bold">1000+</p>
                 <p className="text-sm text-gray-200">
-                  {lang === "mn" ? "Сэтгэгдэл" : "Reviews"}
+                  {lang === "mn" ? "Recenzije" : "Reviews"}
                 </p>
               </div>
             </div>
