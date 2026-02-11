@@ -49,7 +49,8 @@ export default function Navbar() {
             variant="ghost"
             size="sm"
             asChild
-            className="text-amber-500 hover:text-gray-600"
+            onClick={() => setMenuOpen(false)}
+            className="text-amber-500 hover:text-gray-300"
           >
             <Link href={`/o_hotelu?lang=${currentLang}`}>
               {currentLang === "mn" ? "O hotelu" : "About"}
@@ -76,11 +77,21 @@ export default function Navbar() {
             onClick={() => setMenuOpen(false)}
             className="text-amber-500 hover:text-gray-300"
           >
+            <Link href={`/sobe?lang=${currentLang}`}>
+              {currentLang === "mn" ? "Sobe" : "Rooms"}
+            </Link>
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            asChild
+            onClick={() => setMenuOpen(false)}
+            className="text-amber-500 hover:text-gray-300"
+          >
             <Link href={`/o_hotelu?lang=${currentLang}`}>
               {currentLang === "mn" ? "O hotelu" : "About"}
             </Link>
           </Button>
-
           {/* Language buttons */}
           <div className="flex flex-col gap-2 border-t border-gray-700 pt-4 mt-4">
             <Button
