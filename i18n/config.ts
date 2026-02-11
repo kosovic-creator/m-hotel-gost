@@ -7,8 +7,6 @@ import enCommon from './locales/en/common.json';
 import enAuth from './locales/en/auth.json';
 import mnCommon from './locales/mn/common.json';
 import mnAuth from './locales/mn/auth.json';
-import enSobe from './locales/en/sobe.json';
-import mnSobe from './locales/mn/sobe.json';
 import mnNavbar from './locales/mn/navbar.json';
 import enNavbar from './locales/en/navbar.json';
 import enRezervacije from './locales/en/rezervacije.json';
@@ -21,9 +19,9 @@ const resources = {
   en: {
     common: enCommon,
     auth: enAuth,
-    sobe: enSobe,
 
-    
+
+
     navbar: enNavbar,
     rezervacije: enRezervacije,
     gosti: enGosti,
@@ -32,7 +30,6 @@ const resources = {
   mn: {
     common: mnCommon,
     auth: mnAuth,
-    sobe: mnSobe,
     navbar: mnNavbar,
     rezervacije: mnRezervacije,
     gosti: mnGosti,
@@ -46,7 +43,7 @@ if (!i18n.isInitialized) {
       fallbackLng: 'en',
       supportedLngs: ['en', 'mn'],
       debug: false,
-      ns: ['common', 'auth', 'sobe', 'navbar', 'rezervacije', 'gosti'],
+      ns: ['common', 'auth', 'navbar', 'rezervacije', 'gosti'],
       defaultNS: 'common',
       resources,
       backend: false, // onemogući backend loader i na klijentu
