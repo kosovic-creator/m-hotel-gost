@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ucitajSobe, obrisiSobu } from '@/actions/sobe';
+import { ucitajSobe } from '@/actions/sobe';
 import { getLocaleMessages } from '@/i18n/i18n';
 import { Metadata } from 'next';
 import { SuccessMessage, ErrorMessage } from '@/components/messages/MessageComponents';
