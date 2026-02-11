@@ -38,12 +38,12 @@ export default function Navbar() {
   return (
     <nav className="w-full bg-transparent px-4 py-3 flex justify-between items-center md:px-6 md:py-4 relative z-20 print:hidden">
       {/* Logo & desktop nav */}
-      <div className="flex flex-col items-start gap-1">
+      <div className="flex flex-row items-center gap-4">
          <Link href={`/?lang=${i18n.language}`} className="text-xl font-bold">
           <span className="font-bold text-sm sm:text-base truncate ">
             <span className="text-black">⭕️ </span>
-            <span className="text-black">{'M-HOTEL Admin'.slice(0, 7)}</span>
-            <span className="text-red-600">{'M-HOTEL Admin'.slice(7)}</span>
+            <span className="text-black">{'M-HOTEL Gost'.slice(0, 7)}</span>
+            <span className="text-red-600">{'M-HOTEL Gost'.slice(7)}</span>
           </span>
         </Link>
         <div className="hidden sm:block">

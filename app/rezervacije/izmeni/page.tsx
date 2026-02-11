@@ -56,7 +56,7 @@ const IzmeniStrana = async ({
             action={izmeniRezervacijuSaGostom}
           submitLabel={messages.saveChanges}
           cancelLabel={messages.cancel}
-          cancelHref="/rezervacije"
+            cancelHref={`/rezervacije?lang=${lang}`}
             description={commonMessages.form_description}
       >
             <HiddenField name="id" value={rezervacije?.id || ''} />

@@ -28,7 +28,7 @@ export function FormWrapper({
   className = '',
 }: FormWrapperProps) {
   return (
-    <div className={`flex flex-col items-center justify-center min-h-screen px-4 py-8 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 ${className}`}>
+    <div className={`flex flex-col items-center justify-center min-h-screen px-4 py-8 pt-24 ${className}`}>
       <div className="w-full max-w-2xl bg-white dark:bg-gray-950 rounded-xl shadow-lg border border-gray-200 dark:border-gray-800 p-6 sm:p-8">
         <div className="mb-6">
           <h1 className="text-xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">{title}</h1>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { dodajRezervacijuSaGostom } from '@/actions/rezervacije';
 import { FormWrapper, InputField, HiddenField, SelectField } from '@/components/form/FormComponents';
 import { getLocaleMessages } from '@/i18n/i18n';
@@ -60,7 +61,7 @@ const DodajRezervacijuPage = async ({
       action={dodajRezervacijuSaGostom}
       submitLabel={messages.book_now}
       cancelLabel={messages.cancel}
-      cancelHref="/rezervacije"
+      cancelHref={`/rezervacije?lang=${lang}`}
       description={commonMessages.form_description}
     >
       <HiddenField name="lang" value={lang} />
