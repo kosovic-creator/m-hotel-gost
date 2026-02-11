@@ -4,21 +4,11 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table';
-import { ConfirmDialog } from '@/components/ui/dialog';
-import { useMemo, useState, useTransition } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import { rascunajBrojDana, rascunajUkupnuCenu, rascunajUkupnePrihode } from '@/lib/helpers/rezervacije';
+import Image from 'next/image';
+import { useMemo, useState } from 'react';
+import { rascunajUkupnuCenu } from '@/lib/helpers/rezervacije';
 
 interface RezervacijeContentProps {
-  rezervacije: any[];
   sobe: Array<{
     id: number;
     broj: string;
@@ -26,54 +16,25 @@ interface RezervacijeContentProps {
     tip_en?: string | null;
     kapacitet: number;
     cena: number;
+    slike?: string;
+    opis?: string;
+    opis_en?: string;
   }>;
   lang: 'en' | 'mn';
   t: any;
-  obrisiRezervaciju: any;
-  initialSearch?: string;
+  rezervacije?: any[];
 }
 
 export default function RezervacijeContent({
-  rezervacije,
   sobe,
   lang,
   t,
-  obrisiRezervaciju,
-  initialSearch = ''
+  rezervacije = []
 }: RezervacijeContentProps) {
   const [periodStart, setPeriodStart] = useState('');
   const [periodEnd, setPeriodEnd] = useState('');
   const [numberOfGuests, setNumberOfGuests] = useState(1);
   const [numberOfGuestsInput, setNumberOfGuestsInput] = useState('1');
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedReservationId, setSelectedReservationId] = useState<number | null>(null);
-  const [searchValue, setSearchValue] = useState(initialSearch);
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const handleSearchChange = (value: string) => {
-    setSearchValue(value);
-
-    startTransition(() => {
-      const params = new URLSearchParams();
-      params.set('lang', lang);
-      if (value.trim()) {
-        params.set('search', value.trim());
-      }
-      router.push(`${pathname}?${params.toString()}`);
-    });
-  };
-
-  const handleClearSearch = () => {
-    setSearchValue('');
-
-    startTransition(() => {
-      const params = new URLSearchParams();
-      params.set('lang', lang);
-      router.push(`${pathname}?${params.toString()}`);
-    });
-  };
 
   const parseDateInput = (value: string) => {
     if (!value) return null;
@@ -94,7 +55,6 @@ export default function RezervacijeContent({
   const parsedStart = parseDateInput(periodStart);
   const parsedEnd = parseDateInput(periodEnd);
 
-  // Proveri da li je start datum u prošlosti
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const isStartInPast = parsedStart && parsedStart < today;
@@ -107,7 +67,6 @@ export default function RezervacijeContent({
     const end = parsedEnd;
 
     return sobe.filter((soba) => {
-      // Proveri da li soba ima dovoljno kapaciteta za broj gostiju
       if (soba.kapacitet < numberOfGuests) return false;
 
       const hasOverlap = rezervacije.some((rezervacija) => {
@@ -127,11 +86,6 @@ export default function RezervacijeContent({
   const formatPrice = (value: number) =>
     new Intl.NumberFormat(lang === 'mn' ? 'me-ME' : 'en-US').format(value);
 
-  // Računaj ukupne prihode
-  const ukupniPrihodi = useMemo(() => {
-    return rascunajUkupnePrihode(rezervacije);
-  }, [rezervacije]);
-
   const getBookingUrl = (roomNumber: string) => {
     const params = new URLSearchParams({
       lang,
@@ -145,265 +99,206 @@ export default function RezervacijeContent({
 
   const canBookFromRange = isRangeValid;
 
-  const handleDeleteClick = (id: number) => {
-    setSelectedReservationId(id);
-    setIsDeleteModalOpen(true);
-  };
-
-  const handleDeleteConfirm = () => {
-    if (selectedReservationId) {
-      // Kreiraj FormData objekat sa potrebnim podacima
-      const formData = new FormData();
-      formData.append('id', selectedReservationId.toString());
-      formData.append('lang', lang);
-
-      // Pozovi server akciju
-      obrisiRezervaciju(formData);
-
-      // Zatvori modal i resetuj state
-      setIsDeleteModalOpen(false);
-      setSelectedReservationId(null);
-    }
-  };
-
-  const handleDeleteCancel = () => {
-    setIsDeleteModalOpen(false);
-    setSelectedReservationId(null);
-  };
-
-  const getStatusLabel = (status: string): string => {
-    const statusLabels: Record<string, string> = {
-      'confirmed': t.confirmed || 'Confirmed',
-      'pending': t.pending || 'Pending',
-      'cancelled': t.cancelled || 'Cancelled',
-      'completed': t.completed || 'Completed',
-      'free_rooms': t.free_rooms || 'Free Rooms',
-      'no_free_rooms': t.no_free_rooms || 'No Free Rooms'
-    };
-    return statusLabels[status] || status;
-  };
-
-  const getStatusBadge = (status: string) => {
-    const statusColors: Record<string, string> = {
-      'confirmed': 'bg-green-400 text-green-800 border-green-600',
-      'pending': 'bg-yellow-100 text-yellow-800 border-yellow-200',
-      'cancelled': 'bg-red-100 text-red-800 border-red-200',
-      'completed': 'bg-blue-100 text-blue-800 border-blue-200',
-      'free_rooms': 'bg-green-100 text-green-800 border-green-200',
-      'no_free_rooms': 'bg-red-100 text-red-800 border-red-200'
-    };
-    return statusColors[status] || 'bg-gray-100 text-gray-800 border-gray-200';
-  };
-
   return (
-    <div className="container mx-auto py-6 px-2 sm:px-4">
-      <div className="mb-4">
-        <h1 className="text-xl sm:text-2xl font-bold text-center">{t.title}</h1>
-        {/* Prikaz ukupnih prihoda */}
-        <div className="mt-2 text-center">
-          <span className="text-sm text-gray-600">{t.ukupni_prihodi}: </span>
-          <span className="text-lg font-semibold text-green-600">
-            €{formatPrice(ukupniPrihodi)}
-          </span>
+    <>
+      {/* Full Screen Hero Banner Background */}
+      <div
+        className="relative min-h-screen w-full"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1280"><defs><linearGradient id="grad1" x1="0%25" y1="0%25" x2="100%25" y2="100%25"><stop offset="0%25" style="stop-color:%23D4A574;stop-opacity:1" /><stop offset="50%25" style="stop-color:%238B7355;stop-opacity:1" /><stop offset="100%25" style="stop-color:%23654321;stop-opacity:1" /></linearGradient></defs><rect fill="url(%23grad1)" width="1920" height="1280"/><path fill="%23F5DEB3" opacity="0.3" d="M0 0 L1920 400 L1920 0 Z"/><circle cx="200" cy="300" r="80" fill="%2327AE60" opacity="0.2"/><circle cx="1800" cy="400" r="120" fill="%2327AE60" opacity="0.15"/><rect x="300" y="800" width="400" height="300" fill="%23D2B48C" opacity="0.4" rx="20"/><circle cx="700" cy="900" r="60" fill="%23FFFFFF" opacity="0.3"/><path fill="%23E8D5C4" opacity="0.25" d="M100 1100 Q480 900 960 1100 T1820 1100 L1920 1280 L0 1280 Z"/></svg>')`,
+          backgroundAttachment: 'fixed',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {/* Title Section */}
+        <div className="text-center text-white py-12 px-4">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg">
+            {lang === "mn" ? "Pronađite svoju idejalnu sobu" : "Find Your Perfect Room"}
+          </h1>
+          <p className="text-lg md:text-xl font-light drop-shadow-lg max-w-2xl mx-auto">
+            {lang === "mn"
+              ? "Pretraži dostupne sobe i rezerviši sada"
+              : "Search available rooms and book now"}
+          </p>
         </div>
-      </div>
 
-      {/* Search Input */}
-      <div className="mb-6">
-        <div className="relative max-w-md mx-auto">
-          <Input
-            type="text"
-            placeholder={t.search_placeholder || 'Pretraži po imenu ili prezimenu gosta...'}
-            value={searchValue}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            className="pl-10 pr-10"
-          />
-          <svg
-            className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-          {searchValue && !isPending && (
-            <button
-              onClick={handleClearSearch}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="Očisti pretragu"
-            >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          )}
-          {isPending && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2">
-              <div className="h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        {/* Search Section */}
+        <div className="container mx-auto px-4 mb-12">
+          <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-lg p-6">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
+              <div className="flex-1">
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+                  {t.start_date || t.checkin_date}
+                </label>
+                <Input
+                  type="date"
+                  value={periodStart}
+                  min={new Date().toISOString().split('T')[0]}
+                  onChange={(event) => {
+                    setPeriodStart(event.target.value);
+                    if (periodEnd && event.target.value > periodEnd) {
+                      setPeriodEnd('');
+                    }
+                  }}
+                  className="w-full"
+                />
+              </div>
+              <div className="flex-1">
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+                  {t.end_date || t.checkout_date}
+                </label>
+                <Input
+                  type="date"
+                  value={periodEnd}
+                  min={periodStart || undefined}
+                  onChange={(event) => setPeriodEnd(event.target.value)}
+                  className="w-full"
+                />
+              </div>
+              <div className="flex-1 sm:max-w-40">
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+                  {t.number_of_guests_label || 'Broj osoba'}
+                </label>
+                <Input
+                  type="number"
+                  min="1"
+                  max="10"
+                  value={numberOfGuestsInput}
+                  onChange={(event) => {
+                    setNumberOfGuestsInput(event.target.value);
+                    const newValue = parseInt(event.target.value) || 1;
+                    setNumberOfGuests(Math.max(1, Math.min(10, newValue)));
+                  }}
+                  onBlur={() => {
+                    const newValue = parseInt(numberOfGuestsInput) || 1;
+                    const validValue = Math.max(1, Math.min(10, newValue));
+                    setNumberOfGuests(validValue);
+                    setNumberOfGuestsInput(validValue.toString());
+                  }}
+                  className="w-full"
+                />
+              </div>
             </div>
-          )}
-        </div>
-      </div>
-
-      <div className="rounded-lg border bg-card shadow-sm p-4 sm:p-6">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
-          <div className="flex-1">
-            <label className="mb-1 block text-sm font-medium" htmlFor="free-rooms-start">
-              {t.start_date || t.checkin_date}
-            </label>
-            <Input
-              id="free-rooms-start"
-              type="date"
-              value={periodStart}
-              min={new Date().toISOString().split('T')[0]}
-              onChange={(event) => {
-                setPeriodStart(event.target.value);
-                if (periodEnd && event.target.value > periodEnd) {
-                  setPeriodEnd('');
-                }
-              }}
-            />
-          </div>
-          <div className="flex-1">
-            <label className="mb-1 block text-sm font-medium" htmlFor="free-rooms-end">
-              {t.end_date || t.checkout_date}
-            </label>
-            <Input
-              id="free-rooms-end"
-              type="date"
-              value={periodEnd}
-              min={periodStart || undefined}
-              onChange={(event) => setPeriodEnd(event.target.value)}
-            />
-          </div>
-          <div className="flex-1 sm:max-w-40">
-            <label className="mb-1 block text-sm font-medium" htmlFor="free-rooms-guests">
-              {t.number_of_guests_label || 'Broj osoba'}
-            </label>
-            <Input
-              id="free-rooms-guests"
-              type="number"
-              min="1"
-              max="10"
-              value={numberOfGuestsInput}
-              onChange={(event) => {
-                setNumberOfGuestsInput(event.target.value);
-                const newValue = parseInt(event.target.value) || 1;
-                setNumberOfGuests(Math.max(1, Math.min(10, newValue)));
-              }}
-              onBlur={() => {
-                const newValue = parseInt(numberOfGuestsInput) || 1;
-                const validValue = Math.max(1, Math.min(10, newValue));
-                setNumberOfGuests(validValue);
-                setNumberOfGuestsInput(validValue.toString());
-              }}
-            />
           </div>
         </div>
 
-        {!periodStart || !periodEnd ? (
-          <p className="mt-4 text-sm text-muted-foreground">
-            {t.select_period || t.free_rooms}
-          </p>
-        ) : isStartInPast ? (
-          <p className="mt-4 text-sm text-destructive">
-            {t.select_future_date || 'Molimo odaberite budući datum za pretragu dostupnih soba.'}
-          </p>
-        ) : !isRangeValid ? (
-          <p className="mt-4 text-sm text-destructive">
-            {t.invalid_period || t.checkout_date}
-          </p>
-        ) : freeRooms.length === 0 ? (
-          <p className="mt-4 text-sm text-muted-foreground">{t.no_free_rooms}</p>
-        ) : (
-          <>
-            <div className="mt-6 hidden sm:block rounded-lg border bg-card shadow-sm">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="text-center">{t.room}</TableHead>
-                    <TableHead className="text-center">{t.room_type || t.type}</TableHead>
-                    <TableHead className="text-center">{t.capacity || t.number_of_guests_label}</TableHead>
-                    <TableHead className="text-center">{t.price || t.cena}</TableHead>
-                    <TableHead className="text-center"></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {freeRooms.map((soba) => (
-                    <TableRow key={soba.id}>
-                      <TableCell className="text-center font-medium">{soba.broj}</TableCell>
-                      <TableCell className="text-center">
-                        {lang === 'en' ? soba.tip_en || soba.tip : soba.tip}
-                      </TableCell>
-                      <TableCell className="text-center">{soba.kapacitet}</TableCell>
-                      <TableCell className="text-center">{formatPrice(soba.cena)}</TableCell>
-                      <TableCell className="text-center">
-                        {canBookFromRange ? (
-                          <Button asChild size="sm">
-                            <Link href={getBookingUrl(soba.broj)}>{t.book_room || t.book_now}</Link>
-                          </Button>
-                        ) : (
-                          <Button size="sm" disabled title={t.invalid_period || t.checkout_date}>
-                            {t.book_room || t.book_now}
-                          </Button>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+        {/* Results Section */}
+        <div className="container mx-auto px-4 pb-16">
+          {!periodStart || !periodEnd ? (
+            <div className="text-center text-white">
+              <p className="text-lg font-light drop-shadow-lg">
+                {t.select_period || t.free_rooms}
+              </p>
             </div>
-
-            <div className="mt-4 flex flex-col gap-4 sm:hidden">
-              {freeRooms.map((soba) => (
-                <div key={soba.id} className="rounded-lg border bg-card shadow-sm p-4 flex flex-col gap-2">
-                  <div className="flex justify-between">
-                    <span className="font-semibold">{t.room}:</span>
-                    <span>{soba.broj}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-semibold">{t.room_type || t.type}:</span>
-                    <span>{lang === 'en' ? soba.tip_en || soba.tip : soba.tip}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-semibold">{t.capacity || t.number_of_guests_label}:</span>
-                    <span>{soba.kapacitet}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-semibold">{t.price || t.cena}:</span>
-                    <span>{formatPrice(soba.cena)}</span>
-                  </div>
-                  {canBookFromRange ? (
-                    <Button asChild size="sm" className="mt-2">
-                      <Link href={getBookingUrl(soba.broj)}>{t.book_room || t.book_now}</Link>
-                    </Button>
-                  ) : (
-                    <Button size="sm" className="mt-2" disabled title={t.invalid_period || t.checkout_date}>
-                      {t.book_room || t.book_now}
-                    </Button>
-                  )}
+          ) : isStartInPast ? (
+              <div className="text-center text-white">
+                <p className="text-lg font-light drop-shadow-lg">
+                  {t.select_future_date || 'Molimo odaberite budući datum za pretragu dostupnih soba.'}
+                </p>
+              </div>
+            ) : !isRangeValid ? (
+                <div className="text-center text-white">
+                  <p className="text-lg font-light drop-shadow-lg">
+                    {t.invalid_period || t.checkout_date}
+                  </p>
                 </div>
-              ))}
-            </div>
-          </>
-        )}
-      </div>
+              ) : freeRooms.length === 0 ? (
+                  <div className="text-center text-white">
+                    <p className="text-lg font-light drop-shadow-lg">{t.no_free_rooms}</p>
+                  </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {freeRooms.map((soba) => {
+                        let slikeArr: string[] = [];
+                        if (Array.isArray(soba.slike)) {
+                          slikeArr = soba.slike;
+                        } else if (typeof soba.slike === 'string' && soba.slike) {
+                          try {
+                            slikeArr = JSON.parse(soba.slike);
+                            if (!Array.isArray(slikeArr)) {
+                              slikeArr = soba.slike.split(',').map((s: string) => s.trim()).filter(Boolean);
+                            }
+                          } catch {
+                            slikeArr = soba.slike.split(',').map((s: string) => s.trim()).filter(Boolean);
+                          }
+                        }
 
-      <ConfirmDialog
-        isOpen={isDeleteModalOpen}
-        onClose={handleDeleteCancel}
-        onConfirm={handleDeleteConfirm}
-        title={t.confirmDelete || 'Potvrdi brisanje'}
-        message={t.confirmDeleteMessage || 'Da li ste sigurni da želite da obrišete ovu rezervaciju? Ova akcija se ne može poništiti.'}
-        confirmText={t.delete || 'Obriši'}
-        cancelText={t.cancel || 'Otkaži'}
-        variant="destructive"
-      />
-    </div>
+                        return (
+                          <div
+                            key={soba.id}
+                            className="rounded-lg bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 backdrop-blur-sm bg-white/95"
+                          >
+                            {/* Image */}
+                            <div className="relative h-48 bg-gray-200 overflow-hidden">
+                              {slikeArr.length > 0 ? (
+                                <Image
+                                  src={slikeArr[0]}
+                                  alt={`${t.room} ${soba.broj}`}
+                                  fill
+                                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                                />
+                              ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-300">
+                          <span className="text-gray-500">{t.no_image || "Nema slike"}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-6">
+                      {/* Room Number and Type */}
+                      <div className="mb-3">
+                        <h2 className="text-2xl font-bold text-gray-900">
+                          {t.room || "Soba"} {soba.broj}
+                        </h2>
+                        <p className="text-yellow-600 font-semibold">
+                          {lang === "en" ? soba.tip_en || soba.tip : soba.tip}
+                        </p>
+                      </div>
+
+                      {/* Description */}
+                      <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                        {lang === "en" ? soba.opis_en || soba.opis : soba.opis}
+                      </p>
+
+                      {/* Features */}
+                      <div className="grid grid-cols-2 gap-3 mb-4 py-3 border-y border-gray-200">
+                        <div className="flex items-center gap-2">
+                          <svg className="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 6a1 1 0 11-2 0 1 1 0 012 0ZM9 12a1 1 0 11-2 0 1 1 0 012 0ZM10.5 1.5H5.75A2.75 2.75 0 003 4.25v11.5A2.75 2.75 0 005.75 18.5h8.5A2.75 2.75 0 0017 15.75V4.25A2.75 2.75 0 0014.25 1.5Z" />
+                          </svg>
+                          <div>
+                            <p className="text-xs text-gray-500">{t.capacity || "Kapacitet"}</p>
+                            <p className="font-semibold text-gray-900">{soba.kapacitet}</p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <svg className="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                          </svg>
+                          <div>
+                            <p className="text-xs text-gray-500">{t.price || "Cijena"}</p>
+                            <p className="font-semibold text-gray-900">€{formatPrice(soba.cena)}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* CTA Button */}
+                      <Button asChild className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold">
+                        <Link href={getBookingUrl(soba.broj)}>
+                          {lang === "mn" ? "Rezerviriši" : "Book Now"}
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+    </>
   );
 }

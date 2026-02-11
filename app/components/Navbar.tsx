@@ -39,6 +39,13 @@ export default function Navbar() {
     <nav className="w-full bg-transparent px-4 py-3 flex justify-between items-center md:px-6 md:py-4 relative z-20 print:hidden">
       {/* Logo & desktop nav */}
       <div className="flex flex-col items-start gap-1">
+         <Link href={`/?lang=${i18n.language}`} className="text-xl font-bold">
+          <span className="font-bold text-sm sm:text-base truncate ">
+            <span className="text-black">⭕️ </span>
+            <span className="text-black">{'M-HOTEL Admin'.slice(0, 7)}</span>
+            <span className="text-red-600">{'M-HOTEL Admin'.slice(7)}</span>
+          </span>
+        </Link>
         <div className="hidden sm:block">
           <Button variant="ghost" size="sm" asChild className="text-white hover:text-gray-200">
             <Link href={`/sobe?lang=${i18n.language}`}>{t("rooms")}</Link>
