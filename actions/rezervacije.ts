@@ -435,12 +435,12 @@ export async function dodajRezervacijuSaGostom(formData: FormData) {
 
   } catch (error: any) {
     revalidatePath('/rezervacije');
-    console.error('Greška pri kreiranju rezervacije sa gostom:', error);
+    console.error('Greška pri dodavanju rezervacije sa gostom:', error);
 
     if (error.code === 'P2002') {
-      return { error: 'emailExists' };
+      redirect(createFailureRedirect('/rezervacije/dodaj', 'emailExists', lang));
     } else {
-      return { error: 'errorGeneral' };
+      redirect(createFailureRedirect('/rezervacije/dodaj', 'errorGeneral', lang));
     }
   }
 }
