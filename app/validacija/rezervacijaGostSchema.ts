@@ -27,7 +27,10 @@ export const rezervacijaGostSchema = (t: TranslateFn) => z.object({
     gost_telefon: z.string().optional(),
 
     // Postojeći gost (opciono)
-    postojeci_gost: z.string().optional(),
+    postojeci_gost: z.preprocess(
+        (val) => val === null || val === undefined ? '' : val,
+        z.string().optional()
+    ),
     koristi_postojeceg_gosta: z.boolean().default(false)
 }).superRefine((data, ctx) => {
     // Ako se koristi postojeći gost, onda je postojeci_gost obavezno

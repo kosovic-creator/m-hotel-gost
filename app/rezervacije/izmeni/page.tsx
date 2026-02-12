@@ -33,19 +33,26 @@ const IzmeniStrana = async ({
     // Popuni formData iz query parametara ili iz baze
     const formData: Record<string, string> = {
         // Rezervacija podaci
-        soba: getFieldValue(params?.soba, rezervacije?.sobaBroj),
+        soba: getFieldValue(params?.soba, rezervacije?.soba?.broj),
         prijava: getFieldValue(params?.prijava, rezervacije?.prijava, true),
         odjava: getFieldValue(params?.odjava, rezervacije?.odjava, true),
         broj_osoba: getFieldValue(params?.broj_osoba, rezervacije?.broj_osoba),
-        popust: getFieldValue(params?.popust, '0'),
+        popust: String(rezervacije?.popust ?? 0), // Eksplicitno postavljanje na 0 ako je null/undefined
         status: getFieldValue(params?.status, rezervacije?.status),
 
         // Gost podaci iz trenutne rezervacije ili query parametara
         gost_id: getFieldValue(params?.gost_id, rezervacije?.gost?.id),
+        gost_titula: getFieldValue(params?.gost_titula, rezervacije?.gost?.titula),
         gost_ime: getFieldValue(params?.gost_ime, rezervacije?.gost?.ime),
         gost_prezime: getFieldValue(params?.gost_prezime, rezervacije?.gost?.prezime),
+        gost_titula_drugog_gosta: getFieldValue(params?.gost_titula_drugog_gosta, rezervacije?.gost?.titula_drugog_gosta),
+        gost_ime_drugog_gosta: getFieldValue(params?.gost_ime_drugog_gosta, rezervacije?.gost?.ime_drugog_gosta),
+        gost_prezime_drugog_gosta: getFieldValue(params?.gost_prezime_drugog_gosta, rezervacije?.gost?.prezime_drugog_gosta),
+        gost_adresa: getFieldValue(params?.gost_adresa, rezervacije?.gost?.adresa),
+        gost_grad: getFieldValue(params?.gost_grad, rezervacije?.gost?.grad),
+        gost_drzava: getFieldValue(params?.gost_drzava, rezervacije?.gost?.drzava),
         gost_email: getFieldValue(params?.gost_email, rezervacije?.gost?.email),
-        gost_telefon: getFieldValue(params?.gost_telefon, rezervacije?.gost?.telefon),
+        gost_telefon: getFieldValue(params?.gost_telefon, rezervacije?.gost?.mob_telefon),
         postojeci_gost: getFieldValue(params?.postojeci_gost, undefined),
         koristi_postojeceg_gosta: getFieldValue(params?.koristi_postojeceg_gosta, 'false'),
     };
@@ -56,7 +63,7 @@ const IzmeniStrana = async ({
             action={izmeniRezervacijuSaGostom}
           submitLabel={messages.saveChanges}
           cancelLabel={messages.cancel}
-            cancelHref={`/rezervacije?lang=${lang}`}
+          cancelHref="/rezervacije"
             description={commonMessages.form_description}
       >
             <HiddenField name="id" value={rezervacije?.id || ''} />

@@ -1,3 +1,9 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client"
   output   = "../app/generated/prisma"
@@ -5,15 +11,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-}
 
-model Gost {
-  id          Int           @id @default(autoincrement())
-  ime         String
-  prezime     String
-  email       String        @unique
-  telefon     String?
-  rizervacija Rezervacija[]
 }
 
 model Korisnik {
@@ -24,30 +22,48 @@ model Korisnik {
   uloga   String  @default("admin")
 }
 
-/// This table contains exclusion constraints and requires additional setup for migrations. Visit https://pris.ly/d/exclusion-constraints for more info.
+model Soba {
+  id          Int           @id @default(autoincrement())
+  broj        String        @unique
+  tip         String
+  opis        String
+  kapacitet   Int
+  cena        Float
+  slike       String[]
+  tip_en      String
+  opis_en     String
+  rezervacije Rezervacija[]
+}
+
+model Gost {
+  id                  Int           @id @default(autoincrement())
+  titula              String        @default("N/A")
+  ime                 String
+  prezime             String
+  titula_drugog_gosta   String?
+  ime_drugog_gosta    String?
+  prezime_drugog_gosta String?
+  adresa              String?
+  grad                String?
+  drzava              String        @default("N/A")
+  email               String        @unique
+  mob_telefon         String?       @map("telefon")
+  rezervacije         Rezervacija[]
+}
+
 model Rezervacija {
   id         Int      @id @default(autoincrement())
+  soba       Soba     @relation(fields: [sobaBroj], references: [broj])
+  sobaBroj   String
+  gost       Gost     @relation(fields: [gostId], references: [id])
   gostId     Int
   prijava    DateTime
   odjava     DateTime
-  status     String
-  kreirano   DateTime @default(now())
-  azurirano  DateTime
   broj_osoba Int      @default(1)
-  sobaBroj   String
-  gost       Gost     @relation(fields: [gostId], references: [id])
-}
-
-model Soba {
-  id        Int      @id @default(autoincrement())
-  broj      String   @unique
-  tip       String
-  opis      String
-  kapacitet Int
-  cena      Float
-  slike     String[]
-  tip_en    String
-  opis_en   String
+  popust     Float    @default(0) // popust u procentima (0-100)
+  status     String // npr. "na čekanju", "potvrđeno", "otkazano"
+  kreirano   DateTime @default(now())
+  azurirano  DateTime @updatedAt
 }
 
 model Student {

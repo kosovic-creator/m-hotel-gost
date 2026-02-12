@@ -21,39 +21,64 @@ const DodajRezervacijuPage = async ({
   const [sobe, gosti] = await Promise.all([
     prisma.soba.findMany(),
     prisma.gost.findMany(),
-  ]);
+    ]);
 
-  const errors = extractErrors(params);
 
-  // Konvertuj errors u format koji GostForm očekuje
-  const errorsArray: Record<string, string[] | undefined> = {};
-  Object.entries(errors).forEach(([key, value]) => {
-    errorsArray[key] = value ? [value] : undefined;
-  });
+    const errors = extractErrors(params);
 
-  const formData: Record<string, string> = {
-    soba: getFieldValue(params?.soba, undefined),
-    prijava: getFieldValue(params?.prijava, undefined, true),
-    odjava: getFieldValue(params?.odjava, undefined, true),
-    broj_osoba: getFieldValue(params?.broj_osoba, '1'),
-    popust: getFieldValue(params?.popust, '0'),
-    status: getFieldValue(params?.status, 'pending'),
+    // Konvertuj errors u format koji GostForm očekuje
+    const errorsArray: Record<string, string[] | undefined> = {};
+    Object.entries(errors).forEach(([key, value]) => {
+      errorsArray[key] = value ? [value] : undefined;
+    });
 
-    // Gost polja
-    gost_titula: getFieldValue(params?.gost_titula, undefined),
-    gost_ime: getFieldValue(params?.gost_ime, undefined),
-    gost_prezime: getFieldValue(params?.gost_prezime, undefined),
-    gost_titula_drugog_gosta: getFieldValue(params?.gost_titula_drugog_gosta, undefined),
-    gost_ime_drugog_gosta: getFieldValue(params?.gost_ime_drugog_gosta, undefined),
-    gost_prezime_drugog_gosta: getFieldValue(params?.gost_prezime_drugog_gosta, undefined),
-    gost_adresa: getFieldValue(params?.gost_adresa, undefined),
-    gost_grad: getFieldValue(params?.gost_grad, undefined),
-    gost_drzava: getFieldValue(params?.gost_drzava, undefined),
-    gost_email: getFieldValue(params?.gost_email, undefined),
-    gost_telefon: getFieldValue(params?.gost_telefon, undefined),
-    postojeci_gost: getFieldValue(params?.postojeci_gost, undefined),
-    koristi_postojeceg_gosta: getFieldValue(params?.koristi_postojeceg_gosta, 'false'),
-  };
+    const formData: Record<string, string> = {
+      soba: getFieldValue(params?.soba, undefined),
+      prijava: getFieldValue(params?.prijava, undefined, true),
+      odjava: getFieldValue(params?.odjava, undefined, true),
+      broj_osoba: getFieldValue(params?.broj_osoba, '1'),
+      popust: getFieldValue(params?.popust, '0'),
+      status: getFieldValue(params?.status, 'pending'),
+
+      // Gost polja
+      gost_titula: getFieldValue(params?.gost_titula, undefined),
+      gost_ime: getFieldValue(params?.gost_ime, undefined),
+      gost_prezime: getFieldValue(params?.gost_prezime, undefined),
+      gost_titula_drugog_gosta: getFieldValue(params?.gost_titula_drugog_gosta, undefined),
+      gost_ime_drugog_gosta: getFieldValue(params?.gost_ime_drugog_gosta, undefined),
+      gost_prezime_drugog_gosta: getFieldValue(params?.gost_prezime_drugog_gosta, undefined),
+      gost_adresa: getFieldValue(params?.gost_adresa, undefined),
+      gost_grad: getFieldValue(params?.gost_grad, undefined),
+      gost_drzava: getFieldValue(params?.gost_drzava, undefined),
+      gost_email: getFieldValue(params?.gost_email, undefined),
+      gost_telefon: getFieldValue(params?.gost_telefon, undefined),
+      postojeci_gost: getFieldValue(params?.postojeci_gost, 'none'),
+      koristi_postojeceg_gosta: getFieldValue(params?.koristi_postojeceg_gosta, 'false'),
+    };
+
+    const rawGosti = gosti.map((g: any) => ({
+      id: g.id,
+      titula: g.titula,
+      ime: g.ime,
+      prezime: g.prezime,
+      titula_drugog_gosta: g.titula_drugog_gosta,
+      ime_drugog_gosta: g.ime_drugog_gosta,
+      prezime_drugog_gosta: g.prezime_drugog_gosta,
+      adresa: g.adresa,
+      grad: g.grad,
+      drzava: g.drzava,
+      email: g.email,
+      mob_telefon: g.mob_telefon,
+      telefon: g.mob_telefon ?? '', // Ensure 'telefon' is always present
+    }));
+
+    const mappedGosti = rawGosti.map((g: any) => ({
+      id: g.id,
+      ime: g.ime,
+      prezime: g.prezime,
+      email: g.email,
+      telefon: g.mob_telefon, // <-- mapiraj mob_telefon na telefon
+    }));
 
   return (
     <FormWrapper
@@ -61,7 +86,7 @@ const DodajRezervacijuPage = async ({
       action={dodajRezervacijuSaGostom}
       submitLabel={messages.book_now}
       cancelLabel={messages.cancel}
-      cancelHref={`/rezervacije?lang=${lang}`}
+      cancelHref="/rezervacije"
       description={commonMessages.form_description}
     >
       <HiddenField name="lang" value={lang} />
@@ -142,7 +167,7 @@ const DodajRezervacijuPage = async ({
 
       {/* SEKCIJA ZA GOSTA */}
       <GostForm
-        gosti={gosti as any}
+        gosti={rawGosti}
         gostMessages={gostMessages}
         errors={errorsArray}
         formData={formData}

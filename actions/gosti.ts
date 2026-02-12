@@ -10,8 +10,15 @@ import { gostSchema } from '@/app/validacija/gostSchema'; // Adjust path to matc
 
 type GostFormValues = {
     id?: number;
+    titula: string;
     ime: string;
     prezime: string;
+    titula_drugog_gosta?: string;
+    ime_drugog_gosta?: string;
+    prezime_drugog_gosta?: string;
+    adresa?: string;
+    grad?: string;
+    drzava: string;
     email: string;
     telefon?: string;
 };
@@ -27,8 +34,15 @@ const parseGostForm = (formData: FormData): GostFormValues => {
 
     return {
         id: Number.isFinite(id) && id! > 0 ? id : undefined,
+        titula: formData.get('titula') ? String(formData.get('titula')) : '',
         ime: formData.get('ime') ? String(formData.get('ime')) : '',
         prezime: formData.get('prezime') ? String(formData.get('prezime')) : '',
+        titula_drugog_gosta: formData.get('titula_drugog_gosta') ? String(formData.get('titula_drugog_gosta')) : undefined,
+        ime_drugog_gosta: formData.get('ime_drugog_gosta') ? String(formData.get('ime_drugog_gosta')) : undefined,
+        prezime_drugog_gosta: formData.get('prezime_drugog_gosta') ? String(formData.get('prezime_drugog_gosta')) : undefined,
+        adresa: formData.get('adresa') ? String(formData.get('adresa')) : undefined,
+        grad: formData.get('grad') ? String(formData.get('grad')) : undefined,
+        drzava: formData.get('drzava') ? String(formData.get('drzava')) : '',
         email: formData.get('email') ? String(formData.get('email')) : '',
         telefon: formData.get('telefon') ? String(formData.get('telefon')) : undefined
     };
@@ -37,8 +51,15 @@ const parseGostForm = (formData: FormData): GostFormValues => {
 type Lang = 'en' | 'mn';
 
 interface GostValues extends Omit<GostFormValues, 'id'> {
+    titula: string;
     ime: string;
     prezime: string;
+    titula_drugog_gosta?: string;
+    ime_drugog_gosta?: string;
+    prezime_drugog_gosta?: string;
+    adresa?: string;
+    grad?: string;
+    drzava: string;
     email: string;
     telefon?: string;
 }
@@ -105,16 +126,30 @@ export const ucitajGostaId = async (searchParams: { gostId: number }) => {
 
 export async function dodajGosta(formData: FormData) {
     const {
+        titula,
         ime,
         prezime,
+        titula_drugog_gosta,
+        ime_drugog_gosta,
+        prezime_drugog_gosta,
+        adresa,
+        grad,
+        drzava,
         email,
         telefon
     } = parseGostForm(formData);
     const lang = getLang(formData);
 
     const result = validateGost(lang, {
+        titula,
         ime,
         prezime,
+        titula_drugog_gosta,
+        ime_drugog_gosta,
+        prezime_drugog_gosta,
+        adresa,
+        grad,
+        drzava,
         email,
         telefon
     });
@@ -122,8 +157,15 @@ export async function dodajGosta(formData: FormData) {
     if (!result.success) {
         const errors = result.error.flatten().fieldErrors;
         const formValues = {
+            titula,
             ime,
             prezime,
+            titula_drugog_gosta: titula_drugog_gosta || '',
+            ime_drugog_gosta: ime_drugog_gosta || '',
+            prezime_drugog_gosta: prezime_drugog_gosta || '',
+            adresa: adresa || '',
+            grad: grad || '',
+            drzava,
             email,
             telefon: telefon || ''
         };
@@ -133,10 +175,17 @@ export async function dodajGosta(formData: FormData) {
     try {
         await prisma.gost.create({
             data: {
+                titula,
                 ime,
                 prezime,
+                titula_drugog_gosta,
+                ime_drugog_gosta,
+                prezime_drugog_gosta,
+                adresa,
+                grad,
+                drzava,
                 email,
-                telefon: telefon || undefined
+                mob_telefon: telefon
             },
         });
     } catch (error: any) {
@@ -150,8 +199,15 @@ export async function dodajGosta(formData: FormData) {
 export async function updateGost(formData: FormData) {
     const {
         id,
+        titula,
         ime,
         prezime,
+        titula_drugog_gosta,
+        ime_drugog_gosta,
+        prezime_drugog_gosta,
+        adresa,
+        grad,
+        drzava,
         email,
         telefon
     } = parseGostForm(formData);
@@ -160,8 +216,15 @@ export async function updateGost(formData: FormData) {
     requireValidId(id, lang, '/gosti/izmeni');
 
     const result = validateGost(lang, {
+        titula,
         ime,
         prezime,
+        titula_drugog_gosta,
+        ime_drugog_gosta,
+        prezime_drugog_gosta,
+        adresa,
+        grad,
+        drzava,
         email,
         telefon
     });
@@ -170,8 +233,15 @@ export async function updateGost(formData: FormData) {
         const errors = result.error.flatten().fieldErrors;
         const formValues = {
             id: id!,
+            titula,
             ime,
             prezime,
+            titula_drugog_gosta: titula_drugog_gosta || '',
+            ime_drugog_gosta: ime_drugog_gosta || '',
+            prezime_drugog_gosta: prezime_drugog_gosta || '',
+            adresa: adresa || '',
+            grad: grad || '',
+            drzava,
             email,
             telefon: telefon || ''
         };
@@ -182,10 +252,17 @@ export async function updateGost(formData: FormData) {
         await prisma.gost.update({
             where: { id: id! },
             data: {
+                titula,
                 ime,
                 prezime,
+                titula_drugog_gosta,
+                ime_drugog_gosta,
+                prezime_drugog_gosta,
+                adresa,
+                grad,
+                drzava,
                 email,
-                telefon: telefon || undefined
+                mob_telefon: telefon
             },
         });
     } catch (error: any) {

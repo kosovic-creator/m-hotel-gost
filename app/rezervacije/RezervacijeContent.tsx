@@ -202,8 +202,8 @@ export default function RezervacijeContent({
                       {freeRooms.map((soba) => {
                         let slikeArr: string[] = [];
                         if (Array.isArray(soba.slike)) {
-                          slikeArr = soba.slike;
-                        } else if (typeof soba.slike === 'string' && soba.slike) {
+                          slikeArr = soba.slike.filter((s) => !!s && s.trim() !== '');
+                        } else if (typeof soba.slike === 'string' && soba.slike.trim()) {
                           try {
                             slikeArr = JSON.parse(soba.slike);
                             if (!Array.isArray(slikeArr)) {
@@ -212,6 +212,7 @@ export default function RezervacijeContent({
                           } catch {
                             slikeArr = soba.slike.split(',').map((s: string) => s.trim()).filter(Boolean);
                           }
+                          slikeArr = slikeArr.filter((s) => !!s && s.trim() !== '');
                         }
 
                         return (

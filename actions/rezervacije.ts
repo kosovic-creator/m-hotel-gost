@@ -26,6 +26,7 @@ export const ucitajRezervacije = async (search?: string) => {
       where: whereClause,
       include: {
         gost: true,
+        soba: true,
       },
       orderBy: {
         prijava: 'desc'
@@ -47,7 +48,9 @@ async function provjeriPreklapanjeRezervacije(
 ) {
   const existingReservations = await prisma.rezervacija.findMany({
     where: {
-      sobaBroj: sobaBroj,
+      soba: {
+        broj: sobaBroj
+      },
       ...(excludeId && { NOT: { id: excludeId } })
     },
   });
@@ -108,44 +111,36 @@ export async function dodajRezervaciju(formData: FormData) {
       redirect(createFailureRedirect('/rezervacije/dodaj', 'overlapError', lang));
     }
 
-    // Fetaj sobu da bi dobio cijenu
-    const sobaData = await prisma.soba.findUnique({
-      where: { broj: sobaBroj }
-    });
-
-    if (!sobaData) {
-      redirect(createFailureRedirect('/rezervacije/dodaj', 'errorGeneral', lang));
-    }
-
     // Kreiraj rezervaciju i učitaj sve potrebne podatke
     const novaRezervacija = await prisma.rezervacija.create({
       data: {
-        sobaBroj: sobaBroj,
+        soba: { connect: { broj: sobaBroj } },
         gost: { connect: { id: gostId } },
         prijava: prijavaDate,
         odjava: odjavyDate,
         broj_osoba: Number(broj_osoba) || 1,
-        status: status as string,
-        azurirano: new Date()
+        popust: Number(popust) || 0,
+        status: status as string
       },
       include: {
         gost: true,
+        soba: true,
       }
     });
 
     // Pošalji email potvrdu nakon što je rezervacija kreirana
     try {
       const totalPrice = rascunajUkupnuCenu(
-        sobaData.cena,
+        novaRezervacija.soba.cena,
         novaRezervacija.prijava,
         novaRezervacija.odjava,
-        Number(popust) || 0
+        novaRezervacija.popust
       );
 
       await sendReservationConfirmationEmail(
         {
           gost: novaRezervacija.gost,
-          rezervacija: { ...novaRezervacija, soba: sobaData, popust: Number(popust) || 0 } as any,
+          rezervacija: novaRezervacija,
           totalPrice
         },
         lang
@@ -174,6 +169,7 @@ export async function getRezervacijaById(searchParams: { rezervacijaId: number }
       where: { id },
       include: {
         gost: true,
+        soba: true,
       },
     });
     return rezervacija;
@@ -229,13 +225,13 @@ export async function izmeniRezervaciju(formData: FormData) {
     await prisma.rezervacija.update({
       where: { id },
       data: {
-        sobaBroj: sobaBroj,
+        soba: { connect: { broj: sobaBroj } },
         gost: { connect: { id: gostId } },
         prijava: prijavaDate,
         odjava: odjavyDate,
         broj_osoba: Number(broj_osoba) || 1,
-        status: status as string,
-        azurirano: new Date()
+        popust: Number(popust) || 0,
+        status: status as string
       },
     });
   } catch {
@@ -377,10 +373,17 @@ export async function dodajRezervacijuSaGostom(formData: FormData) {
         // Kreiraj novog gosta
         const noviGost = await tx.gost.create({
           data: {
+            titula: gost_titula as string,
             ime: gost_ime as string,
             prezime: gost_prezime as string,
+            titula_drugog_gosta: gost_titula_drugog_gosta ? String(gost_titula_drugog_gosta) : undefined,
+            ime_drugog_gosta: gost_ime_drugog_gosta ? String(gost_ime_drugog_gosta) : undefined,
+            prezime_drugog_gosta: gost_prezime_drugog_gosta ? String(gost_prezime_drugog_gosta) : undefined,
+            adresa: gost_adresa ? String(gost_adresa) : undefined,
+            grad: gost_grad ? String(gost_grad) : undefined,
+            drzava: gost_drzava as string,
             email: gost_email as string,
-            telefon: gost_telefon ? String(gost_telefon) : undefined,
+            mob_telefon: gost_telefon ? String(gost_telefon) : undefined,
           },
         });
         gostId = noviGost.id;
@@ -388,31 +391,22 @@ export async function dodajRezervacijuSaGostom(formData: FormData) {
       }
 
       // Kreiraj rezervaciju
-      // Fetaj sobu da bi dobio cijenu
-      const sobaData = await tx.soba.findUnique({
-        where: { broj: sobaBroj }
-      });
-
-      if (!sobaData) {
-        throw new Error('Soba nije pronađena');
-      }
-
       const rezervacija = await tx.rezervacija.create({
         data: {
-          sobaBroj: sobaBroj,
+          soba: { connect: { broj: sobaBroj } },
           gost: { connect: { id: gostId } },
           prijava: prijavaDate,
           odjava: odjawaDate,
           broj_osoba: Number(broj_osoba) || 1,
-          status: status as string,
-          azurirano: new Date()
+          popust: Number(popust) || 0,
+          status: status as string
         },
         include: {
-          gost: true,
+          soba: true,
         }
       });
 
-      return { gost: gostData, rezervacija, gostId, sobaData };
+      return { gost: gostData, rezervacija, gostId };
     });
 
     console.log(`Kreiran gost ${result.gostId} i rezervacija ${result.rezervacija.id}`);
@@ -420,16 +414,16 @@ export async function dodajRezervacijuSaGostom(formData: FormData) {
     // Pošalji email potvrdu nakon što je rezervacija kreirana
     try {
       const totalPrice = rascunajUkupnuCenu(
-        result.sobaData.cena,
+        result.rezervacija.soba.cena,
         result.rezervacija.prijava,
         result.rezervacija.odjava,
-        Number(popust) || 0
+        result.rezervacija.popust
       );
 
       await sendReservationConfirmationEmail(
         {
           gost: result.gost,
-          rezervacija: { ...result.rezervacija, soba: result.sobaData, popust: Number(popust) || 0 } as any,
+          rezervacija: result.rezervacija,
           totalPrice
         },
         lang
@@ -570,20 +564,34 @@ export async function izmeniRezervacijuSaGostom(formData: FormData) {
           await tx.gost.update({
             where: { id: gostId },
             data: {
+              titula: gost_titula as string,
               ime: gost_ime as string,
               prezime: gost_prezime as string,
+              titula_drugog_gosta: gost_titula_drugog_gosta ? String(gost_titula_drugog_gosta) : undefined,
+              ime_drugog_gosta: gost_ime_drugog_gosta ? String(gost_ime_drugog_gosta) : undefined,
+              prezime_drugog_gosta: gost_prezime_drugog_gosta ? String(gost_prezime_drugog_gosta) : undefined,
+              adresa: gost_adresa ? String(gost_adresa) : undefined,
+              grad: gost_grad ? String(gost_grad) : undefined,
+              drzava: gost_drzava as string,
               email: gost_email as string,
-              telefon: gost_telefon ? String(gost_telefon) : undefined,
+              mob_telefon: gost_telefon ? String(gost_telefon) : undefined,
             },
           });
         } else {
           // Kreiraj novog gosta
           const noviGost = await tx.gost.create({
             data: {
+              titula: gost_titula as string,
               ime: gost_ime as string,
               prezime: gost_prezime as string,
+              titula_drugog_gosta: gost_titula_drugog_gosta ? String(gost_titula_drugog_gosta) : undefined,
+              ime_drugog_gosta: gost_ime_drugog_gosta ? String(gost_ime_drugog_gosta) : undefined,
+              prezime_drugog_gosta: gost_prezime_drugog_gosta ? String(gost_prezime_drugog_gosta) : undefined,
+              adresa: gost_adresa ? String(gost_adresa) : undefined,
+              grad: gost_grad ? String(gost_grad) : undefined,
+              drzava: gost_drzava as string,
               email: gost_email as string,
-              telefon: gost_telefon ? String(gost_telefon) : undefined,
+              mob_telefon: gost_telefon ? String(gost_telefon) : undefined,
             },
           });
           gostId = noviGost.id;
@@ -591,28 +599,18 @@ export async function izmeniRezervacijuSaGostom(formData: FormData) {
       }
 
       // Ažuriraj rezervaciju
-      const sobaData = await tx.soba.findUnique({
-        where: { broj: sobaBroj }
-      });
-
-      if (!sobaData) {
-        throw new Error('Soba nije pronađena');
-      }
-
       await tx.rezervacija.update({
         where: { id },
         data: {
-          sobaBroj: sobaBroj,
+          soba: { connect: { broj: sobaBroj } },
           gost: { connect: { id: gostId } },
           prijava: prijavaDate,
           odjava: odjawaDate,
           broj_osoba: Number(broj_osoba) || 1,
-          status: status as string,
-          azurirano: new Date()
+          popust: Number(popust) || 0,
+          status: status as string
         },
       });
-
-      return { sobaData };
     });
 
   } catch (error: any) {
@@ -640,27 +638,15 @@ export async function ucitajUkupnePrihode() {
           { status: 'completed' }
         ]
       },
+      include: {
+        soba: true,
+      },
     });
-
-    // Fetch soba data separately for each reservation
-    const rezervacijeWithSoba = await Promise.all(
-      rezervacije.map(async (rez) => {
-        const soba = await prisma.soba.findUnique({
-          where: { broj: rez.sobaBroj },
-          select: { cena: true }
-        });
-        return {
-          ...rez,
-          popust: 0, // Default popust since it's not stored in database
-          soba: { cena: soba?.cena || 0 }
-        };
-      })
-    );
 
     // Importujemo funkciju za računanje prihoda
     const { rascunajUkupnePrihode } = await import('@/lib/helpers/rezervacije');
 
-    return rascunajUkupnePrihode(rezervacijeWithSoba);
+    return rascunajUkupnePrihode(rezervacije);
   } catch (error) {
     console.error("Greška pri računanju ukupnih prihoda:", error);
     return 0;
@@ -673,31 +659,19 @@ export async function dajDetaljeRezervacije(rezervacijaId: number) {
     const rezervacija = await prisma.rezervacija.findUnique({
       where: { id: rezervacijaId },
       include: {
+        soba: true,
         gost: true
       },
     });
 
     if (!rezervacija) return null;
 
-    // Fetch soba data separately
-    const soba = await prisma.soba.findUnique({
-      where: { broj: rezervacija.sobaBroj }
-    });
-
-    if (!soba) return null; // Return null if soba not found
-
-    const rezervacijaWithSoba = {
-      ...rezervacija,
-      soba,
-      popust: 0 // Default popust since it's not stored in database
-    };
-
     // Importujemo funkciju za računanje podataka
     const { dajPodatkeORezervaciji } = await import('@/lib/helpers/rezervacije');
 
     return {
-      ...rezervacijaWithSoba,
-      podaci: dajPodatkeORezervaciji(rezervacijaWithSoba)
+      ...rezervacija,
+      podaci: dajPodatkeORezervaciji(rezervacija)
     };
   } catch (error) {
     console.error("Greška pri dobijanju detalja rezervacije:", error);
