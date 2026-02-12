@@ -26,6 +26,7 @@ export default function GostForm({ gosti, gostMessages, errors, formData }: Gost
     prezime: formData.gost_prezime || '',
     email: formData.gost_email || '',
     telefon: formData.gost_telefon || '',
+    titula: formData.gost_titula || '',
   });
 
   // Helper funkcija za konvertovanje errors
@@ -44,6 +45,8 @@ export default function GostForm({ gosti, gostMessages, errors, formData }: Gost
           prezime: izabraniGost.prezime,
           email: izabraniGost.email,
           telefon: izabraniGost.telefon || '',
+          // titula nije u Gost, pa fallback na formData ili prazno
+          titula: formData.gost_titula || '',
         };
         setGostPodaci(noviPodaci);
       }
@@ -54,6 +57,7 @@ export default function GostForm({ gosti, gostMessages, errors, formData }: Gost
         prezime: '',
         email: '',
         telefon: '',
+        titula: '',
       };
       setGostPodaci(praznaPodaci);
     }
@@ -84,6 +88,19 @@ export default function GostForm({ gosti, gostMessages, errors, formData }: Gost
         [field]: e.target.value,
       }));
     }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Validacija titule gosta
+    if (!formData.gost_titula || formData.gost_titula === '') {
+      // Postavi grešku (možeš koristiti setErrors ako postoji)
+      alert(gostMessages.titula_required); // ili prikazati poruku na formi
+      return;
+    }
+
+    // ...dalji kod za submit...
   };
 
   return (
@@ -125,6 +142,7 @@ export default function GostForm({ gosti, gostMessages, errors, formData }: Gost
 
       {/* Polja za gosta */}
       <div className="space-y-4">
+        {/* Prvi gost */}
         <h4 className="text-md font-medium text-gray-700 mt-6 mb-4">
           {koristiPostojeceg ? gostMessages.guest_details : gostMessages.add_new_guest}
         </h4>
@@ -169,7 +187,116 @@ export default function GostForm({ gosti, gostMessages, errors, formData }: Gost
           readOnly={koristiPostojeceg}
           onChange={handleInputChange('telefon')}
         />
+
+        <InputField
+          name="gost_adresa"
+          label={gostMessages.address}
+          placeholder={gostMessages.address_placeholder}
+          defaultValue={formData.gost_adresa || ''}
+          error={getError('gost_adresa')}
+        />
+
+        <InputField
+          name="gost_grad"
+          label={gostMessages.city}
+          placeholder={gostMessages.city_placeholder}
+          defaultValue={formData.gost_grad || ''}
+          error={getError('gost_grad')}
+        />
+
+        <SelectField
+          name="gost_drzava"
+          label={gostMessages.country}
+          placeholder={gostMessages.select_country}
+          defaultValue={formData.gost_drzava || ''}
+          error={getError('gost_drzava')}
+          options={[
+            { value: '', label: gostMessages.select_country },
+            { value: 'Montenegro', label: gostMessages.montenegro },
+            { value: 'Serbia', label: gostMessages.serbia },
+            { value: 'Bosnia and Herzegovina', label: gostMessages.bosnia },
+            { value: 'Croatia', label: gostMessages.croatia },
+            { value: 'Other', label: gostMessages.other },
+          ]}
+        />
+
+        <SelectField
+          name="gost_titula"
+          label={gostMessages.titula}
+          placeholder={gostMessages.select_title}
+          value={gostPodaci.titula || ''}
+          error={getError('gost_titula')}
+          required
+          options={[
+            { value: '', label: gostMessages.select_title },
+            { value: 'Mr', label: 'Mr' },
+            { value: 'Mrs', label: 'Mrs' },
+            { value: 'Ms', label: 'Ms' },
+            { value: 'Dr', label: 'Dr' },
+          ]}
+          onChange={handleSelectChange('titula')}
+        />
+
+        {/* Drugi gost (opciono) */}
+        <h4 className="text-md font-medium text-gray-700 mt-8 mb-4">
+          {gostMessages.second_guest_optional}
+        </h4>
+
+        <SelectField
+          name="gost_titula_drugog_gosta"
+          label={gostMessages.second_guest_title}
+          placeholder={gostMessages.select_title}
+          defaultValue={formData.gost_titula_drugog_gosta || ''}
+          error={getError('gost_titula_drugog_gosta')}
+          options={[
+            { value: '', label: gostMessages.select_title },
+            { value: 'Mr', label: 'Mr' },
+            { value: 'Mrs', label: 'Mrs' },
+            { value: 'Ms', label: 'Ms' },
+            { value: 'Dr', label: 'Dr' },
+          ]}
+          onChange={handleSelectChange('titula_drugog_gosta')}
+        />
+
+        <InputField
+          name="gost_ime_drugog_gosta"
+          label={gostMessages.second_guest_first_name}
+          placeholder={gostMessages.first_name_placeholder}
+          defaultValue={formData.gost_ime_drugog_gosta || ''}
+          error={getError('gost_ime_drugog_gosta')}
+          onChange={handleInputChange('ime_drugog_gosta')}
+        />
+
+        <InputField
+          name="gost_prezime_drugog_gosta"
+          label={gostMessages.second_guest_last_name}
+          placeholder={gostMessages.last_name_placeholder}
+          defaultValue={formData.gost_prezime_drugog_gosta || ''}
+          error={getError('gost_prezime_drugog_gosta')}
+          onChange={handleInputChange('prezime_drugog_gosta')}
+        />
       </div>
+
+
+      {/* ...ostala polja... */}
+      <SelectField
+        name="gost_titula"
+        label={gostMessages.titula}
+        placeholder={gostMessages.select_title}
+        value={gostPodaci.titula || ''}
+        error={getError('gost_titula')}
+        required
+        options={[
+          { value: '', label: gostMessages.select_title },
+          { value: 'Mr', label: 'Mr' },
+          { value: 'Mrs', label: 'Mrs' },
+          { value: 'Ms', label: 'Ms' },
+          { value: 'Dr', label: 'Dr' },
+        ]}
+        onChange={handleSelectChange('titula')}
+      />
+      {/* ...ostala polja... */}
+
     </div>
   );
 }

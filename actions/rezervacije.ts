@@ -438,14 +438,11 @@ export async function dodajRezervacijuSaGostom(formData: FormData) {
     console.error('Greška pri kreiranju rezervacije sa gostom:', error);
 
     if (error.code === 'P2002') {
-      redirect(createFailureRedirect('/rezervacije/dodaj', 'emailExists', lang));
+      return { error: 'emailExists' };
     } else {
-      redirect(createFailureRedirect('/rezervacije/dodaj', 'errorGeneral', lang));
+      return { error: 'errorGeneral' };
     }
   }
-
-  revalidatePath('/rezervacije');
-  redirect(createSuccessRedirect('/rezervacije', 'successAddedWithGuest', lang));
 }
 
 // Funkcija za izmjenu rezervacije sa ažuriranjem gosta
@@ -618,43 +615,14 @@ export async function izmeniRezervacijuSaGostom(formData: FormData) {
     console.error('Greška pri ažuriranju rezervacije sa gostom:', error);
 
     if (error.code === 'P2002') {
+      // return { error: 'emailExists' };
       redirect(createFailureRedirect('/rezervacije/izmeni', 'emailExists', lang));
     } else {
+      // return { error: 'errorGeneral' };
       redirect(createFailureRedirect('/rezervacije/izmeni', 'errorGeneral', lang));
     }
   }
-
-  revalidatePath('/rezervacije');
-  redirect(createSuccessRedirect('/rezervacije', 'successUpdatedWithGuest', lang));
-}
-
-// Nova funkcija za računanje ukupnih prihoda
-export async function ucitajUkupnePrihode() {
-  try {
-    const rezervacije = await prisma.rezervacija.findMany({
-      where: {
-        OR: [
-          { status: 'confirmed' },
-          { status: 'completed' }
-        ]
-      },
-      include: {
-        soba: true,
-      },
-    });
-
-    // Importujemo funkciju za računanje prihoda
-    const { rascunajUkupnePrihode } = await import('@/lib/helpers/rezervacije');
-
-    return rascunajUkupnePrihode(rezervacije);
-  } catch (error) {
-    console.error("Greška pri računanju ukupnih prihoda:", error);
-    return 0;
-  }
-}
-
-// Nova funkcija za dobijanje detaljnih podataka o rezervaciji
-export async function dajDetaljeRezervacije(rezervacijaId: number) {
+}export async function dajDetaljeRezervacije(rezervacijaId: number) {
   try {
     const rezervacija = await prisma.rezervacija.findUnique({
       where: { id: rezervacijaId },
