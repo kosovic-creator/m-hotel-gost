@@ -98,6 +98,7 @@ export async function dodajRezervaciju(formData: FormData) {
     redirect(createErrorRedirect('/rezervacije/dodaj', errors, formValues, lang));
   }
 
+  let rezervacijaId: number | null = null;
   try {
     const sobaBroj = soba as string;
     const gostId = Number(gost);
@@ -127,6 +128,7 @@ export async function dodajRezervaciju(formData: FormData) {
         soba: true,
       }
     });
+    rezervacijaId = novaRezervacija.id;
 
     // Pošalji email potvrdu nakon što je rezervacija kreirana
     try {
@@ -152,11 +154,11 @@ export async function dodajRezervaciju(formData: FormData) {
   } catch (error: any) {
     revalidatePath('/rezervacije');
     const message = error.code === 'P2002' ? 'errorExists' : 'errorGeneral';
-    redirect(createFailureRedirect('/rezervacije', message, lang));
+    return { success: false, message };
   }
 
   revalidatePath('/rezervacije');
-  redirect(createSuccessRedirect('/rezervacije', 'successAdded', lang));
+  return { success: true, redirectTo: `/rezervacije/${rezervacijaId}` };
 }
 
 export async function getRezervacijaById(searchParams: { rezervacijaId: number }) {
@@ -433,15 +435,34 @@ export async function dodajRezervacijuSaGostom(formData: FormData) {
       // Nastavi sa redirekcijom čak i ako email slanje ne uspije
     }
 
+    // Redirect directly to reservation details page
+    revalidatePath('/rezervacije');
+    return { success: true, redirectTo: `/rezervacije/${result.rezervacija.id}` };
   } catch (error: any) {
+    // Ignoriraj NEXT_REDIRECT grešku, dozvoli redirect
+    if (error?.digest && error.digest.startsWith('NEXT_REDIRECT')) {
+      return;
+    }
     revalidatePath('/rezervacije');
     console.error('Greška pri dodavanju rezervacije sa gostom:', error);
 
+    // Prisma unique error
     if (error.code === 'P2002') {
       redirect(createFailureRedirect('/rezervacije/dodaj', 'emailExists', lang));
-    } else {
-      redirect(createFailureRedirect('/rezervacije/dodaj', 'errorGeneral', lang));
+      return;
     }
+    // Preklapanje rezervacije
+    if (error.message && error.message.includes('overlapError')) {
+      redirect(createFailureRedirect('/rezervacije/dodaj', 'overlapError', lang));
+      return;
+    }
+    // Odabrani gost ne postoji
+    if (error.message && error.message.includes('Odabrani gost ne postoji')) {
+      redirect(createFailureRedirect('/rezervacije/dodaj', 'guestNotFound', lang));
+      return;
+    }
+    // Ostale greške
+    redirect(createFailureRedirect('/rezervacije/dodaj', 'errorGeneral', lang));
   }
 }
 
