@@ -127,3 +127,6 @@ kill <PID>     # ubiaj taj proces
 # Development serveri:
 npm run dev        # HTTP na portu 3000 (preporučeno)
 npm run dev:https  # HTTPS na portu 3443 (ako HTTP ne radi za Stripe)
+
+
+aa

@@ -29,8 +29,8 @@ export default function Navbar() {
       <div className="flex flex-row items-center gap-4">
         <Link href={`/?lang=${currentLang}`} className="text-xl font-bold">
           <span className="font-bold text-sm sm:text-base truncate ">
-            <span className="text-black">⭕️ </span>
-            <span className="text-black">{"M-HOTEL Gost".slice(0, 7)}</span>
+            <span className="text-gray-800">⭕️ </span>
+            <span className="text-gray-800">{"M-HOTEL Gost".slice(0, 7)}</span>
             <span className="text-red-600">{"M-HOTEL Gost".slice(7)}</span>
           </span>
         </Link>
