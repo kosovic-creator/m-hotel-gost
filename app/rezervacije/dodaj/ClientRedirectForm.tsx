@@ -10,7 +10,14 @@ export default function ClientRedirectForm({ action, children }: { action: (form
     const formData = new FormData(e.currentTarget);
     const result = await action(formData);
     if (result?.redirectTo) {
-      setRedirectTo(result.redirectTo);
+      // Dodaj lang parametar ako postoji u formi
+      const lang = formData.get('lang');
+      let redirectUrl = result.redirectTo;
+      if (lang && typeof redirectUrl === 'string' && !redirectUrl.includes('lang=')) {
+        const hasQuery = redirectUrl.includes('?');
+        redirectUrl += (hasQuery ? '&' : '?') + `lang=${lang}`;
+      }
+      setRedirectTo(redirectUrl);
     }
   }
 

@@ -1,13 +1,11 @@
 import { dodajRezervacijuSaGostom } from '@/actions/rezervacije';
 import Link from 'next/link';
-import { InputField, HiddenField, SelectField } from '@/components/form/FormComponents';
+import { InputField, HiddenField, SelectField, FormActions } from '@/components/form/FormComponents';
 import ClientRedirectForm from './ClientRedirectForm';
 import { getLocaleMessages } from '@/i18n/i18n';
 import prisma from '@/lib/prisma';
 import { RezervacijaSearchParams } from '@/lib/types/searchParams';
 import { extractErrors, getFieldValue } from '@/lib/helpers/url';
-import { Button } from '@/components/ui/button';
-
 
 
 const DodajRezervacijuPage = async ({
@@ -212,16 +210,12 @@ const DodajRezervacijuPage = async ({
                 error={errors.gost_prezime_drugog_gosta}
               />
             </div>
-            <div className="flex items-center justify-end gap-4 mt-8">
-              <Button type="submit" >
-                {messages.book_now}
-              </Button>
-              <Button variant="outline" asChild>
-                <Link href="/rezervacije">
-                  {messages.cancel}
-                </Link>
-              </Button>
-            </div>
+            {/* Dugmad za akcije forme */}
+            <FormActions
+              submitLabel={messages.book_now}
+              cancelLabel={messages.cancel}
+              cancelHref={`/rezervacije?lang=${lang}`}
+            />
           </ClientRedirectForm>
         </div>
       </div>

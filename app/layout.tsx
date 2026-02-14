@@ -46,14 +46,13 @@ export default function RootLayout({
           minHeight: '100vh',
         }}
       >
-
-          <Suspense fallback={null}>
-            <div className="absolute top-0 left-0 right-0 z-50">
-              <Navbar />
-            </div>
-          </Suspense>
-          {children}
-            <Footer />
+        <Suspense fallback={null}>
+          <div className="absolute top-0 left-0 right-0 z-50">
+            <Navbar />
+          </div>
+        </Suspense>
+        {children}
+        <Footer />
       </body>
     </html>
   );
