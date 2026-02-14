@@ -1,7 +1,5 @@
 import { dodajRezervacijuSaGostom } from '@/actions/rezervacije';
-import Link from 'next/link';
 import { InputField, HiddenField, SelectField, FormActions } from '@/components/form/FormComponents';
-import ClientRedirectForm from './ClientRedirectForm';
 import { getLocaleMessages } from '@/i18n/i18n';
 import prisma from '@/lib/prisma';
 import { RezervacijaSearchParams } from '@/lib/types/searchParams';
@@ -54,7 +52,7 @@ const DodajRezervacijuPage = async ({
             <h1 className="text-xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">{messages.book_now}</h1>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{commonMessages.form_description}</p>
           </div>
-          <ClientRedirectForm action={dodajRezervacijuSaGostom}>
+          <form action="/api/rezervacije/dodaj" method="POST">
             <HiddenField name="lang" value={lang} />
             <div className="border-b pb-6 mb-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">{messages.reservation_details}</h3>
@@ -216,7 +214,7 @@ const DodajRezervacijuPage = async ({
               cancelLabel={messages.cancel}
               cancelHref={`/rezervacije?lang=${lang}`}
             />
-          </ClientRedirectForm>
+          </form>
         </div>
       </div>
     </>

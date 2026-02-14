@@ -92,16 +92,16 @@ export default function RezervacijaWithPayment({
           )}
           <div className="flex flex-row justify-center items-center gap-2 pt-2">
             <a href={`/rezervacije?lang=${lang}`} className="flex-1">
-              <Button type="button" className="w-full h-10 rounded-lg border border-gray-300 bg-white text-gray-900 font-semibold text-base hover:bg-gray-100 transition">
+              <Button type="button" className="w-full h-10 rounded-lg border border-gray-300 bg-gray-100 text-gray-900 font-semibold text-base hover:bg-gray-200 transition cursor-pointer">
                 {commonT?.back || 'Nazad'}
               </Button>
             </a>
             <a href={`/rezervacije/izmeni?id=${rezervacija.id}&lang=${lang}`} className="flex-1">
-              <Button type="button" className="w-full h-10 rounded-lg border border-blue-600 bg-blue-600 text-white font-semibold text-base hover:bg-blue-700 transition">
+              <Button type="button" className="w-full h-10 rounded-lg border bg-gray-700 text-white font-semibold text-base hover:bg-gray-800 transition cursor-pointer">
                 {t.editReservation || 'Izmeni rezervaciju'}
               </Button>
             </a>
-            <PrintButton className="flex-1 w-full h-10 rounded-lg border border-gray-300 bg-white text-gray-900 font-semibold text-base hover:bg-gray-300 transition">
+            <PrintButton className="flex-1 w-full h-10 rounded-lg border border-gray-300 bg-gray-100 text-gray-900 font-semibold text-base hover:bg-gray-200 transition cursor-pointer">
               <span className="inline-flex items-center">
                 <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -109,10 +109,10 @@ export default function RezervacijaWithPayment({
                 {commonT?.print || 'Štampaj'}
               </span>
             </PrintButton>
-             {canPay && (
+            {canPay && (
               <Button
                 onClick={() => setShowPayment(true)}
-                className="flex-1 h-10 rounded-lg border border-green-600 bg-green-600 text-white font-semibold text-base hover:bg-green-700 transition"
+                className="flex-1 h-10 rounded-lg border border-green-600 bg-green-600 text-white font-semibold text-base hover:bg-green-700 transition cursor-pointer"
               >
                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />

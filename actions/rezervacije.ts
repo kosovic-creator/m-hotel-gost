@@ -265,6 +265,7 @@ export async function obrisiRezervaciju(formData: FormData) {
 }
 
 // Nova transakcijska funkcija za kreiranje rezervacije sa gostom
+
 export async function dodajRezervacijuSaGostom(formData: FormData) {
   const soba = formData.get('soba');
   const prijava = formData.get('prijava');
@@ -359,57 +360,57 @@ export async function dodajRezervacijuSaGostom(formData: FormData) {
       let gostId: number;
       let gostData: any;
 
-      if (koristi_postojeceg_gosta && postojeci_gost) {
-        gostId = Number(postojeci_gost);
+        if (koristi_postojeceg_gosta && postojeci_gost) {
+          gostId = Number(postojeci_gost);
 
-        // Provjeri da li gost postoji
-        const postojiGost = await tx.gost.findUnique({
-          where: { id: gostId }
-        });
+          // Provjeri da li gost postoji
+          const postojiGost = await tx.gost.findUnique({
+            where: { id: gostId }
+          });
 
-        if (!postojiGost) {
-          throw new Error('Odabrani gost ne postoji');
+          if (!postojiGost) {
+            throw new Error('Odabrani gost ne postoji');
+          }
+          gostData = postojiGost;
+        } else {
+          // Kreiraj novog gosta
+          const noviGost = await tx.gost.create({
+            data: {
+              titula: gost_titula as string,
+              ime: gost_ime as string,
+              prezime: gost_prezime as string,
+              titula_drugog_gosta: gost_titula_drugog_gosta ? String(gost_titula_drugog_gosta) : undefined,
+              ime_drugog_gosta: gost_ime_drugog_gosta ? String(gost_ime_drugog_gosta) : undefined,
+              prezime_drugog_gosta: gost_prezime_drugog_gosta ? String(gost_prezime_drugog_gosta) : undefined,
+              adresa: gost_adresa ? String(gost_adresa) : undefined,
+              grad: gost_grad ? String(gost_grad) : undefined,
+              drzava: gost_drzava as string,
+              email: gost_email as string,
+              mob_telefon: gost_telefon ? String(gost_telefon) : undefined,
+            },
+          });
+          gostId = noviGost.id;
+          gostData = noviGost;
         }
-        gostData = postojiGost;
-      } else {
-        // Kreiraj novog gosta
-        const noviGost = await tx.gost.create({
+
+        // Kreiraj rezervaciju
+        const rezervacija = await tx.rezervacija.create({
           data: {
-            titula: gost_titula as string,
-            ime: gost_ime as string,
-            prezime: gost_prezime as string,
-            titula_drugog_gosta: gost_titula_drugog_gosta ? String(gost_titula_drugog_gosta) : undefined,
-            ime_drugog_gosta: gost_ime_drugog_gosta ? String(gost_ime_drugog_gosta) : undefined,
-            prezime_drugog_gosta: gost_prezime_drugog_gosta ? String(gost_prezime_drugog_gosta) : undefined,
-            adresa: gost_adresa ? String(gost_adresa) : undefined,
-            grad: gost_grad ? String(gost_grad) : undefined,
-            drzava: gost_drzava as string,
-            email: gost_email as string,
-            mob_telefon: gost_telefon ? String(gost_telefon) : undefined,
+            soba: { connect: { broj: sobaBroj } },
+            gost: { connect: { id: gostId } },
+            prijava: prijavaDate,
+            odjava: odjawaDate,
+            broj_osoba: Number(broj_osoba) || 1,
+            popust: Number(popust) || 0,
+            status: status as string
           },
+          include: {
+            soba: true,
+          }
         });
-        gostId = noviGost.id;
-        gostData = noviGost;
-      }
 
-      // Kreiraj rezervaciju
-      const rezervacija = await tx.rezervacija.create({
-        data: {
-          soba: { connect: { broj: sobaBroj } },
-          gost: { connect: { id: gostId } },
-          prijava: prijavaDate,
-          odjava: odjawaDate,
-          broj_osoba: Number(broj_osoba) || 1,
-          popust: Number(popust) || 0,
-          status: status as string
-        },
-        include: {
-          soba: true,
-        }
+        return { gost: gostData, rezervacija, gostId };
       });
-
-      return { gost: gostData, rezervacija, gostId };
-    });
 
     console.log(`Kreiran gost ${result.gostId} i rezervacija ${result.rezervacija.id}`);
 
@@ -422,22 +423,21 @@ export async function dodajRezervacijuSaGostom(formData: FormData) {
         result.rezervacija.popust
       );
 
-      await sendReservationConfirmationEmail(
-        {
-          gost: result.gost,
-          rezervacija: result.rezervacija,
-          totalPrice
-        },
-        lang
-      );
-    } catch (emailError) {
-      console.error('Greška pri slanju potvrdnog emaila:', emailError);
-      // Nastavi sa redirekcijom čak i ako email slanje ne uspije
-    }
+        await sendReservationConfirmationEmail(
+          {
+            gost: result.gost,
+            rezervacija: result.rezervacija,
+            totalPrice
+          },
+          lang
+        );
+      } catch (emailError) {
+        console.error('Greška pri slanju potvrdnog emaila:', emailError);
+        // Nastavi sa redirekcijom čak i ako email slanje ne uspije
+      }
 
-    // Redirect directly to reservation details page
     revalidatePath('/rezervacije');
-    return { success: true, redirectTo: `/rezervacije/${result.rezervacija.id}` };
+    return { rezervacija: result.rezervacija };
   } catch (error: any) {
     // Ignoriraj NEXT_REDIRECT grešku, dozvoli redirect
     if (error?.digest && error.digest.startsWith('NEXT_REDIRECT')) {
@@ -465,6 +465,9 @@ export async function dodajRezervacijuSaGostom(formData: FormData) {
     redirect(createFailureRedirect('/rezervacije/dodaj', 'errorGeneral', lang));
   }
 }
+// Remove the stray closing bracket here.
+// There is no need for an extra `}` after the dodajRezervacijuSaGostom function.
+// Just delete it.
 
 // Funkcija za izmjenu rezervacije sa ažuriranjem gosta
 export async function izmeniRezervacijuSaGostom(formData: FormData) {

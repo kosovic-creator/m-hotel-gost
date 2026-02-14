@@ -39,7 +39,7 @@ export default async function RezervacijaPage({ params, searchParams }: Rezervac
       <div className="min-h-screen">
           <div className="container mx-auto px-4 py-6 lg:py-8">
               <Card className="max-w-2xl mx-auto shadow-lg">
-                  <CardHeader className="bg-linear-to-r from-blue-500 to-indigo-600 text-white rounded-t-lg print:hidden">
+                  <CardHeader className="bg-linear-to-r from-gray-600 to-gray-400 text-white rounded-t-lg print:hidden">
                       <CardTitle className="flex items-center gap-3">
                           <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
                               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
