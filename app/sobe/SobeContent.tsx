@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 
 interface SobeContentProps {
   sobe: any[];
-  lang: 'en' | 'mn';
+  lang: 'en' | 'sr';
   t: any;
 }
 
@@ -22,10 +22,10 @@ export default function SobeContent({
         {/* Title Section */}
         <div className="text-center text-white py-20 px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg">
-            {lang === "mn" ? "Naše Sobe" : "Our Rooms"}
+            {lang === "sr" ? "Naše Sobe" : "Our Rooms"}
           </h1>
           <p className="text-lg md:text-xl font-light drop-shadow-lg max-w-2xl mx-auto">
-            {lang === "mn"
+            {lang === "sr"
               ? "Pronađite savršenu sobu za vašu posjetu"
               : "Find the perfect room for your stay"}
           </p>
@@ -113,7 +113,7 @@ export default function SobeContent({
                     {/* CTA Button */}
                     <Button asChild className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold">
                       <a href={`/rezervacije?soba=${soba.broj}&lang=${lang}`}>
-                        {lang === "mn" ? "Rezerviriši" : "Book Now"}
+                        {lang === "sr" ? "Rezerviriši" : "Book Now"}
                       </a>
                     </Button>
                   </div>

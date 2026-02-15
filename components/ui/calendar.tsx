@@ -41,11 +41,11 @@ function Calendar({
       captionLayout={captionLayout}
       formatters={{
         formatMonthDropdown: (date) => {
-          // Custom formatter for Montenegrin to ensure Latin script
+          // Custom formatter for Serbian to ensure Latin script
           const locale = typeof window !== 'undefined' ?
-            (window.location.href.includes('lang=mn') ? 'mn' : 'en') : 'en';
+            (window.location.href.includes('lang=sr') ? 'sr' : 'en') : 'en';
 
-          if (locale === 'mn') {
+          if (locale === 'sr') {
             const monthsLatin = [
               'Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun',
               'Jul', 'Avg', 'Sep', 'Okt', 'Nov', 'Dec'
@@ -56,11 +56,11 @@ function Calendar({
           return date.toLocaleString("default", { month: "short" });
         },
         formatCaption: (date) => {
-          // Custom formatter for Montenegrin caption to ensure Latin script
+          // Custom formatter for Serbian caption to ensure Latin script
           const locale = typeof window !== 'undefined' ?
-            (window.location.href.includes('lang=mn') ? 'mn' : 'en') : 'en';
+            (window.location.href.includes('lang=sr') ? 'sr' : 'en') : 'en';
 
-          if (locale === 'mn') {
+          if (locale === 'sr') {
             const monthsLatinFull = [
               'Januar', 'Februar', 'Mart', 'April', 'Maj', 'Juni',
               'Juli', 'Avgust', 'Septembar', 'Oktobar', 'Novembar', 'Decembar'

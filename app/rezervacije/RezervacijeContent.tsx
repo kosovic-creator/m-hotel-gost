@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
-import { rascunajUkupnuCenu } from '@/lib/helpers/rezervacije';
 
 interface RezervacijeContentProps {
   sobe: Array<{
@@ -20,7 +19,7 @@ interface RezervacijeContentProps {
     opis?: string;
     opis_en?: string;
   }>;
-  lang: 'en' | 'mn';
+  lang: 'en' | 'sr';
   t: any;
   rezervacije?: any[];
 }
@@ -84,7 +83,7 @@ export default function RezervacijeContent({
   }, [parsedStart, parsedEnd, numberOfGuests, sobe, rezervacije, isStartInPast]);
 
   const formatPrice = (value: number) =>
-    new Intl.NumberFormat(lang === 'mn' ? 'me-ME' : 'en-US').format(value);
+    new Intl.NumberFormat(lang === 'sr' ? 'sr-ME' : 'en-US').format(value);
 
   const getBookingUrl = (roomNumber: string) => {
     const params = new URLSearchParams({
@@ -104,10 +103,10 @@ export default function RezervacijeContent({
         {/* Title Section */}
         <div className="text-center text-white py-12 px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg">
-            {lang === "mn" ? "Pronađite Svoju Idealnu sobu" : "Find Your Perfect Room"}
+            {lang === "sr" ? "Pronađite Svoju Idealnu sobu" : "Find Your Perfect Room"}
           </h1>
           <p className="text-lg md:text-xl font-light drop-shadow-lg max-w-2xl mx-auto">
-            {lang === "mn"
+            {lang === "sr"
               ? "Pretraži dostupne sobe i rezerviši sada"
               : "Search available rooms and book now"}
           </p>
@@ -279,7 +278,7 @@ export default function RezervacijeContent({
                       {/* CTA Button */}
                       <Button asChild className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold">
                         <Link href={getBookingUrl(soba.broj)}>
-                          {lang === "mn" ? "Rezerviriši" : "Book Now"}
+                                  {lang === "sr" ? "Rezerviriši" : "Book Now"}
                         </Link>
                       </Button>
                     </div>

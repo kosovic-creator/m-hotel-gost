@@ -21,7 +21,7 @@ export default async function StudentiPage({
   searchParams: Promise<{ lang?: string; success?: string; error?: string; query?: string }>;
 }) {
   const params = await searchParams;
-  const lang = params?.lang === 'mn' ? 'mn' : 'en';
+  const lang = params?.lang === 'en' ? 'en' : 'sr';
   const query = params?.query || '';
   const t = await getLocaleMessages(lang, 'student');
   const students = await traziStudenta({ query });

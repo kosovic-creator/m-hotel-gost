@@ -10,10 +10,9 @@ interface ImageUploadProps {
   defaultValue?: string;
   error?: string;
   label: string;
-  onlyUrls?: boolean;
 }
 
-export function ImageUpload({ name, defaultValue = '', error, label, onlyUrls = false }: ImageUploadProps) {
+export function ImageUpload({ name, defaultValue = '', error, label }: ImageUploadProps) {
   const [images, setImages] = useState<string[]>(
     defaultValue ? defaultValue.split(',').map(img => img.trim()).filter(Boolean) : []
   );

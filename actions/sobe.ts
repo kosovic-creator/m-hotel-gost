@@ -38,7 +38,7 @@ export async function dodajSobu(formData: FormData) {
   const slikeRaw = formData.get('slike') as string;
   const tip_en = formData.get('tip_en') as string;
   const opis_en = formData.get('opis_en') as string;
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'mn';
+  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
 
   const slike = slikeRaw ? slikeRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
 
@@ -80,7 +80,7 @@ export const azurirajSobu = async (formData: FormData) => {
   const tip_en = formData.get('tip_en') as string;
   const opis_en = formData.get('opis_en') as string;
   const slikeRaw = formData.get('slike') as string;
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'mn';
+  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
 
   const slike = slikeRaw ? slikeRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
 
@@ -113,7 +113,7 @@ export const azurirajSobu = async (formData: FormData) => {
 
 export async function obrisiSobu(formData: FormData) {
   const id = Number(formData.get('id'));
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'mn';
+  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
 
   try {
     const soba = await prisma.soba.findUnique({ where: { id } });
@@ -121,7 +121,7 @@ export async function obrisiSobu(formData: FormData) {
       throw new Error('errorNotFound');
     }
     await prisma.soba.delete({ where: { id } });
-  } catch (error) {
+  } catch {
     revalidatePath('/sobe');
     redirect(createFailureRedirect('/sobe', 'errorGeneral', lang));
   }

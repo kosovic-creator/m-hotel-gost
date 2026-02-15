@@ -11,7 +11,7 @@ const DodajStudenta = async ({
     searchParams: Promise<StudentSearchParams>;
 }) => {
     const params = await searchParams;
-    const lang = params.lang === 'mn' ? 'mn' : 'en';
+    const lang = params.lang === 'en' ? 'en' : 'sr';
     const messages = await getLocaleMessages(lang, 'student');
     const errors = extractErrors(params);
     const formData: Record<string, string> = {

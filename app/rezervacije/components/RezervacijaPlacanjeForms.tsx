@@ -20,7 +20,7 @@ interface RezervacijaPlacanjeFormsProps {
     gost: { ime: string; prezime: string };
   };
   ukupnaCena: number;
-  lang: 'en' | 'mn';
+  lang: 'en' | 'sr';
   t: Record<string, string>;
   onPaymentSuccess?: (paymentIntent: any) => void;
   onCancel?: () => void;
@@ -41,7 +41,7 @@ export function RezervacijaPlacanjeForms({
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const formatPrice = (value: number) =>
-    new Intl.NumberFormat(lang === 'mn' ? 'me-ME' : 'en-US', {
+    new Intl.NumberFormat(lang === 'sr' ? 'sr-ME' : 'en-US', {
       style: 'currency',
       currency: 'EUR'
     }).format(value);
@@ -91,7 +91,7 @@ export function RezervacijaPlacanjeForms({
           console.error('Confirmation error:', confirmError);
         }
       }
-    } catch (err) {
+    } catch {
       setErrorMessage('An unexpected error occurred');
     } finally {
       setIsLoading(false);

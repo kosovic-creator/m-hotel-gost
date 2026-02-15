@@ -4,11 +4,10 @@ import { useTransition } from 'react';
 import handleSubmit from '@/actions/student';
 
 type ClearFormInputProps = {
-  lang: string;
   placeholder?: string;
 };
 
-export function ClearFormInput({ lang, placeholder = 'Unesi tekst' }: ClearFormInputProps) {
+export function ClearFormInput({ placeholder = 'Unesi tekst' }: ClearFormInputProps) {
   const [isPending, startTransition] = useTransition();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

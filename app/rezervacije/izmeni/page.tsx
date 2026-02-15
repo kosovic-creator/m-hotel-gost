@@ -25,7 +25,7 @@ const IzmeniStrana = async ({
 
     // Ektauj greške iz query parametara
     const errors = extractErrors(params);
-    const lang = params?.lang === 'mn' ? 'mn' : 'en';
+    const lang = params?.lang === 'en' ? 'en' : 'sr';
     const messages = getLocaleMessages(lang, 'rezervacije');
     const gostMessages = getLocaleMessages(lang, 'gosti');
     const commonMessages = getLocaleMessages(lang, 'common');

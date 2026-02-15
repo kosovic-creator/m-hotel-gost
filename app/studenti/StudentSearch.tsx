@@ -8,7 +8,7 @@ import { X } from 'lucide-react';
 export function StudentSearch({ placeholder }: { placeholder: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const inputRef = useRef<HTMLInputElement>(null);
   const query = searchParams.get('query')?.toString() || '';
 

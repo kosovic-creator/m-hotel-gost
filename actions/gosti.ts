@@ -25,7 +25,7 @@ type GostFormValues = {
 
 const getLang = (formData: FormData) => {
     const lang = formData.get('lang');
-    return lang === 'en' ? 'en' : 'mn';
+    return lang === 'en' ? 'en' : 'sr';
 };
 
 const parseGostForm = (formData: FormData): GostFormValues => {
@@ -48,7 +48,7 @@ const parseGostForm = (formData: FormData): GostFormValues => {
     };
 };
 
-type Lang = 'en' | 'mn';
+type Lang = 'en' | 'sr';
 
 interface GostValues extends Omit<GostFormValues, 'id'> {
     titula: string;

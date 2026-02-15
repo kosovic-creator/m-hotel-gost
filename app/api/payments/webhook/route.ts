@@ -5,7 +5,7 @@ import prisma from '@/lib/prisma';
 import { sendPaymentConfirmationEmail } from '@/lib/email';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2020-08-27' as any,
+  apiVersion: '2020-08-27' as Stripe.LatestApiVersion,
 });
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
                   rezervacija: updatedReservacija,
                   paymentAmount
                 },
-                'mn' // Default language
+                'sr' // Default language
               );
 
               if (emailSent) {

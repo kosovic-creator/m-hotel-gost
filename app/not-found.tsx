@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { getLocaleMessages } from "@/i18n/i18n";
 export default async function NotFound({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
  const params = await searchParams;
-  const lang: "en" | "mn" = params?.lang === "mn" ? "mn" : "en";
+  const lang: "en" | "sr" = params?.lang === "en" ? "en" : "sr";
     const t = getLocaleMessages(lang, 'common');
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-linear-to-br from-gray-50 to-gray-100 p-8">

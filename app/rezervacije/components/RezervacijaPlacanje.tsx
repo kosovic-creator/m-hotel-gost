@@ -20,7 +20,7 @@ interface RezervacijaPlacanjeProps {
     gost: { ime: string; prezime: string };
   };
   ukupnaCena: number;
-  lang: 'en' | 'mn';
+  lang: 'en' | 'sr';
   t: Record<string, string>;
   onPaymentSuccess?: (paymentIntent: any) => void;
   onCancel?: () => void;
@@ -39,7 +39,7 @@ export default function RezervacijaPlacanje({
   const [error, setError] = useState<string>('');
 
   const formatPrice = (value: number) =>
-    new Intl.NumberFormat(lang === 'mn' ? 'me-ME' : 'en-US', {
+    new Intl.NumberFormat(lang === 'sr' ? 'sr-ME' : 'en-US', {
       style: 'currency',
       currency: 'EUR'
     }).format(value);
@@ -95,7 +95,7 @@ export default function RezervacijaPlacanje({
         borderRadius: '6px',
       },
     },
-    locale: lang === 'mn' ? 'hr' : 'en', // Najbliži jezik za crnogorski
+    locale: lang === 'sr' ? 'hr' : 'en',
   };
 
   if (!clientSecret) {

@@ -14,13 +14,13 @@ interface RezervacijaDetaljiProps {
     soba: { cena: number; broj: string };
     gost: { ime: string; prezime: string };
   };
-  lang: 'en' | 'mn';
+  lang: 'en' | 'sr';
     t: Record<string, string>;
 }
 
 export default function RezervacijaDetalji({ rezervacija, lang, t }: RezervacijaDetaljiProps) {
   const formatPrice = (value: number) =>
-    new Intl.NumberFormat(lang === 'mn' ? 'me-ME' : 'en-US', {
+    new Intl.NumberFormat(lang === 'sr' ? 'sr-ME' : 'en-US', {
       style: 'currency',
       currency: 'EUR'
     }).format(value);
@@ -28,8 +28,8 @@ export default function RezervacijaDetalji({ rezervacija, lang, t }: Rezervacija
   const formatDate = (date: Date | string) => {
     const dateObj = new Date(date);
 
-    if (lang === 'mn') {
-      // Custom formatting for Montenegrin Latin script
+    if (lang === 'sr') {
+    // Custom formatting for Serbian Latin script
       const monthsLatinFull = [
         'januar', 'februar', 'mart', 'april', 'maj', 'juni',
         'juli', 'avgust', 'septembar', 'oktobar', 'novembar', 'decembar'
@@ -144,7 +144,6 @@ export default function RezervacijaDetalji({ rezervacija, lang, t }: Rezervacija
           <p className="text-sm text-gray-600">{t.status}:</p>
           <PaymentStatusBadge
             status={rezervacija.status || 'pending'}
-            lang={lang}
             t={t}
           />
         </div>

@@ -6,7 +6,7 @@ import { StudentSearchParams } from '@/lib/types/searchParams';
 
 export default async function IzmjeniGostaPage({ searchParams }: { searchParams: Promise<StudentSearchParams> }) {
     const params = await searchParams;
-    const lang = params?.lang === 'mn' ? 'mn' : 'en';
+    const lang = params?.lang === 'en' ? 'en' : 'sr';
     const t = await getLocaleMessages(lang, 'student');
     const commonMessages = await getLocaleMessages(lang, 'common');
 

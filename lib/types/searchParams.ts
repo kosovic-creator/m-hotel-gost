@@ -6,7 +6,7 @@
  * Opšti tip za search params sa validacionim greškama
  */
 export type validacijaSearchParams<T extends string> = {
-  lang?: 'en' | 'mn';
+  lang?: 'en' | 'sr';
   success?: string;
   error?: string;
 } & {
@@ -85,7 +85,7 @@ export type Awaited<T> = T extends Promise<infer U> ? U : T;
 /**
  * Jezik tip
  */
-export type Language = 'en' | 'mn';
+export type Language = 'en' | 'sr';
 
 /**
  * Base page props

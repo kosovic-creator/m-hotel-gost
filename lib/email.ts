@@ -61,7 +61,7 @@ interface PaymentEmailData {
 }
 
 // Email šablon za uspješnu rezervaciju
-function getReservationConfirmationHTML(data: ReservationEmailData, lang: string = 'mn'): string {
+function getReservationConfirmationHTML(data: ReservationEmailData, lang: string = 'sr'): string {
   const { gost, rezervacija, totalPrice } = data;
 
   const prijava = new Date(rezervacija.prijava).toLocaleDateString();
@@ -175,7 +175,7 @@ function getReservationConfirmationHTML(data: ReservationEmailData, lang: string
 }
 
 // Email šablon za potvrdu plaćanja
-function getPaymentConfirmationHTML(data: PaymentEmailData, lang: string = 'mn'): string {
+function getPaymentConfirmationHTML(data: PaymentEmailData, lang: string = 'sr'): string {
   const { gost, rezervacija, paymentAmount } = data;
 
   const textMn = {
@@ -268,7 +268,7 @@ function getPaymentConfirmationHTML(data: PaymentEmailData, lang: string = 'mn')
 // Pošalji email za potvrdu rezervacije
 export async function sendReservationConfirmationEmail(
   data: ReservationEmailData,
-  lang: string = 'mn'
+  lang: string = 'sr'
 ): Promise<boolean> {
   try {
     // Provjeri da li su email kredencijali postavljeni
@@ -301,7 +301,7 @@ export async function sendReservationConfirmationEmail(
 // Pošalji email za potvrdu plaćanja
 export async function sendPaymentConfirmationEmail(
   data: PaymentEmailData,
-  lang: string = 'mn'
+  lang: string = 'sr'
 ): Promise<boolean> {
   try {
     // Provjeri da li su email kredencijali postavljeni

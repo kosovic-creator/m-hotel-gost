@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
             rezervacija: updatedRezervacija,
             paymentAmount
           },
-          'mn' // Default language - možete dodati lang parametar ako trebate
+          'sr' // Default language - možete dodati lang parametar ako trebate
         );
 
         if (emailSent) {

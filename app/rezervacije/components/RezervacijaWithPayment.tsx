@@ -1,10 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { FormActions } from '@/components/form/FormComponents';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import RezervacijaDetalji, { useRezervacijaDetalji } from './RezervacijaDetalji';
 import RezervacijaPlacanje from './RezervacijaPlacanje';
 
@@ -19,13 +16,12 @@ interface RezervacijaWithPaymentProps {
     soba: { cena: number; broj: string };
     gost: { ime: string; prezime: string };
   };
-  lang: 'en' | 'mn';
+  lang: 'en' | 'sr';
   t: Record<string, string>;
   commonT?: Record<string, string>;
   showPaymentOption?: boolean;
 }
 
-import Link from 'next/link';
 import { PrintButton } from '@/components/ui/print-button';
 
 export default function RezervacijaWithPayment({
@@ -45,7 +41,7 @@ export default function RezervacijaWithPayment({
                  rezervacija.status !== 'cancelled' &&
                  !paymentCompleted;
 
-  const handlePaymentSuccess = (paymentIntent: any) => {
+  const handlePaymentSuccess = () => {
     setPaymentCompleted(true);
     setShowPayment(false);
     // Optionally refresh the page or update state

@@ -35,7 +35,7 @@ export const ucitajStudentaId = async (searchParams: { studentId: number }) => {
 };
 export async function dodajStudenta(formData: FormData) {
   const ime = formData.get('ime') as string;
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'mn';
+  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
   const t = await getLocaleMessages(lang, 'student');
   const tFunc = (key: string) => t[key] || key;
   const result = studentSchema(tFunc).safeParse({ ime });
@@ -65,7 +65,7 @@ export async function dodajStudenta(formData: FormData) {
 export async function izmeniStudenta(formData: FormData) {
   const id = Number(formData.get('studentId'));
   const ime = formData.get('ime') as string;
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'mn';
+  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
 
   const t = await getLocaleMessages(lang, 'student'); // Promijeni sa 'studenti' na 'student'
   const tFunc = (key: string) => t[key] || key;
@@ -97,7 +97,7 @@ export async function izmeniStudenta(formData: FormData) {
 
 export async function obrisiStudenta(formData: FormData) {
   const id = Number(formData.get('id'));
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'mn';
+  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
 
   try {
     const student = await prisma.student.findUnique({ where: { id } });

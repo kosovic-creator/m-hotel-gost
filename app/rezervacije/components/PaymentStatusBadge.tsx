@@ -2,14 +2,12 @@
 
 interface PaymentStatusBadgeProps {
   status: string;
-  lang: 'en' | 'mn';
   t: Record<string, string>;
   className?: string;
 }
 
 export default function PaymentStatusBadge({
   status,
-  lang,
   t,
   className = ''
 }: PaymentStatusBadgeProps) {

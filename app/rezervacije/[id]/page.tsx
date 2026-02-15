@@ -1,4 +1,3 @@
-import { PrintButton } from '@/components/ui/print-button';
 import { dajDetaljeRezervacije } from '@/actions/rezervacije';
 import { getLocaleMessages } from '@/i18n/i18n';
 import { Metadata } from 'next';
@@ -32,7 +31,7 @@ export default async function RezervacijaPage({ params, searchParams }: Rezervac
     notFound();
   }
 
-  const lang: "en" | "mn" = resolvedSearchParams?.lang === "mn" ? "mn" : "en";
+    const lang: "en" | "sr" = resolvedSearchParams?.lang === "en" ? "en" : "sr";
   const t = getLocaleMessages(lang, 'rezervacije');
   const commonT = getLocaleMessages(lang, 'common');
     const successKey = resolvedSearchParams?.success;

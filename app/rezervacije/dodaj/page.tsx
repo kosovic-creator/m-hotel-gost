@@ -18,7 +18,7 @@ const DodajRezervacijuPage = async ({
   const formData = params || {};
 
   // Klijentski redirect workaround
-  const lang = params?.lang === 'mn' ? 'mn' : 'en';
+  const lang = params?.lang === 'en' ? 'en' : 'sr';
   const messages = getLocaleMessages(lang, 'rezervacije');
   const gostMessages = getLocaleMessages(lang, 'gosti');
   const commonMessages = getLocaleMessages(lang, 'common');

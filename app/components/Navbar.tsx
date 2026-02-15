@@ -12,11 +12,11 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const currentLang =
-    searchParams?.get("lang") === "en" || searchParams?.get("lang") === "mn"
-      ? (searchParams.get("lang") as "en" | "mn")
-      : "mn";
+    searchParams?.get("lang") === "en" || searchParams?.get("lang") === "sr"
+      ? (searchParams.get("lang") as "en" | "sr")
+      : "sr";
 
-  const handleChangeLanguage = (lng: "en" | "mn") => {
+  const handleChangeLanguage = (lng: "en" | "sr") => {
     const params = new URLSearchParams(searchParams?.toString());
     params.set("lang", lng);
     router.push(`${pathname}?${params.toString()}`);
@@ -42,7 +42,7 @@ export default function Navbar() {
             className="text-amber-500 hover:text-gray-600"
           >
             <Link href={`/sobe?lang=${currentLang}`}>
-              {currentLang === "mn" ? "Sobe" : "Rooms"}
+              {currentLang === "sr" ? "Sobe" : "Rooms"}
             </Link>
           </Button>
           <Button
@@ -53,7 +53,7 @@ export default function Navbar() {
             className="text-amber-500 hover:text-gray-300"
           >
             <Link href={`/o_hotelu?lang=${currentLang}`}>
-              {currentLang === "mn" ? "O hotelu" : "About"}
+              {currentLang === "sr" ? "O hotelu" : "About"}
             </Link>
           </Button>
         </div>
@@ -78,7 +78,7 @@ export default function Navbar() {
             className="text-amber-500 hover:text-gray-300"
           >
             <Link href={`/sobe?lang=${currentLang}`}>
-              {currentLang === "mn" ? "Sobe" : "Rooms"}
+              {currentLang === "sr" ? "Sobe" : "Rooms"}
             </Link>
           </Button>
           <Button
@@ -89,7 +89,7 @@ export default function Navbar() {
             className="text-amber-500 hover:text-gray-300"
           >
             <Link href={`/o_hotelu?lang=${currentLang}`}>
-              {currentLang === "mn" ? "O hotelu" : "About"}
+              {currentLang === "sr" ? "O hotelu" : "About"}
             </Link>
           </Button>
           {/* Language buttons */}
@@ -99,16 +99,16 @@ export default function Navbar() {
               onClick={() => handleChangeLanguage("en")}
               className={`flex items-center gap-1 text-white hover:text-gray-400 ${currentLang === "en" ? "font-bold" : ""}`}
             >
-              <span role="img" aria-label="English">
+              <span role="img" aria-label="EN">
                 🇬🇧
               </span>
             </Button>
             <Button
               variant="ghost"
-              onClick={() => handleChangeLanguage("mn")}
-              className={`flex items-center gap-1 text-white hover:text-gray-400 ${currentLang === "mn" ? "font-bold" : ""}`}
+              onClick={() => handleChangeLanguage("sr")}
+              className={`flex items-center gap-1 text-white hover:text-gray-400 ${currentLang === "sr" ? "font-bold" : ""}`}
             >
-              <span role="img" aria-label="Montenegrin">
+              <span role="img" aria-label="MN">
                 🇲🇪
               </span>
             </Button>
@@ -142,17 +142,17 @@ export default function Navbar() {
           onClick={() => handleChangeLanguage("en")}
           className={`flex items-center gap-1 text-white hover:text-gray-400 ${currentLang === "en" ? "font-bold" : ""}`}
         >
-          <span role="img" aria-label="English">
+          <span role="img" aria-label="EN">
             🇬🇧
           </span>{" "}
           EN
         </Button>
         <Button
           variant="ghost"
-          onClick={() => handleChangeLanguage("mn")}
-          className={`flex items-center gap-1 text-white hover:text-gray-400 ${currentLang === "mn" ? "font-bold" : ""}`}
+          onClick={() => handleChangeLanguage("sr")}
+          className={`flex items-center gap-1 text-white hover:text-gray-400 ${currentLang === "sr" ? "font-bold" : ""}`}
         >
-          <span role="img" aria-label="Montenegrin">
+          <span role="img" aria-label="MN">
             🇲🇪
           </span>{" "}
           MN

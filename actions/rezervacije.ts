@@ -70,7 +70,7 @@ export async function dodajRezervaciju(formData: FormData) {
   const broj_osoba = formData.get('broj_osoba');
   const popust = formData.get('popust');
   const status = formData.get('status');
-  const lang= (formData.get('lang') as string) === 'en' ? 'en' : 'mn';
+  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
 
   const messages = getLocaleMessages(lang, 'rezervacije');
   const t = (key: string) => messages[key] || key;
@@ -190,7 +190,7 @@ export async function izmeniRezervaciju(formData: FormData) {
   const broj_osoba = formData.get('broj_osoba');
   const popust = formData.get('popust');
   const status = formData.get('status');
-  const lang= (formData.get('lang') as string) === 'en' ? 'en' : 'mn';
+  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
 
   const messages = getLocaleMessages(lang, 'rezervacije');
   const t = (key: string) => messages[key] || key;
@@ -247,7 +247,7 @@ export async function izmeniRezervaciju(formData: FormData) {
 
 export async function obrisiRezervaciju(formData: FormData) {
   const id = Number(formData.get('id'));
-  const lang= (formData.get('lang') as string) === 'en' ? 'en' : 'mn';
+  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
 
   try {
     const rezervacija = await prisma.rezervacija.findUnique({ where: { id } });
@@ -273,7 +273,7 @@ export async function dodajRezervacijuSaGostom(formData: FormData) {
   const broj_osoba = formData.get('broj_osoba');
   const popust = formData.get('popust');
   const status = formData.get('status');
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'mn';
+  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
 
   // Podaci o gostu
   const gost_titula = formData.get('gost_titula');
@@ -484,7 +484,7 @@ export async function izmeniRezervacijuSaGostom(formData: FormData) {
   const broj_osoba = formData.get('broj_osoba');
   const popust = formData.get('popust');
   const status = formData.get('status');
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'mn';
+  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
 
   // Podaci o gostu
   const gost_id = formData.get('gost_id'); // ID postojećeg gosta ili 'new' za novog

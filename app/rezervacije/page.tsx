@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ucitajRezervacije } from '@/actions/rezervacije';
 import { ucitajSobe } from '@/actions/sobe';
-import { obrisiRezervaciju } from '@/actions/rezervacije';
 import { getLocaleMessages } from '@/i18n/i18n';
 import { Metadata } from 'next';
 import { SuccessMessage, ErrorMessage } from '@/components/messages/MessageComponents';
@@ -38,17 +37,7 @@ export default async function RezervacijePage({ searchParams }: { searchParams: 
     opis_en: s.opis_en,
   }));
 
-  const rawGosti = (rawRezervacije ?? []).map((r: any) => r.gost);
-  const gosti = rawGosti.map((g: any) => ({
-    id: g.id,
-    ime: g.ime,
-    prezime: g.prezime,
-    email: g.email,
-    telefon: g.mob_telefon, // <-- dodaj ovo!
-  // ...ostala polja...
-  }));
-
-  const lang: "en" | "mn" = params?.lang === "mn" ? "mn" : "en";
+  const lang: "en" | "sr" = params?.lang === "en" ? "en" : "sr";
   const t = getLocaleMessages(lang, 'rezervacije');
   const successParam = params.success;
   const errorParam = params.error;

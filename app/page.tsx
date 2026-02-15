@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
   const params = await searchParams;
-  const lang: "en" | "mn" = params?.lang === "mn" ? "mn" : "en";
+  const lang: "en" | "sr" = params?.lang === "en" ? "en" : "sr";
 
   return (
     <>
@@ -24,12 +24,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
             {/* Main Heading */}
             <div className="mb-8">
               <h2 className="text-3xl md:text-5xl font-light mb-4 drop-shadow-lg leading-tight">
-                {lang === "mn"
+                {lang === "sr"
                   ? "Uživajte luksuz i udobnost"
                   : "Experience Luxury & Comfort"}
               </h2>
               <p className="text-lg md:text-xl font-light drop-shadow-lg text-gray-200">
-                {lang === "mn"
+                {lang === "sr"
                   ? "Otkrijte savršenu kombinaciju udobnosti, elegancije i vrhunske usluge"
                   : "Discover the perfect blend of comfort, elegance, and world-class service"}
               </p>
@@ -41,12 +41,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
                 href="/rezervacije"
                 className="px-8 py-3 bg-linear-to-r from-yellow-500 to-yellow-600 text-gray-900 font-semibold rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
               >
-                {lang === "mn" ? "Rezerviriši sada" : "Book Now"}
+                {lang === "sr" ? "Rezerviriši sada" : "Book Now"}
               </Link>
               <button
                 className="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-gray-900 transition-all duration-300 hover:shadow-lg"
               >
-                {lang === "mn" ? "Saznajte više" : "Learn More"}
+                {lang === "sr" ? "Saznajte više" : "Learn More"}
               </button>
             </div>
 
@@ -55,19 +55,19 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
               <div>
                 <p className="text-3xl md:text-4xl font-bold">25+</p>
                 <p className="text-sm text-gray-200">
-                  {lang === "mn" ? "Sobe" : "Rooms"}
+                  {lang === "sr" ? "Sobe" : "Rooms"}
                 </p>
               </div>
               <div>
                 <p className="text-3xl md:text-4xl font-bold">4.8★</p>
                 <p className="text-sm text-gray-200">
-                  {lang === "mn" ? "Ocjene" : "Rating"}
+                  {lang === "sr" ? "Ocjene" : "Rating"}
                 </p>
               </div>
               <div>
                 <p className="text-3xl md:text-4xl font-bold">1000+</p>
                 <p className="text-sm text-gray-200">
-                  {lang === "mn" ? "Recenzije" : "Reviews"}
+                  {lang === "sr" ? "Recenzije" : "Reviews"}
                 </p>
               </div>
             </div>
