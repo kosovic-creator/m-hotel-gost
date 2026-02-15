@@ -1,7 +1,7 @@
 'use client';
 
 import { useTransition } from 'react';
-import { handleSubmit } from '@/actions/student';
+import handleSubmit from '@/actions/student';
 
 type ClearFormInputProps = {
   lang: string;
@@ -15,11 +15,7 @@ export function ClearFormInput({ lang, placeholder = 'Unesi tekst' }: ClearFormI
     const value = e.target.value;
 
     startTransition(async () => {
-      const formData = new FormData();
-      formData.append('imeInputa', value);
-      formData.append('lang', lang);
-
-      await handleSubmit(formData);
+      await handleSubmit({ query: value });
     });
   };
 
