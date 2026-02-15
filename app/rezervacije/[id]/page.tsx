@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 interface RezervacijaPageProps {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ lang?: string }>;
+    searchParams: Promise<{ lang?: string; success?: string }>;
 }
 
 export default async function RezervacijaPage({ params, searchParams }: RezervacijaPageProps) {
@@ -34,10 +34,17 @@ export default async function RezervacijaPage({ params, searchParams }: Rezervac
   const lang: "en" | "mn" = resolvedSearchParams?.lang === "mn" ? "mn" : "en";
   const t = getLocaleMessages(lang, 'rezervacije');
   const commonT = getLocaleMessages(lang, 'common');
+    const successKey = resolvedSearchParams?.success;
+    const successMessage = successKey ? (t[successKey] || commonT.success_general || successKey) : null;
 
   return (
       <div className="min-h-screen">
           <div className="container mx-auto px-4 py-6 lg:py-8">
+              {successMessage && (
+                  <div className="max-w-2xl mx-auto mb-4 rounded border border-green-200 bg-green-50 px-4 py-3 text-green-800">
+                      {successMessage}
+                  </div>
+              )}
               <Card className="max-w-2xl mx-auto shadow-lg">
                   <CardHeader className="bg-linear-to-r from-gray-600 to-gray-400 text-white rounded-t-lg print:hidden">
                       <CardTitle className="flex items-center gap-3">

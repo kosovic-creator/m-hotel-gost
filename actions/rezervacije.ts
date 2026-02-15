@@ -437,11 +437,17 @@ export async function dodajRezervacijuSaGostom(formData: FormData) {
       }
 
     revalidatePath('/rezervacije');
-    return { rezervacija: result.rezervacija };
+    redirect(
+      createSuccessRedirect(
+        `/rezervacije/${result.rezervacija.id}`,
+        'successAddedWithGuest',
+        lang
+      )
+    );
   } catch (error: any) {
     // Ignoriraj NEXT_REDIRECT grešku, dozvoli redirect
     if (error?.digest && error.digest.startsWith('NEXT_REDIRECT')) {
-      return;
+      throw error;
     }
     revalidatePath('/rezervacije');
     console.error('Greška pri dodavanju rezervacije sa gostom:', error);

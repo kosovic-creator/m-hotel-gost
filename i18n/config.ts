@@ -17,6 +17,8 @@ import mnSobe from './locales/mn/sobe.json';
 import enSobe from './locales/en/sobe.json';
 import enOHotelu from './locales/en/o_hotelu.json';
 import mnOHotelu from './locales/mn/o_hotelu.json';
+import mnSudent from './locales/mn/student.json';
+import enStudent from './locales/en/student.json';
 
 
 const resources = {
@@ -28,6 +30,7 @@ const resources = {
     gosti: enGosti,
     sobe: enSobe,
     o_hotelu: enOHotelu,
+    student: enStudent,
   },
   mn: {
     common: mnCommon,
@@ -37,6 +40,7 @@ const resources = {
     gosti: mnGosti,
     sobe: mnSobe,
     o_hotelu: mnOHotelu,
+    student: mnSudent,
   },
 };
 
@@ -47,7 +51,7 @@ if (!i18n.isInitialized) {
       fallbackLng: 'en',
       supportedLngs: ['en', 'mn'],
       debug: false,
-      ns: ['common', 'auth', 'navbar', 'rezervacije', 'gosti', 'sobe', 'o_hotelu'],
+      ns: ['common', 'auth', 'navbar', 'rezervacije', 'gosti', 'sobe', 'o_hotelu', 'student'],
       defaultNS: 'common',
       resources,
       backend: false, // onemogući backend loader i na klijentu

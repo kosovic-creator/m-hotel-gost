@@ -52,7 +52,7 @@ const DodajRezervacijuPage = async ({
             <h1 className="text-xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">{messages.book_now}</h1>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{commonMessages.form_description}</p>
           </div>
-          <form action="/api/rezervacije/dodaj" method="POST">
+          <form action={dodajRezervacijuSaGostom}>
             <HiddenField name="lang" value={lang} />
             <div className="border-b pb-6 mb-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">{messages.reservation_details}</h3>
