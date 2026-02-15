@@ -3,6 +3,7 @@
 
 import prisma from '@/lib/prisma';
 import { getLocaleMessages } from '@/i18n/i18n';
+import { getLocale } from '@/i18n/locale';
 import { createErrorRedirect, createFailureRedirect, createSuccessRedirect } from '@/lib/formHelpers';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -21,11 +22,6 @@ type GostFormValues = {
     drzava: string;
     email: string;
     telefon?: string;
-};
-
-const getLang = (formData: FormData) => {
-    const lang = formData.get('lang');
-    return lang === 'en' ? 'en' : 'sr';
 };
 
 const parseGostForm = (formData: FormData): GostFormValues => {
@@ -70,15 +66,14 @@ const validateGost = (lang: Lang, values: GostValues) => {
     return gostSchema(t).safeParse(values);
 };
 
-const requireValidId = (id: number | undefined, lang: Lang, failurePath = '/gosti') => {
+const requireValidId = async (id: number | undefined, failurePath = '/gosti') => {
     if (!id) {
-        redirect(createFailureRedirect(failurePath, 'errorGeneral', lang));
+        redirect(createFailureRedirect(failurePath, 'errorGeneral'));
     }
 };
 
-const handleDbError = (
+const handleDbError = async (
     error: any,
-    lang: Lang,
     failurePath: string,
     revalidateOnError: string,
     logLabel: string
@@ -86,7 +81,7 @@ const handleDbError = (
     console.error(logLabel, error);
     revalidatePath(revalidateOnError);
     const message = error?.code === 'P2002' ? 'errorExists' : 'errorGeneral';
-    redirect(createFailureRedirect(failurePath, message, lang));
+    redirect(createFailureRedirect(failurePath, message));
 };
 
 export const ucitajGoste = async (search?: string) => {
@@ -138,7 +133,7 @@ export async function dodajGosta(formData: FormData) {
         email,
         telefon
     } = parseGostForm(formData);
-    const lang = getLang(formData);
+    const lang = await getLocale();
 
     const result = validateGost(lang, {
         titula,
@@ -169,7 +164,7 @@ export async function dodajGosta(formData: FormData) {
             email,
             telefon: telefon || ''
         };
-        redirect(createErrorRedirect('/gosti', errors, formValues, lang));
+        redirect(createErrorRedirect('/gosti', errors, formValues));
     }
 
     try {
@@ -189,11 +184,11 @@ export async function dodajGosta(formData: FormData) {
             },
         });
     } catch (error: any) {
-        handleDbError(error, lang, '/gosti', '/gosti/dodaj', "Greška pri dodavanju gosta:");
+        await handleDbError(error, '/gosti', '/gosti/dodaj', "Greška pri dodavanju gosta:");
     }
 
     revalidatePath('/gosti');
-    redirect(createSuccessRedirect('/gosti', 'successAdded', lang));
+    redirect(createSuccessRedirect('/gosti', 'successAdded'));
 }
 
 export async function updateGost(formData: FormData) {
@@ -211,9 +206,9 @@ export async function updateGost(formData: FormData) {
         email,
         telefon
     } = parseGostForm(formData);
-    const lang = getLang(formData);
+    const lang = await getLocale();
 
-    requireValidId(id, lang, '/gosti/izmeni');
+    await requireValidId(id, '/gosti/izmeni');
 
     const result = validateGost(lang, {
         titula,
@@ -245,7 +240,7 @@ export async function updateGost(formData: FormData) {
             email,
             telefon: telefon || ''
         };
-        redirect(createErrorRedirect('/gosti/izmeni', errors, formValues, lang));
+        redirect(createErrorRedirect('/gosti/izmeni', errors, formValues));
     }
 
     try {
@@ -266,18 +261,17 @@ export async function updateGost(formData: FormData) {
             },
         });
     } catch (error: any) {
-        handleDbError(error, lang, '/gosti/izmeni', '/gosti/izmeni', "Greška pri izmeni gosta:");
+        await handleDbError(error, '/gosti/izmeni', '/gosti/izmeni', "Greška pri izmeni gosta:");
     }
 
     revalidatePath('/gosti');
-    redirect(createSuccessRedirect('/gosti', 'successUpdated', lang));
+    redirect(createSuccessRedirect('/gosti', 'successUpdated'));
 }
 
 export async function obrisiGosta(formData: FormData) {
     const { id } = parseGostForm(formData);
-    const lang = getLang(formData);
 
-    requireValidId(id, lang, '/gosti');
+    await requireValidId(id, '/gosti');
 
     try {
         await prisma.gost.delete({
@@ -285,11 +279,11 @@ export async function obrisiGosta(formData: FormData) {
         });
     } catch {
         revalidatePath('/gosti');
-        redirect(createFailureRedirect('/gosti', 'errorGeneral', lang));
+        redirect(createFailureRedirect('/gosti', 'errorGeneral'));
     }
 
     revalidatePath('/gosti');
-    redirect(createSuccessRedirect('/gosti', 'successDeleted', lang));
+    redirect(createSuccessRedirect('/gosti', 'successDeleted'));
 }
 
 

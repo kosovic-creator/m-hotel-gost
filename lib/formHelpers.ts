@@ -3,11 +3,9 @@
 export function createErrorRedirect(
   path: string,
   errors: Record<string, string[] | undefined>,
-  formValues: Record<string, string | number | boolean>,
-  lang: string
+  formValues: Record<string, string | number | boolean>
 ): string {
   const params = new URLSearchParams();
-  params.append('lang', lang);
 
   // Dodaj greške
   Object.entries(errors).forEach(([key, value]) => {
@@ -31,11 +29,9 @@ export function createErrorRedirect(
  */
 export function createSuccessRedirect(
   path: string,
-  message: string,
-  lang: string
+  message: string
 ): string {
   const params = new URLSearchParams();
-  params.append('lang', lang);
   params.append('success', message);
   return `${path}?${params.toString()}`;
 }
@@ -45,11 +41,9 @@ export function createSuccessRedirect(
  */
 export function createFailureRedirect(
   path: string,
-  message: string,
-  lang: string
+  message: string
 ): string {
   const params = new URLSearchParams();
-  params.append('lang', lang);
   params.append('error', message);
   return `${path}?${params.toString()}`;
 }

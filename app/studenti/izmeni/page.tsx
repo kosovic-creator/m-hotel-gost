@@ -1,12 +1,13 @@
 import {ucitajStudentaId,izmeniStudenta} from '@/actions/student';
 import { FormWrapper, InputField, HiddenField } from '@/components/form/FormComponents';
 import { getLocaleMessages } from '@/i18n/i18n';
+import { getLocale } from '@/i18n/locale';
 import { extractErrors, getFieldValue } from '@/lib/helpers/url';
 import { StudentSearchParams } from '@/lib/types/searchParams';
 
 export default async function IzmjeniGostaPage({ searchParams }: { searchParams: Promise<StudentSearchParams> }) {
     const params = await searchParams;
-    const lang = params?.lang === 'en' ? 'en' : 'sr';
+    const lang = await getLocale();
     const t = await getLocaleMessages(lang, 'student');
     const commonMessages = await getLocaleMessages(lang, 'common');
 
@@ -37,7 +38,6 @@ export default async function IzmjeniGostaPage({ searchParams }: { searchParams:
             cancelHref="/studenti"
             description={commonMessages.form_description}
         >
-            <HiddenField name="lang" value={lang} />
             <HiddenField name="studentId" value={student.id} />
             <InputField
                 name="ime"

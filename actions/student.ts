@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createErrorRedirect, createSuccessRedirect, createFailureRedirect } from '@/lib/formHelpers';
 import { getLocaleMessages } from '@/i18n/i18n';
+import { getLocale } from '@/i18n/locale';
 import { studentSchema } from '@/app/validacija/studentSchema';
 
 
@@ -35,7 +36,7 @@ export const ucitajStudentaId = async (searchParams: { studentId: number }) => {
 };
 export async function dodajStudenta(formData: FormData) {
   const ime = formData.get('ime') as string;
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
+  const lang = await getLocale();
   const t = await getLocaleMessages(lang, 'student');
   const tFunc = (key: string) => t[key] || key;
   const result = studentSchema(tFunc).safeParse({ ime });
@@ -44,7 +45,7 @@ export async function dodajStudenta(formData: FormData) {
     revalidatePath('/studenti/dodaj');
     const errors = result.error.flatten().fieldErrors;
     const formValues = { ime };
-    redirect(createErrorRedirect('/studenti/dodaj', errors, formValues, lang));
+    redirect(createErrorRedirect('/studenti/dodaj', errors, formValues));
   }
 
   try {
@@ -54,18 +55,18 @@ export async function dodajStudenta(formData: FormData) {
   } catch (error: any) {
     revalidatePath('/studenti');
     const message = error.code === 'P2002' ? 'student_already_exists' : 'student_create_error';
-    redirect(createFailureRedirect('/studenti', message, lang));
+    redirect(createFailureRedirect('/studenti', message));
   }
 
   revalidatePath('/studenti');
-  redirect(createSuccessRedirect('/studenti', 'student_create_success', lang));
+  redirect(createSuccessRedirect('/studenti', 'student_create_success'));
 }
 
 
 export async function izmeniStudenta(formData: FormData) {
   const id = Number(formData.get('studentId'));
   const ime = formData.get('ime') as string;
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
+  const lang = await getLocale();
 
   const t = await getLocaleMessages(lang, 'student'); // Promijeni sa 'studenti' na 'student'
   const tFunc = (key: string) => t[key] || key;
@@ -76,7 +77,7 @@ export async function izmeniStudenta(formData: FormData) {
     revalidatePath(basePath);
     const errors = result.error.flatten().fieldErrors;
     const formValues = { ime, studentId: id };
-    redirect(createErrorRedirect(basePath, errors, formValues, lang));
+    redirect(createErrorRedirect(basePath, errors, formValues));
   }
 
   try {
@@ -87,17 +88,17 @@ export async function izmeniStudenta(formData: FormData) {
   } catch (error: any) {
     revalidatePath('/studenti');
     const message = error.code === 'P2002' ? 'student_already_exists' : 'student_update_error';
-    redirect(createFailureRedirect('/studenti', message, lang));
+    redirect(createFailureRedirect('/studenti', message));
   }
 
   revalidatePath('/studenti');
-  redirect(createSuccessRedirect('/studenti', 'student_update_success', lang));
+  redirect(createSuccessRedirect('/studenti', 'student_update_success'));
 }
 
 
 export async function obrisiStudenta(formData: FormData) {
   const id = Number(formData.get('id'));
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
+  const lang = await getLocale();
 
   try {
     const student = await prisma.student.findUnique({ where: { id } });
@@ -107,11 +108,11 @@ export async function obrisiStudenta(formData: FormData) {
     await prisma.student.delete({ where: { id } });
   } catch (error) {
     revalidatePath('/studenti');
-    redirect(createFailureRedirect('/studenti', 'student_delete_error', lang));
+    redirect(createFailureRedirect('/studenti', 'student_delete_error'));
   }
 
   revalidatePath('/studenti');
-  redirect(createSuccessRedirect('/studenti', 'student_delete_success', lang));
+  redirect(createSuccessRedirect('/studenti', 'student_delete_success'));
 }
 
 export default traziStudenta;

@@ -2,6 +2,7 @@
 import { ucitajRezervacije } from '@/actions/rezervacije';
 import { ucitajSobe } from '@/actions/sobe';
 import { getLocaleMessages } from '@/i18n/i18n';
+import { getLocale } from '@/i18n/locale';
 import { Metadata } from 'next';
 import { SuccessMessage, ErrorMessage } from '@/components/messages/MessageComponents';
 import RezervacijeContent from './RezervacijeContent';
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   title: 'Rezervacije'
 };
 
-export default async function RezervacijePage({ searchParams }: { searchParams: Promise<{ lang?: string; search?: string;[key: string]: string | undefined }> }) {
+export default async function RezervacijePage({ searchParams }: { searchParams: Promise<{ search?: string; success?: string; error?: string;[key: string]: string | undefined }> }) {
   const params = await searchParams;
   const search = params.search || '';
 
@@ -37,7 +38,7 @@ export default async function RezervacijePage({ searchParams }: { searchParams: 
     opis_en: s.opis_en,
   }));
 
-  const lang: "en" | "sr" = params?.lang === "en" ? "en" : "sr";
+  const lang = await getLocale();
   const t = getLocaleMessages(lang, 'rezervacije');
   const successParam = params.success;
   const errorParam = params.error;

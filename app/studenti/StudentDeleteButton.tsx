@@ -6,7 +6,6 @@ import { obrisiStudenta } from '@/actions/student';
 
 type StudentDeleteButtonProps = {
   id: string | number;
-  lang: string;
   label: string;
   confirmTitle: string;
   confirmBody: string;
@@ -16,7 +15,6 @@ type StudentDeleteButtonProps = {
 
 export function StudentDeleteButton({
   id,
-  lang,
   label,
   confirmTitle,
   confirmBody,
@@ -50,7 +48,6 @@ export function StudentDeleteButton({
       onSubmit={() => setIsSubmitting(true)}
     >
       <input type="hidden" name="id" value={id} />
-      <input type="hidden" name="lang" value={lang} />
       <Button
         variant="ghost"
         type="button"

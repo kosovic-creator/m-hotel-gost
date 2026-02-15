@@ -1,8 +1,8 @@
 import React from 'react'
+import { getLocale } from '@/i18n/locale';
 
-const OHotelu =  async ({ searchParams }: { searchParams: Promise<{ lang?: string;[key: string]: string | undefined }> }) => {
-    const params = await searchParams;
-  const lang: "en" | "sr" = params?.lang === "en" ? "en" : "sr";
+const OHotelu = async () => {
+  const lang = await getLocale();
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="max-w-2xl text-center text-amber-500 space-y-5 px-4 py-8 rounded-lg shadow-lg">

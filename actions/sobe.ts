@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createErrorRedirect, createSuccessRedirect, createFailureRedirect } from '@/lib/formHelpers';
+import { getLocale } from '@/i18n/locale';
 
 
 export const ucitajSobe = async () => {
@@ -38,7 +39,7 @@ export async function dodajSobu(formData: FormData) {
   const slikeRaw = formData.get('slike') as string;
   const tip_en = formData.get('tip_en') as string;
   const opis_en = formData.get('opis_en') as string;
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
+  const lang = await getLocale();
 
   const slike = slikeRaw ? slikeRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
 
@@ -50,7 +51,7 @@ export async function dodajSobu(formData: FormData) {
     revalidatePath('/sobe/dodaj');
     const errors = result.error.flatten().fieldErrors;
     const formValues = { broj, tip, kapacitet, cena, opis, slike: slikeRaw, tip_en, opis_en };
-    redirect(createErrorRedirect('/sobe/dodaj', errors, formValues, lang));
+    redirect(createErrorRedirect('/sobe/dodaj', errors, formValues));
   }
 
   try {
@@ -60,11 +61,11 @@ export async function dodajSobu(formData: FormData) {
   } catch (error: any) {
     revalidatePath('/sobe');
     const message = error.code === 'P2002' ? 'errorExists' : 'errorGeneral';
-    redirect(createFailureRedirect('/sobe', message, lang));
+    redirect(createFailureRedirect('/sobe', message));
   }
 
   revalidatePath('/sobe');
-  redirect(createSuccessRedirect('/sobe', 'successAdded', lang));
+  redirect(createSuccessRedirect('/sobe', 'successAdded'));
 }
 
 export const azurirajSobu = async (formData: FormData) => {
@@ -80,7 +81,7 @@ export const azurirajSobu = async (formData: FormData) => {
   const tip_en = formData.get('tip_en') as string;
   const opis_en = formData.get('opis_en') as string;
   const slikeRaw = formData.get('slike') as string;
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
+  const lang = await getLocale();
 
   const slike = slikeRaw ? slikeRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
 
@@ -92,7 +93,7 @@ export const azurirajSobu = async (formData: FormData) => {
     revalidatePath('/sobe/izmeni');
     const errors = result.error.flatten().fieldErrors;
     const formValues = { broj, tip, kapacitet, cena, opis, slike: slikeRaw, tip_en, opis_en, sobaId: id };
-    redirect(createErrorRedirect('/sobe/izmeni', errors, formValues, lang));
+    redirect(createErrorRedirect('/sobe/izmeni', errors, formValues));
   }
 
   try {
@@ -103,17 +104,16 @@ export const azurirajSobu = async (formData: FormData) => {
   } catch (error: any) {
     revalidatePath('/sobe');
     const message = error.code === 'P2002' ? 'errorExists' : 'errorGeneral';
-    redirect(createFailureRedirect('/sobe', message, lang));
+    redirect(createFailureRedirect('/sobe', message));
   }
 
   revalidatePath('/sobe');
-  redirect(createSuccessRedirect('/sobe', 'successUpdated', lang));
+  redirect(createSuccessRedirect('/sobe', 'successUpdated'));
 };
 
 
 export async function obrisiSobu(formData: FormData) {
   const id = Number(formData.get('id'));
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
 
   try {
     const soba = await prisma.soba.findUnique({ where: { id } });
@@ -123,10 +123,10 @@ export async function obrisiSobu(formData: FormData) {
     await prisma.soba.delete({ where: { id } });
   } catch {
     revalidatePath('/sobe');
-    redirect(createFailureRedirect('/sobe', 'errorGeneral', lang));
+    redirect(createFailureRedirect('/sobe', 'errorGeneral'));
   }
 
   revalidatePath('/sobe');
-  redirect(createSuccessRedirect('/sobe', 'successDeleted', lang));
+  redirect(createSuccessRedirect('/sobe', 'successDeleted'));
 }
 

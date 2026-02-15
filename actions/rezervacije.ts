@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { rezervacijaSchema } from '@/app/validacija/rezervacijaSchema';
 import { rezervacijaGostSchema } from '@/app/validacija/rezervacijaGostSchema';
 import { getLocaleMessages } from '@/i18n/i18n';
+import { getLocale } from '@/i18n/locale';
 import { createErrorRedirect, createSuccessRedirect, createFailureRedirect, toDateInput } from '@/lib/formHelpers';
 import { sendReservationConfirmationEmail } from '@/lib/email';
 import { rascunajUkupnuCenu } from '@/lib/helpers/rezervacije';
@@ -70,7 +71,7 @@ export async function dodajRezervaciju(formData: FormData) {
   const broj_osoba = formData.get('broj_osoba');
   const popust = formData.get('popust');
   const status = formData.get('status');
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
+  const lang = await getLocale();
 
   const messages = getLocaleMessages(lang, 'rezervacije');
   const t = (key: string) => messages[key] || key;
@@ -95,7 +96,7 @@ export async function dodajRezervaciju(formData: FormData) {
       popust: popust ? String(popust) : '0',
       status: status ? String(status) : ''
     };
-    redirect(createErrorRedirect('/rezervacije/dodaj', errors, formValues, lang));
+    redirect(createErrorRedirect('/rezervacije/dodaj', errors, formValues));
   }
 
   let rezervacijaId: number | null = null;
@@ -109,7 +110,7 @@ export async function dodajRezervaciju(formData: FormData) {
     const prekolapanje = await provjeriPreklapanjeRezervacije(sobaBroj, prijavaDate, odjavyDate);
 
     if (prekolapanje) {
-      redirect(createFailureRedirect('/rezervacije/dodaj', 'overlapError', lang));
+      redirect(createFailureRedirect('/rezervacije/dodaj', 'overlapError'));
     }
 
     // Kreiraj rezervaciju i učitaj sve potrebne podatke
@@ -190,7 +191,7 @@ export async function izmeniRezervaciju(formData: FormData) {
   const broj_osoba = formData.get('broj_osoba');
   const popust = formData.get('popust');
   const status = formData.get('status');
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
+  const lang = await getLocale();
 
   const messages = getLocaleMessages(lang, 'rezervacije');
   const t = (key: string) => messages[key] || key;
@@ -208,7 +209,7 @@ export async function izmeniRezervaciju(formData: FormData) {
       popust: popust ? String(popust) : '0',
       status: status ? String(status) : ''
     };
-    redirect(createErrorRedirect('/rezervacije/izmeni', errors, formValues, lang));
+    redirect(createErrorRedirect('/rezervacije/izmeni', errors, formValues));
   }
 
   try {
@@ -221,7 +222,7 @@ export async function izmeniRezervaciju(formData: FormData) {
     const prekolapanje = await provjeriPreklapanjeRezervacije(sobaBroj, prijavaDate, odjavyDate, id);
 
     if (prekolapanje) {
-      redirect(createFailureRedirect('/rezervacije/izmeni', 'overlapError', lang));
+      redirect(createFailureRedirect('/rezervacije/izmeni', 'overlapError'));
     }
 
     await prisma.rezervacija.update({
@@ -238,16 +239,15 @@ export async function izmeniRezervaciju(formData: FormData) {
     });
   } catch {
     revalidatePath('/rezervacije');
-    redirect(createFailureRedirect('/rezervacije', 'errorGeneral', lang));
+    redirect(createFailureRedirect('/rezervacije', 'errorGeneral'));
   }
 
   revalidatePath('/rezervacije');
-  redirect(createSuccessRedirect('/rezervacije', 'successUpdated', lang));
+  redirect(createSuccessRedirect('/rezervacije', 'successUpdated'));
 }
 
 export async function obrisiRezervaciju(formData: FormData) {
   const id = Number(formData.get('id'));
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
 
   try {
     const rezervacija = await prisma.rezervacija.findUnique({ where: { id } });
@@ -257,11 +257,11 @@ export async function obrisiRezervaciju(formData: FormData) {
     await prisma.rezervacija.delete({ where: { id } });
   } catch {
     revalidatePath('/rezervacije');
-    redirect(createFailureRedirect('/rezervacije', 'errorGeneral', lang));
+    redirect(createFailureRedirect('/rezervacije', 'errorGeneral'));
   }
 
   revalidatePath('/rezervacije');
-  redirect(createSuccessRedirect('/rezervacije', 'successDeleted', lang));
+  redirect(createSuccessRedirect('/rezervacije', 'successDeleted'));
 }
 
 // Nova transakcijska funkcija za kreiranje rezervacije sa gostom
@@ -273,7 +273,7 @@ export async function dodajRezervacijuSaGostom(formData: FormData) {
   const broj_osoba = formData.get('broj_osoba');
   const popust = formData.get('popust');
   const status = formData.get('status');
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
+  const lang = await getLocale();
 
   // Podaci o gostu
   const gost_titula = formData.get('gost_titula');
@@ -340,7 +340,7 @@ export async function dodajRezervacijuSaGostom(formData: FormData) {
       postojeci_gost: postojeci_gost ? String(postojeci_gost) : '',
       koristi_postojeceg_gosta: String(koristi_postojeceg_gosta)
     };
-    redirect(createErrorRedirect('/rezervacije/dodaj', errors, formValues, lang));
+    redirect(createErrorRedirect('/rezervacije/dodaj', errors, formValues));
   }
 
   try {
@@ -352,7 +352,7 @@ export async function dodajRezervacijuSaGostom(formData: FormData) {
     const prekolapanje = await provjeriPreklapanjeRezervacije(sobaBroj, prijavaDate, odjawaDate);
 
     if (prekolapanje) {
-      redirect(createFailureRedirect('/rezervacije/dodaj', 'overlapError', lang));
+      redirect(createFailureRedirect('/rezervacije/dodaj', 'overlapError'));
     }
 
     // Transakcija: kreiraj gosta i rezervaciju ovdje počinje transakciona funkcija
@@ -440,8 +440,7 @@ export async function dodajRezervacijuSaGostom(formData: FormData) {
     redirect(
       createSuccessRedirect(
         `/rezervacije/${result.rezervacija.id}`,
-        'successAddedWithGuest',
-        lang
+        'successAddedWithGuest'
       )
     );
   } catch (error: any) {
@@ -454,21 +453,21 @@ export async function dodajRezervacijuSaGostom(formData: FormData) {
 
     // Prisma unique error
     if (error.code === 'P2002') {
-      redirect(createFailureRedirect('/rezervacije/dodaj', 'emailExists', lang));
+      redirect(createFailureRedirect('/rezervacije/dodaj', 'emailExists'));
       return;
     }
     // Preklapanje rezervacije
     if (error.message && error.message.includes('overlapError')) {
-      redirect(createFailureRedirect('/rezervacije/dodaj', 'overlapError', lang));
+      redirect(createFailureRedirect('/rezervacije/dodaj', 'overlapError'));
       return;
     }
     // Odabrani gost ne postoji
     if (error.message && error.message.includes('Odabrani gost ne postoji')) {
-      redirect(createFailureRedirect('/rezervacije/dodaj', 'guestNotFound', lang));
+      redirect(createFailureRedirect('/rezervacije/dodaj', 'guestNotFound'));
       return;
     }
     // Ostale greške
-    redirect(createFailureRedirect('/rezervacije/dodaj', 'errorGeneral', lang));
+    redirect(createFailureRedirect('/rezervacije/dodaj', 'errorGeneral'));
   }
 }
 // Remove the stray closing bracket here.
@@ -484,7 +483,7 @@ export async function izmeniRezervacijuSaGostom(formData: FormData) {
   const broj_osoba = formData.get('broj_osoba');
   const popust = formData.get('popust');
   const status = formData.get('status');
-  const lang = (formData.get('lang') as string) === 'en' ? 'en' : 'sr';
+  const lang = await getLocale();
 
   // Podaci o gostu
   const gost_id = formData.get('gost_id'); // ID postojećeg gosta ili 'new' za novog
@@ -553,7 +552,7 @@ export async function izmeniRezervacijuSaGostom(formData: FormData) {
       postojeci_gost: postojeci_gost ? String(postojeci_gost) : '',
       koristi_postojeceg_gosta: String(koristi_postojeceg_gosta)
     };
-    redirect(createErrorRedirect('/rezervacije/izmeni', errors, formValues, lang));
+    redirect(createErrorRedirect('/rezervacije/izmeni', errors, formValues));
   }
 
   try {
@@ -565,7 +564,7 @@ export async function izmeniRezervacijuSaGostom(formData: FormData) {
     const prekolapanje = await provjeriPreklapanjeRezervacije(sobaBroj, prijavaDate, odjawaDate, id);
 
     if (prekolapanje) {
-      redirect(createFailureRedirect('/rezervacije/izmeni', 'overlapError', lang));
+      redirect(createFailureRedirect('/rezervacije/izmeni', 'overlapError'));
     }
 
     // Transakcija: ažuriraj gosta i rezervaciju
@@ -646,10 +645,10 @@ export async function izmeniRezervacijuSaGostom(formData: FormData) {
 
     if (error.code === 'P2002') {
       // return { error: 'emailExists' };
-      redirect(createFailureRedirect('/rezervacije/izmeni', 'emailExists', lang));
+      redirect(createFailureRedirect('/rezervacije/izmeni', 'emailExists'));
     } else {
       // return { error: 'errorGeneral' };
-      redirect(createFailureRedirect('/rezervacije/izmeni', 'errorGeneral', lang));
+      redirect(createFailureRedirect('/rezervacije/izmeni', 'errorGeneral'));
     }
   }
 }export async function dajDetaljeRezervacije(rezervacijaId: number) {

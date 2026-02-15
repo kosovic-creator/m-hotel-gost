@@ -1,25 +1,16 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useState } from "react";
+import { useI18n } from "@/i18n/I18nProvider";
 
 export default function Navbar() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
   const [menuOpen, setMenuOpen] = useState(false);
-
-  const currentLang =
-    searchParams?.get("lang") === "en" || searchParams?.get("lang") === "sr"
-      ? (searchParams.get("lang") as "en" | "sr")
-      : "sr";
+  const { language, setLanguage } = useI18n();
 
   const handleChangeLanguage = (lng: "en" | "sr") => {
-    const params = new URLSearchParams(searchParams?.toString());
-    params.set("lang", lng);
-    router.push(`${pathname}?${params.toString()}`);
+    setLanguage(lng);
     setMenuOpen(false);
   };
 
@@ -27,7 +18,7 @@ export default function Navbar() {
     <nav className="w-full bg-transparent px-4 py-3 flex justify-between items-center md:px-6 md:py-4 relative z-20 print:hidden">
       {/* Logo & desktop nav */}
       <div className="flex flex-row items-center gap-4">
-        <Link href={`/?lang=${currentLang}`} className="text-xl font-bold">
+        <Link href="/" className="text-xl font-bold">
           <span className="font-bold text-sm sm:text-base truncate ">
             <span className="text-gray-800">⭕️ </span>
             <span className="text-gray-800">{"M-HOTEL Gost".slice(0, 7)}</span>
@@ -41,8 +32,8 @@ export default function Navbar() {
             asChild
             className="text-amber-500 hover:text-gray-600"
           >
-            <Link href={`/sobe?lang=${currentLang}`}>
-              {currentLang === "sr" ? "Sobe" : "Rooms"}
+            <Link href="/sobe">
+              {language === "sr" ? "Sobe" : "Rooms"}
             </Link>
           </Button>
           <Button
@@ -52,8 +43,8 @@ export default function Navbar() {
             onClick={() => setMenuOpen(false)}
             className="text-amber-500 hover:text-gray-300"
           >
-            <Link href={`/o_hotelu?lang=${currentLang}`}>
-              {currentLang === "sr" ? "O hotelu" : "About"}
+            <Link href="/o_hotelu">
+              {language === "sr" ? "O hotelu" : "About"}
             </Link>
           </Button>
         </div>
@@ -77,8 +68,8 @@ export default function Navbar() {
             onClick={() => setMenuOpen(false)}
             className="text-amber-500 hover:text-gray-300"
           >
-            <Link href={`/sobe?lang=${currentLang}`}>
-              {currentLang === "sr" ? "Sobe" : "Rooms"}
+            <Link href="/sobe">
+              {language === "sr" ? "Sobe" : "Rooms"}
             </Link>
           </Button>
           <Button
@@ -88,8 +79,8 @@ export default function Navbar() {
             onClick={() => setMenuOpen(false)}
             className="text-amber-500 hover:text-gray-300"
           >
-            <Link href={`/o_hotelu?lang=${currentLang}`}>
-              {currentLang === "sr" ? "O hotelu" : "About"}
+            <Link href="/o_hotelu">
+              {language === "sr" ? "O hotelu" : "About"}
             </Link>
           </Button>
           {/* Language buttons */}
@@ -97,7 +88,7 @@ export default function Navbar() {
             <Button
               variant="ghost"
               onClick={() => handleChangeLanguage("en")}
-              className={`flex items-center gap-1 text-white hover:text-gray-400 ${currentLang === "en" ? "font-bold" : ""}`}
+              className={`flex items-center gap-1 text-white hover:text-gray-400 ${language === "en" ? "font-bold" : ""}`}
             >
               <span role="img" aria-label="EN">
                 🇬🇧
@@ -106,7 +97,7 @@ export default function Navbar() {
             <Button
               variant="ghost"
               onClick={() => handleChangeLanguage("sr")}
-              className={`flex items-center gap-1 text-white hover:text-gray-400 ${currentLang === "sr" ? "font-bold" : ""}`}
+              className={`flex items-center gap-1 text-white hover:text-gray-400 ${language === "sr" ? "font-bold" : ""}`}
             >
               <span role="img" aria-label="MN">
                 🇲🇪
@@ -140,7 +131,7 @@ export default function Navbar() {
         <Button
           variant="ghost"
           onClick={() => handleChangeLanguage("en")}
-          className={`flex items-center gap-1 text-white hover:text-gray-400 ${currentLang === "en" ? "font-bold" : ""}`}
+          className={`flex items-center gap-1 text-white hover:text-gray-400 ${language === "en" ? "font-bold" : ""}`}
         >
           <span role="img" aria-label="EN">
             🇬🇧
@@ -150,7 +141,7 @@ export default function Navbar() {
         <Button
           variant="ghost"
           onClick={() => handleChangeLanguage("sr")}
-          className={`flex items-center gap-1 text-white hover:text-gray-400 ${currentLang === "sr" ? "font-bold" : ""}`}
+          className={`flex items-center gap-1 text-white hover:text-gray-400 ${language === "sr" ? "font-bold" : ""}`}
         >
           <span role="img" aria-label="MN">
             🇲🇪

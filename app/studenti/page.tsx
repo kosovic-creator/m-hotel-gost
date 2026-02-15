@@ -10,6 +10,7 @@ import traziStudenta  from '@/actions/student';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getLocaleMessages } from '@/i18n/i18n';
+import { getLocale } from '@/i18n/locale';
 import { ErrorMessage, SuccessMessage } from '@/components/messages';
 import { StudentSearch } from './StudentSearch';
 import { Suspense } from 'react';
@@ -18,10 +19,10 @@ import { StudentDeleteButton } from './StudentDeleteButton';
 export default async function StudentiPage({
   searchParams,
 }: {
-  searchParams: Promise<{ lang?: string; success?: string; error?: string; query?: string }>;
+    searchParams: Promise<{ success?: string; error?: string; query?: string }>;
 }) {
   const params = await searchParams;
-  const lang = params?.lang === 'en' ? 'en' : 'sr';
+  const lang = await getLocale();
   const query = params?.query || '';
   const t = await getLocaleMessages(lang, 'student');
   const students = await traziStudenta({ query });
@@ -67,14 +68,13 @@ export default async function StudentiPage({
                     <TableCell className="font-medium">{student.ime}</TableCell>
                     <TableCell className="font-medium">
                       <div className="flex gap-2">
-                        <Link href={`/studenti/izmeni?studentId=${student.id}&lang=${lang}`}>
+                        <Link href={`/studenti/izmeni?studentId=${student.id}`}>
                           <Button variant="ghost" >
                             {t.edit}
                           </Button>
                         </Link>
                         <StudentDeleteButton
                           id={student.id}
-                          lang={lang}
                           label={t.delete}
                           confirmTitle={t.delete_confirm_title ?? 'Potvrdi brisanje'}
                           confirmBody={

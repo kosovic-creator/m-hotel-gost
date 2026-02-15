@@ -217,7 +217,7 @@ export default function RezervacijeContent({
                         return (
                           <div
                             key={soba.id}
-                            className="rounded-lg bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 backdrop-blur-sm bg-white/95"
+                            className="rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 backdrop-blur-sm bg-white/95"
                           >
                             {/* Image */}
                             <div className="relative h-48 bg-gray-200 overflow-hidden">

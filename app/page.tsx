@@ -1,10 +1,10 @@
 
 import Link from "next/link";
+import { getLocale } from "@/i18n/locale";
 
 
-export default async function Home({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
-  const params = await searchParams;
-  const lang: "en" | "sr" = params?.lang === "en" ? "en" : "sr";
+export default async function Home() {
+  const lang = await getLocale();
 
   return (
     <>

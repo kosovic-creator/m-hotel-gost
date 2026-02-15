@@ -1,5 +1,6 @@
 import { dajDetaljeRezervacije } from '@/actions/rezervacije';
 import { getLocaleMessages } from '@/i18n/i18n';
+import { getLocale } from '@/i18n/locale';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 
 interface RezervacijaPageProps {
   params: Promise<{ id: string }>;
-    searchParams: Promise<{ lang?: string; success?: string }>;
+    searchParams: Promise<{ success?: string }>;
 }
 
 export default async function RezervacijaPage({ params, searchParams }: RezervacijaPageProps) {
@@ -31,7 +32,7 @@ export default async function RezervacijaPage({ params, searchParams }: Rezervac
     notFound();
   }
 
-    const lang: "en" | "sr" = resolvedSearchParams?.lang === "en" ? "en" : "sr";
+    const lang = await getLocale();
   const t = getLocaleMessages(lang, 'rezervacije');
   const commonT = getLocaleMessages(lang, 'common');
     const successKey = resolvedSearchParams?.success;

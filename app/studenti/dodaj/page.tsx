@@ -1,6 +1,7 @@
 import { dodajStudenta } from '@/actions/student';
 import { FormWrapper, HiddenField, InputField } from '@/components/form';
 import { getLocaleMessages } from '@/i18n/i18n';
+import { getLocale } from '@/i18n/locale';
 import { extractErrors, getFieldValue } from '@/lib/helpers/url';
 import { StudentSearchParams } from '@/lib/types';
 
@@ -11,7 +12,7 @@ const DodajStudenta = async ({
     searchParams: Promise<StudentSearchParams>;
 }) => {
     const params = await searchParams;
-    const lang = params.lang === 'en' ? 'en' : 'sr';
+    const lang = await getLocale();
     const messages = await getLocaleMessages(lang, 'student');
     const errors = extractErrors(params);
     const formData: Record<string, string> = {
@@ -29,8 +30,6 @@ const DodajStudenta = async ({
                 cancelHref="/studenti"
                 description={messages.form_description}
             >
-                <HiddenField name="lang" value={lang} />
-
                 <InputField
                     name="ime"
                     label={messages.name}

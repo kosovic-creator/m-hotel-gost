@@ -4,6 +4,8 @@ import "./globals.css";
 import Navbar from "@/app/components/Navbar";
 import { Suspense } from "react";
 import { Footer } from "./components/footer";
+import { I18nProvider } from "@/i18n/I18nProvider";
+import { getLocale } from "@/i18n/locale";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,13 +30,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const lang = await getLocale();
+
   return (
-    <html lang="en">
+    <html lang={lang}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         style={{
@@ -46,13 +50,15 @@ export default function RootLayout({
           minHeight: '100vh',
         }}
       >
-        <Suspense fallback={null}>
-          <div className="absolute top-0 left-0 right-0 z-50">
-            <Navbar />
-          </div>
-        </Suspense>
-        {children}
-        <Footer />
+        <I18nProvider initialLang={lang}>
+          <Suspense fallback={null}>
+            <div className="absolute top-0 left-0 right-0 z-50">
+              <Navbar />
+            </div>
+          </Suspense>
+          {children}
+          <Footer />
+        </I18nProvider>
       </body>
     </html>
   );
