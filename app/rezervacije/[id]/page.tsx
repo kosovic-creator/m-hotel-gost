@@ -5,6 +5,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import RezervacijaWithPayment from '../components/RezervacijaWithPayment';
+import { SuccessMessage } from '@/components/messages/MessageComponents';
 
 export const metadata: Metadata = {
   title: 'Detalji Rezervacije'
@@ -39,12 +40,8 @@ export default async function RezervacijaPage({ params, searchParams }: Rezervac
 
   return (
       <div className="min-h-screen">
+          {successMessage && <SuccessMessage message={successMessage} position="fixed" rawMessage={true} />}
           <div className="container mx-auto px-4 py-6 lg:py-8">
-              {successMessage && (
-                  <div className="max-w-2xl mx-auto mb-4 rounded border border-green-200 bg-green-50 px-4 py-3 text-green-800">
-                      {successMessage}
-                  </div>
-              )}
               <Card className="max-w-2xl mx-auto shadow-lg">
                   <CardHeader className="bg-linear-to-r from-gray-600 to-gray-400 text-white rounded-t-lg print:hidden">
                       <CardTitle className="flex items-center gap-3">
