@@ -116,12 +116,14 @@ export default function RezervacijeContent({
           <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-lg p-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
               <div className="flex-1">
-                <label className="mb-2 block text-sm font-medium text-gray-700">
-                  {t.start_date || t.checkin_date}
+                <label htmlFor="checkin" className="mb-2 block text-sm font-medium text-gray-700">
+                  {t.start_date || t.checkin_date} <span className="text-red-500">*</span>
                 </label>
                 <Input
+                  id="checkin"
                   type="date"
                   value={periodStart}
+                  placeholder={lang === 'sr' ? 'Datum prijave' : 'Check-in date'}
                   min={new Date().toISOString().split('T')[0]}
                   onChange={(event) => {
                     setPeriodStart(event.target.value);
@@ -133,25 +135,29 @@ export default function RezervacijeContent({
                 />
               </div>
               <div className="flex-1">
-                <label className="mb-2 block text-sm font-medium text-gray-700">
-                  {t.end_date || t.checkout_date}
+                <label htmlFor="checkout" className="mb-2 block text-sm font-medium text-gray-700">
+                  {t.end_date || t.checkout_date} <span className="text-red-500">*</span>
                 </label>
                 <Input
+                  id="checkout"
                   type="date"
                   value={periodEnd}
+                  placeholder={lang === 'sr' ? 'Datum odjave' : 'Check-out date'}
                   min={periodStart || undefined}
                   onChange={(event) => setPeriodEnd(event.target.value)}
                   className="w-full"
                 />
               </div>
               <div className="flex-1 sm:max-w-40">
-                <label className="mb-2 block text-sm font-medium text-gray-700">
-                  {t.number_of_guests_label || 'Broj osoba'}
+                <label htmlFor="guests" className="mb-2 block text-sm font-medium text-gray-700">
+                  {t.number_of_guests_label || 'Broj osoba'} <span className="text-red-500">*</span>
                 </label>
                 <Input
+                  id="guests"
                   type="number"
                   min="1"
                   max="10"
+                  placeholder={lang === 'sr' ? 'Br. gostiju' : 'Guests'}
                   value={numberOfGuestsInput}
                   onChange={(event) => {
                     setNumberOfGuestsInput(event.target.value);
