@@ -113,17 +113,16 @@ export default function RezervacijeContent({
 
         {/* Search Section */}
         <div className="container mx-auto px-4 mb-12">
-          <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-lg p-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
-              <div className="flex-1">
-                <label htmlFor="checkin" className="mb-2 block text-sm font-medium text-gray-700">
-                  {t.start_date || t.checkin_date} <span className="text-red-500">*</span>
+          <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-4 sm:items-end">
+              <div>
+                <label htmlFor="checkin" className="mb-2 flex items-center gap-1 text-sm font-bold text-gray-900">
+                  {lang === 'sr' ? 'Datum prijave' : 'Check-in'} <span className="text-red-500">*</span>
                 </label>
                 <Input
                   id="checkin"
                   type="date"
                   value={periodStart}
-                  placeholder={lang === 'sr' ? 'Datum prijave' : 'Check-in date'}
                   min={new Date().toISOString().split('T')[0]}
                   onChange={(event) => {
                     setPeriodStart(event.target.value);
@@ -131,33 +130,31 @@ export default function RezervacijeContent({
                       setPeriodEnd('');
                     }
                   }}
-                  className="w-full"
+                  className="w-full text-base"
                 />
               </div>
-              <div className="flex-1">
-                <label htmlFor="checkout" className="mb-2 block text-sm font-medium text-gray-700">
-                  {t.end_date || t.checkout_date} <span className="text-red-500">*</span>
+              <div>
+                <label htmlFor="checkout" className="mb-2 flex items-center gap-1 text-sm font-bold text-gray-900">
+                  {lang === 'sr' ? 'Datum odjave' : 'Check-out'} <span className="text-red-500">*</span>
                 </label>
                 <Input
                   id="checkout"
                   type="date"
                   value={periodEnd}
-                  placeholder={lang === 'sr' ? 'Datum odjave' : 'Check-out date'}
                   min={periodStart || undefined}
                   onChange={(event) => setPeriodEnd(event.target.value)}
-                  className="w-full"
+                  className="w-full text-base"
                 />
               </div>
-              <div className="flex-1 sm:max-w-40">
-                <label htmlFor="guests" className="mb-2 block text-sm font-medium text-gray-700">
-                  {t.number_of_guests_label || 'Broj osoba'} <span className="text-red-500">*</span>
+              <div>
+                <label htmlFor="guests" className="mb-2 flex items-center gap-1 text-sm font-bold text-gray-900">
+                  {lang === 'sr' ? 'Broj osoba' : 'Guests'} <span className="text-red-500">*</span>
                 </label>
                 <Input
                   id="guests"
                   type="number"
                   min="1"
                   max="10"
-                  placeholder={lang === 'sr' ? 'Br. gostiju' : 'Guests'}
                   value={numberOfGuestsInput}
                   onChange={(event) => {
                     setNumberOfGuestsInput(event.target.value);
@@ -170,7 +167,7 @@ export default function RezervacijeContent({
                     setNumberOfGuests(validValue);
                     setNumberOfGuestsInput(validValue.toString());
                   }}
-                  className="w-full"
+                  className="w-full text-base"
                 />
               </div>
             </div>
