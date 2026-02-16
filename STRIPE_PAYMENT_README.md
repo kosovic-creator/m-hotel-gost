@@ -13,7 +13,7 @@
 - **`/api/payments/confirm`** - Manual confirmation plaćanja
 
 ## 🛠️ Setup
-
+sas
 ### 1. Environment Variables
 
 Dodajte u `.env.local`:
