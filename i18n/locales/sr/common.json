@@ -25,4 +25,17 @@
   "errorNotFound": "Zapis nije pronađen",
   "form_description": "Popunite sva obavezna polja označena sa *",
   "print": "Štampaj"
+  ,
+  "footer_rights": "Sva prava zadržana.",
+  "footer_brand": "M-Hotel",
+  "payment_missing_params": "Nedostaju parametri",
+  "payment_not_completed": "Plaćanje nije završeno",
+  "payment_failed_confirm": "Greška pri potvrdi plaćanja",
+  "home_luxury": "Uživajte luksuz i udobnost",
+  "home_blend": "Otkrijte savršenu kombinaciju udobnosti, elegancije i vrhunske usluge",
+  "home_book_now": "Rezerviši sada",
+  "home_learn_more": "Saznajte više",
+  "home_rooms": "Sobe",
+  "home_rating": "Ocjene",
+  "home_reviews": "Recenzije"
 }

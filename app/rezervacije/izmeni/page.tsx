@@ -1,6 +1,7 @@
 import { getRezervacijaById, izmeniRezervacijuSaGostom } from '@/actions/rezervacije';
 import { FormWrapper, InputField, HiddenField, SelectField } from '@/components/form/FormComponents';
 import { getLocaleMessages } from '@/i18n/i18n';
+import { getLocale } from '@/i18n/locale';
 import prisma from '@/lib/prisma';
 import { RezervacijaSearchParams } from '@/lib/types/searchParams';
 import { extractErrors, getFieldValue } from '@/lib/helpers/url';
@@ -25,10 +26,10 @@ const IzmeniStrana = async ({
 
     // Ektauj greške iz query parametara
     const errors = extractErrors(params);
-    const lang = params?.lang === 'en' ? 'en' : 'sr';
-    const messages = getLocaleMessages(lang, 'rezervacije');
-    const gostMessages = getLocaleMessages(lang, 'gosti');
-    const commonMessages = getLocaleMessages(lang, 'common');
+    const lang = await getLocale();
+    const messages = await getLocaleMessages(lang, 'rezervacije');
+    const gostMessages = await getLocaleMessages(lang, 'gosti');
+    const commonMessages = await getLocaleMessages(lang, 'common');
 
     // Popuni formData iz query parametara ili iz baze
     const formData: Record<string, string> = {
@@ -67,7 +68,6 @@ const IzmeniStrana = async ({
             description={commonMessages.form_description}
       >
             <HiddenField name="id" value={rezervacije?.id || ''} />
-            <HiddenField name="lang" value={lang} />
             <HiddenField name="gost_id" value={rezervacije?.gost?.id || ''} />
 
             {/* SEKCIJA ZA REZERVACIJU */}

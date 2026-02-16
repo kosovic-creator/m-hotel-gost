@@ -112,7 +112,7 @@ export default function SobeContent({
 
                     {/* CTA Button */}
                     <Button asChild className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold">
-                      <a href={`/rezervacije?soba=${soba.broj}&lang=${lang}`}>
+                      <a href={`/rezervacije?soba=${soba.broj}`}>
                         {lang === "sr" ? "Rezerviriši" : "Book Now"}
                       </a>
                     </Button>

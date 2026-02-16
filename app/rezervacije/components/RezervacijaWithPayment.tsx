@@ -87,12 +87,12 @@ export default function RezervacijaWithPayment({
             </div>
           )}
           <div className="grid grid-cols-2 gap-2 pt-2 md:flex md:flex-row md:justify-center md:items-center">
-            <a href={`/rezervacije?lang=${lang}`} className="w-full md:flex-1">
+            <a href="/rezervacije" className="w-full md:flex-1">
               <Button type="button" className="w-full h-10 rounded-lg border border-gray-300 bg-gray-100 text-gray-900 font-semibold text-sm md:text-base hover:bg-gray-200 transition cursor-pointer print:hidden">
                 {commonT?.back || 'Nazad'}
               </Button>
             </a>
-            <a href={`/rezervacije/izmeni?id=${rezervacija.id}&lang=${lang}`} className="w-full md:flex-1">
+            <a href={`/rezervacije/izmeni?id=${rezervacija.id}`} className="w-full md:flex-1">
               <Button type="button" className="w-full h-10 rounded-lg border bg-gray-700 text-white font-semibold text-sm md:text-base hover:bg-gray-800 transition cursor-pointer print:hidden">
                 {t.editReservation || 'Izmeni rezervaciju'}
               </Button>

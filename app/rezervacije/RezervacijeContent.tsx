@@ -87,7 +87,6 @@ export default function RezervacijeContent({
 
   const getBookingUrl = (roomNumber: string) => {
     const params = new URLSearchParams({
-      lang,
       soba: roomNumber,
       prijava: periodStart,
       odjava: periodEnd,

@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import prisma from '@/lib/prisma';
 import { sendPaymentConfirmationEmail } from '@/lib/email';
+import { getLocaleMessages } from '@/i18n/i18n';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2020-08-27' as any,
@@ -16,8 +17,10 @@ export async function POST(request: NextRequest) {
 
     if (!paymentIntentId || !rezervacijaId) {
       console.error('❌ Nedostaju parametri');
+      const lang = 'sr'; // ili iz requesta/cookie
+      const messages = await getLocaleMessages(lang, 'common');
       return NextResponse.json(
-        { error: 'Missing required parameters' },
+        { error: messages.payment_missing_params },
         { status: 400 }
       );
     }
@@ -27,8 +30,10 @@ export async function POST(request: NextRequest) {
 
     if (paymentIntent.status !== 'succeeded') {
       console.warn(`⚠️ Payment nije completed - status: ${paymentIntent.status}`);
+      const lang = 'sr';
+      const messages = await getLocaleMessages(lang, 'common');
       return NextResponse.json(
-        { error: 'Payment not completed' },
+        { error: messages.payment_not_completed },
         { status: 400 }
       );
     }
@@ -86,8 +91,10 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('❌ Payment confirmation error:', error);
+    const lang = 'sr';
+    const messages = await getLocaleMessages(lang, 'common');
     return NextResponse.json(
-      { error: 'Failed to confirm payment' },
+      { error: messages.payment_failed_confirm },
       { status: 500 }
     );
   }

@@ -1,11 +1,12 @@
 
 import Link from "next/link";
 import { getLocale } from "@/i18n/locale";
+import { getLocaleMessages } from '@/i18n/i18n';
 
 
-export default async function Home() {
+export default async function HomePage() {
   const lang = await getLocale();
-
+  const t = await getLocaleMessages(lang, 'common');
   return (
     <>
       {/* Hotel Banner - Full Screen Hero */}
@@ -24,14 +25,10 @@ export default async function Home() {
             {/* Main Heading */}
             <div className="mb-8">
               <h2 className="text-3xl md:text-5xl font-light mb-4 drop-shadow-lg leading-tight">
-                {lang === "sr"
-                  ? "Uživajte luksuz i udobnost"
-                  : "Experience Luxury & Comfort"}
+                {t.home_luxury}
               </h2>
               <p className="text-lg md:text-xl font-light drop-shadow-lg text-gray-200">
-                {lang === "sr"
-                  ? "Otkrijte savršenu kombinaciju udobnosti, elegancije i vrhunske usluge"
-                  : "Discover the perfect blend of comfort, elegance, and world-class service"}
+                {t.home_blend}
               </p>
             </div>
 
@@ -41,12 +38,12 @@ export default async function Home() {
                 href="/rezervacije"
                 className="px-8 py-3 bg-linear-to-r from-yellow-500 to-yellow-600 text-gray-900 font-semibold rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
               >
-                {lang === "sr" ? "Rezerviriši sada" : "Book Now"}
+                {t.home_book_now}
               </Link>
               <button
                 className="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-gray-900 transition-all duration-300 hover:shadow-lg"
               >
-                {lang === "sr" ? "Saznajte više" : "Learn More"}
+                {t.home_learn_more}
               </button>
             </div>
 
@@ -55,19 +52,19 @@ export default async function Home() {
               <div>
                 <p className="text-3xl md:text-4xl font-bold">25+</p>
                 <p className="text-sm text-gray-200">
-                  {lang === "sr" ? "Sobe" : "Rooms"}
+                  {t.home_rooms}
                 </p>
               </div>
               <div>
                 <p className="text-3xl md:text-4xl font-bold">4.8★</p>
                 <p className="text-sm text-gray-200">
-                  {lang === "sr" ? "Ocjene" : "Rating"}
+                  {t.home_rating}
                 </p>
               </div>
               <div>
                 <p className="text-3xl md:text-4xl font-bold">1000+</p>
                 <p className="text-sm text-gray-200">
-                  {lang === "sr" ? "Recenzije" : "Reviews"}
+                  {t.home_reviews}
                 </p>
               </div>
             </div>

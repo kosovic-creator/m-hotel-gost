@@ -10,7 +10,7 @@ import enRezervacije from './locales/en/rezervacije.json';
 import enGosti from './locales/en/gosti.json';
 import enSobe from './locales/en/sobe.json';
 import enOHotelu from './locales/en/o_hotelu.json';
-import enStudent from './locales/en/student.json';
+
 import srCommon from './locales/sr/common.json';
 import srAuth from './locales/sr/auth.json';
 import srNavbar from './locales/sr/navbar.json';
@@ -18,7 +18,7 @@ import srRezervacije from './locales/sr/rezervacije.json';
 import srGosti from './locales/sr/gosti.json';
 import srSobe from './locales/sr/sobe.json';
 import srOHotelu from './locales/sr/o_hotelu.json';
-import srStudent from './locales/sr/student.json';
+
 
 
 const resources = {
@@ -30,7 +30,7 @@ const resources = {
     gosti: enGosti,
     sobe: enSobe,
     o_hotelu: enOHotelu,
-    student: enStudent,
+
   },
   sr: {
     common: srCommon,
@@ -40,7 +40,7 @@ const resources = {
     gosti: srGosti,
     sobe: srSobe,
     o_hotelu: srOHotelu,
-    student: srStudent,
+
   },
 };
 
@@ -51,7 +51,7 @@ if (!i18n.isInitialized) {
       fallbackLng: 'sr',
       supportedLngs: ['en', 'sr'],
       debug: false,
-      ns: ['common', 'auth', 'navbar', 'rezervacije', 'gosti', 'sobe', 'o_hotelu', 'student'],
+      ns: ['common', 'auth', 'navbar', 'rezervacije', 'gosti', 'sobe', 'o_hotelu'],
       defaultNS: 'common',
       resources,
       backend: false, // onemogući backend loader i na klijentu

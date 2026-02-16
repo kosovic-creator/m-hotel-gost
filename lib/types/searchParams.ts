@@ -15,11 +15,7 @@ export type validacijaSearchParams<T extends string> = {
   [K in T]?: string;
 };
 
-export type StudentSearchParams = validacijaSearchParams<
-  'ime'
-> & {
-  studentId?: string;
-};
+
 
 /**
  * Search params za rezervacije

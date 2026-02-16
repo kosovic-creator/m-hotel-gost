@@ -61,9 +61,10 @@ interface GostValues extends Omit<GostFormValues, 'id'> {
 }
 
 const validateGost = (lang: Lang, values: GostValues) => {
-    const messages = getLocaleMessages(lang, 'gosti');
-    const t = (key: string) => messages[key] || key;
-    return gostSchema(t).safeParse(values);
+    return getLocaleMessages(lang, 'gosti').then(messages => {
+        const t = (key: string) => messages[key] || key;
+        return gostSchema(t).safeParse(values);
+    });
 };
 
 const requireValidId = async (id: number | undefined, failurePath = '/gosti') => {
@@ -135,7 +136,7 @@ export async function dodajGosta(formData: FormData) {
     } = parseGostForm(formData);
     const lang = await getLocale();
 
-    const result = validateGost(lang, {
+    const result = await validateGost(lang, {
         titula,
         ime,
         prezime,
@@ -150,7 +151,7 @@ export async function dodajGosta(formData: FormData) {
     });
 
     if (!result.success) {
-        const errors = result.error.flatten().fieldErrors;
+        const errors = result.error?.flatten().fieldErrors ?? {};
         const formValues = {
             titula,
             ime,
@@ -210,7 +211,7 @@ export async function updateGost(formData: FormData) {
 
     await requireValidId(id, '/gosti/izmeni');
 
-    const result = validateGost(lang, {
+    const result = await validateGost(lang, {
         titula,
         ime,
         prezime,
@@ -225,7 +226,7 @@ export async function updateGost(formData: FormData) {
     });
 
     if (!result.success) {
-        const errors = result.error.flatten().fieldErrors;
+        const errors = result.error?.flatten().fieldErrors ?? {};
         const formValues = {
             id: id!,
             titula,

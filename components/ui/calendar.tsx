@@ -15,6 +15,16 @@ import {
 import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
 
+const getClientLocale = () => {
+  if (typeof document === "undefined") return "en"
+
+  const docLang = document.documentElement.lang
+  if (docLang === "sr" || docLang === "en") return docLang
+
+  const match = document.cookie.match(/(?:^|; )lang=(sr|en)(?:;|$)/)
+  return match?.[1] ?? "en"
+}
+
 function Calendar({
   className,
   classNames,
@@ -42,8 +52,7 @@ function Calendar({
       formatters={{
         formatMonthDropdown: (date) => {
           // Custom formatter for Serbian to ensure Latin script
-          const locale = typeof window !== 'undefined' ?
-            (window.location.href.includes('lang=sr') ? 'sr' : 'en') : 'en';
+          const locale = getClientLocale()
 
           if (locale === 'sr') {
             const monthsLatin = [
@@ -57,8 +66,7 @@ function Calendar({
         },
         formatCaption: (date) => {
           // Custom formatter for Serbian caption to ensure Latin script
-          const locale = typeof window !== 'undefined' ?
-            (window.location.href.includes('lang=sr') ? 'sr' : 'en') : 'en';
+          const locale = getClientLocale()
 
           if (locale === 'sr') {
             const monthsLatinFull = [

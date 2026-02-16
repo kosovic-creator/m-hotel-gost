@@ -33,8 +33,8 @@ export default async function RezervacijaPage({ params, searchParams }: Rezervac
   }
 
     const lang = await getLocale();
-  const t = getLocaleMessages(lang, 'rezervacije');
-  const commonT = getLocaleMessages(lang, 'common');
+  const t = await getLocaleMessages(lang, 'rezervacije');
+  const commonT = await getLocaleMessages(lang, 'common');
     const successKey = resolvedSearchParams?.success;
     const successMessage = successKey ? (t[successKey] || commonT.success_general || successKey) : null;
 

@@ -16,5 +16,17 @@
   "errorExists": "Record already exists",
   "errorNotFound": "Record not found",
   "form_description": "Fill in all required fields marked with *",
-  "print": "Print"
+  "print": "Print",
+  "footer_rights": "All rights reserved.",
+  "footer_brand": "M-Hotel",
+  "payment_missing_params": "Missing required parameters",
+  "payment_not_completed": "Payment not completed",
+  "payment_failed_confirm": "Failed to confirm payment",
+  "home_luxury": "Experience Luxury & Comfort",
+  "home_blend": "Discover the perfect blend of comfort, elegance, and world-class service",
+  "home_book_now": "Book Now",
+  "home_learn_more": "Learn More",
+  "home_rooms": "Rooms",
+  "home_rating": "Rating",
+  "home_reviews": "Reviews"
 }

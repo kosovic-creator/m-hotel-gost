@@ -1,6 +1,7 @@
 import { dodajRezervacijuSaGostom } from '@/actions/rezervacije';
 import { InputField, HiddenField, SelectField, FormActions } from '@/components/form/FormComponents';
 import { getLocaleMessages } from '@/i18n/i18n';
+import { getLocale } from '@/i18n/locale';
 import prisma from '@/lib/prisma';
 import { RezervacijaSearchParams } from '@/lib/types/searchParams';
 import { extractErrors, getFieldValue } from '@/lib/helpers/url';
@@ -17,11 +18,10 @@ const DodajRezervacijuPage = async ({
   const errors = extractErrors(params);
   const formData = params || {};
 
-  // Klijentski redirect workaround
-  const lang = params?.lang === 'en' ? 'en' : 'sr';
-  const messages = getLocaleMessages(lang, 'rezervacije');
-  const gostMessages = getLocaleMessages(lang, 'gosti');
-  const commonMessages = getLocaleMessages(lang, 'common');
+  const lang = await getLocale();
+  const messages = await getLocaleMessages(lang, 'rezervacije');
+  const gostMessages = await getLocaleMessages(lang, 'gosti');
+  const commonMessages = await getLocaleMessages(lang, 'common');
 
   const sobe = await prisma.soba.findMany();
 
@@ -53,13 +53,12 @@ const DodajRezervacijuPage = async ({
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{commonMessages.form_description}</p>
           </div>
           <form action={dodajRezervacijuSaGostom}>
-            <HiddenField name="lang" value={lang} />
             <div className="border-b pb-6 mb-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">{messages.reservation_details}</h3>
               <SelectField
                 name="soba"
-                label={messages.room}
-                placeholder={messages.select_room}
+                label={messages.room || "Soba"}
+                placeholder={messages.select_room || "Izaberi sobu"}
                 defaultValue={formData.soba}
                 error={errors.soba}
                 required
@@ -71,7 +70,7 @@ const DodajRezervacijuPage = async ({
               <InputField
                 name="prijava"
                 type="date"
-                label={messages.check_in}
+                label={messages.check_in || "Datum prijave"}
                 defaultValue={formData.prijava}
                 error={errors.prijava}
                 required
@@ -79,7 +78,7 @@ const DodajRezervacijuPage = async ({
               <InputField
                 name="odjava"
                 type="date"
-                label={messages.check_out}
+                label={messages.check_out || "Datum odjave"}
                 defaultValue={formData.odjava}
                 error={errors.odjava}
                 required
@@ -87,7 +86,7 @@ const DodajRezervacijuPage = async ({
               <InputField
                 name="broj_osoba"
                 type="number"
-                label={messages.number_of_guests_label}
+                label={messages.number_of_guests_label || "Broj osoba"}
                 defaultValue={formData.broj_osoba}
                 error={errors.broj_osoba}
                 required
@@ -96,7 +95,7 @@ const DodajRezervacijuPage = async ({
               <InputField
                 name="popust"
                 type="number"
-                label={messages.popust}
+                label={messages.popust || "Popust (%)"}
                 defaultValue={getFieldValue(params?.popust, '0')}
                 error={errors.popust}
                 min="0"
@@ -105,18 +104,18 @@ const DodajRezervacijuPage = async ({
               />
               <SelectField
                 name="status"
-                label={messages.status}
-                placeholder={messages.select_status}
+                label={messages.status || "Status"}
+                placeholder={messages.select_status || "Izaberi status"}
                 defaultValue={formData.status}
                 error={errors.status}
                 required
                 options={[
-                  { value: "pending", label: messages.pending, statusColor: 'bg-yellow-100 text-yellow-800' },
-                  { value: "confirmed", label: messages.confirmed, statusColor: 'bg-green-400 text-green-800' },
-                  { value: "cancelled", label: messages.cancelled, statusColor: 'bg-red-100 text-red-800' },
-                  { value: "completed", label: messages.completed, statusColor: 'bg-blue-100 text-blue-800' },
-                  { value: "free_rooms", label: messages.free_rooms, statusColor: 'bg-green-100 text-green-800' },
-                  { value: "no_free_rooms", label: messages.no_free_rooms, statusColor: 'bg-red-100 text-red-800' }
+                  { value: "pending", label: messages.pending || "Na čekanju", statusColor: 'bg-yellow-100 text-yellow-800' },
+                  { value: "confirmed", label: messages.confirmed || "Potvrđeno", statusColor: 'bg-green-400 text-green-800' },
+                  { value: "cancelled", label: messages.cancelled || "Otkazano", statusColor: 'bg-red-100 text-red-800' },
+                  { value: "completed", label: messages.completed || "Završeno", statusColor: 'bg-blue-100 text-blue-800' },
+                  { value: "free_rooms", label: messages.free_rooms || "Slobodne sobe", statusColor: 'bg-green-100 text-green-800' },
+                  { value: "no_free_rooms", label: messages.no_free_rooms || "Nema slobodnih soba", statusColor: 'bg-red-100 text-red-800' }
                 ]}
               />
             </div>
@@ -125,11 +124,11 @@ const DodajRezervacijuPage = async ({
               <h3 className="text-lg font-medium text-gray-900 mb-4">{gostMessages.guest_details}</h3>
               <SelectField
                 name="gost_titula"
-                label={gostMessages.title}
+                label={gostMessages.title || "Titula"}
                 defaultValue={formData.gost_titula}
                 error={errors.gost_titula}
                 options={[
-                  { value: "", label: gostMessages.select_title },
+                  { value: "", label: gostMessages.select_title || "Odaberi titulu" },
                   { value: "Mr", label: "Mr" },
                   { value: "Mrs", label: "Mrs" },
                   { value: "Ms", label: "Ms" },
@@ -138,57 +137,57 @@ const DodajRezervacijuPage = async ({
               />
               <InputField
                 name="gost_ime"
-                label={gostMessages.first_name}
+                label={gostMessages.first_name || "Ime"}
                 defaultValue={formData.gost_ime}
                 error={errors.gost_ime}
                 required
               />
               <InputField
                 name="gost_prezime"
-                label={gostMessages.last_name}
+                label={gostMessages.last_name || "Prezime"}
                 defaultValue={formData.gost_prezime}
                 error={errors.gost_prezime}
                 required
               />
               <InputField
                 name="gost_email"
-                label={gostMessages.email}
+                label={gostMessages.email || "Email"}
                 defaultValue={formData.gost_email}
                 error={errors.gost_email}
                 required
               />
               <InputField
                 name="gost_telefon"
-                label={gostMessages.phone}
+                label={gostMessages.phone || "Telefon"}
                 defaultValue={formData.gost_telefon}
                 error={errors.gost_telefon}
               />
               <InputField
                 name="gost_adresa"
-                label={gostMessages.address}
+                label={gostMessages.address || "Adresa"}
                 defaultValue={formData.gost_adresa}
                 error={errors.gost_adresa}
               />
               <InputField
                 name="gost_grad"
-                label={gostMessages.city}
+                label={gostMessages.city || "Grad"}
                 defaultValue={formData.gost_grad}
                 error={errors.gost_grad}
               />
               <InputField
                 name="gost_drzava"
-                label={gostMessages.country}
+                label={gostMessages.country || "Država"}
                 defaultValue={formData.gost_drzava}
                 error={errors.gost_drzava}
               />
               {/* Drugi gost polja */}
               <SelectField
                 name="gost_titula_drugog_gosta"
-                label={gostMessages.second_guest_title}
+                label={gostMessages.second_guest_title || "Titula drugog gosta"}
                 defaultValue={formData.gost_titula_drugog_gosta}
                 error={errors.gost_titula_drugog_gosta}
                 options={[
-                  { value: "", label: gostMessages.select_title },
+                  { value: "", label: gostMessages.select_title || "Odaberi titulu" },
                   { value: "Mr", label: "Mr" },
                   { value: "Mrs", label: "Mrs" },
                   { value: "Ms", label: "Ms" },
@@ -197,22 +196,22 @@ const DodajRezervacijuPage = async ({
               />
               <InputField
                 name="gost_ime_drugog_gosta"
-                label={gostMessages.second_guest_first_name}
+                label={gostMessages.second_guest_first_name || "Ime drugog gosta"}
                 defaultValue={formData.gost_ime_drugog_gosta}
                 error={errors.gost_ime_drugog_gosta}
               />
               <InputField
                 name="gost_prezime_drugog_gosta"
-                label={gostMessages.second_guest_last_name}
+                label={gostMessages.second_guest_last_name || "Prezime drugog gosta"}
                 defaultValue={formData.gost_prezime_drugog_gosta}
                 error={errors.gost_prezime_drugog_gosta}
               />
             </div>
             {/* Dugmad za akcije forme */}
             <FormActions
-              submitLabel={messages.book_now}
-              cancelLabel={messages.cancel}
-              cancelHref={`/rezervacije?lang=${lang}`}
+              submitLabel={messages.book_now || "Rezerviši"}
+              cancelLabel={messages.cancel || "Otkaži"}
+              cancelHref="/rezervacije"
             />
           </form>
         </div>
