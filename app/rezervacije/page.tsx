@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ucitajRezervacije } from '@/actions/rezervacije';
 import { ucitajSobe } from '@/actions/sobe';
-import { getLocaleMessages } from '@/i18n/i18n';
-import { getLocale } from '@/i18n/locale';
 import { Metadata } from 'next';
 import { SuccessMessage, ErrorMessage } from '@/components/messages/MessageComponents';
 import RezervacijeContent from './RezervacijeContent';
@@ -38,8 +36,6 @@ export default async function RezervacijePage({ searchParams }: { searchParams: 
     opis_en: s.opis_en,
   }));
 
-  const lang = await getLocale();
-  const t = getLocaleMessages(lang, 'rezervacije');
   const successParam = params.success;
   const errorParam = params.error;
 
@@ -54,8 +50,6 @@ export default async function RezervacijePage({ searchParams }: { searchParams: 
       <RezervacijeContent
         rezervacije={rezervacije}
         sobe={sobe}
-        lang={lang}
-        t={t}
       />
     </>
   );

@@ -17,6 +17,7 @@
   "errorNotFound": "Record not found",
   "form_description": "Fill in all required fields marked with *",
   "print": "Print",
+  "id_label": "ID",
   "footer_rights": "All rights reserved.",
   "footer_brand": "M-Hotel",
   "payment_missing_params": "Missing required parameters",
@@ -33,4 +34,10 @@
   "footer_contact": "Contact Us",
   "footer_privacy": "Privacy Policy",
   "footer_terms": "Terms of Service"
+  ,
+  "close": "Close",
+  "image_upload_hint": "Drag images here or click to select",
+  "image_upload_select": "Select images",
+  "image_upload_preview": "Preview",
+  "uploading": "Uploading..."
 }

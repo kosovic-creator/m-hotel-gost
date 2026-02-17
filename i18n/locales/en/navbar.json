@@ -4,5 +4,8 @@
   "logout": "Logout",
   "login": "Login",
   "reservations": "Reservations",
-  "about": "About the Hotel"
+  "about": "About the Hotel",
+  "open_menu": "Open menu",
+  "language_en": "EN",
+  "language_sr": "MN"
 }

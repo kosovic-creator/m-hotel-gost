@@ -3,18 +3,17 @@
 
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { useI18n } from '@/i18n/I18nProvider';
 
 interface SobeContentProps {
   sobe: any[];
-  lang: 'en' | 'sr';
-  t: any;
 }
 
 export default function SobeContent({
-  sobe,
-  lang,
-  t
+  sobe
 }: SobeContentProps) {
+  const { language, t } = useI18n();
+  const tr = (key: string) => t('sobe', key);
   return (
     <>
       {/* Full Screen Hero Banner Background */}
@@ -22,12 +21,10 @@ export default function SobeContent({
         {/* Title Section */}
         <div className="text-center text-white py-20 px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg">
-            {lang === "sr" ? "Naše Sobe" : "Our Rooms"}
+            {tr('title')}
           </h1>
           <p className="text-lg md:text-xl font-light drop-shadow-lg max-w-2xl mx-auto">
-            {lang === "sr"
-              ? "Pronađite savršenu sobu za vašu posjetu"
-              : "Find the perfect room for your stay"}
+            {tr('subtitle')}
           </p>
         </div>
 
@@ -52,20 +49,20 @@ export default function SobeContent({
               return (
                 <div
                   key={soba.id}
-                  className="rounded-lg bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 backdrop-blur-sm bg-white/95"
+                  className="rounded-lg bg-white/95 shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 backdrop-blur-sm"
                 >
                   {/* Image */}
                   <div className="relative h-48 bg-gray-200 overflow-hidden">
                     {slikeArr.length > 0 ? (
                       <Image
                         src={slikeArr[0]}
-                        alt={`${t.room} ${soba.broj}`}
+                        alt={`${tr('room')} ${soba.broj}`}
                         fill
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-gray-300">
-                        <span className="text-gray-500">{t.no_image || "Nema slike"}</span>
+                          <span className="text-gray-500">{tr('no_image')}</span>
                         </div>
                     )}
                   </div>
@@ -75,16 +72,16 @@ export default function SobeContent({
                     {/* Room Number and Type */}
                     <div className="mb-3">
                       <h2 className="text-2xl font-bold text-gray-900">
-                        {t.room || "Soba"} {soba.broj}
+                        {tr('room')} {soba.broj}
                       </h2>
                       <p className="text-yellow-600 font-semibold">
-                        {lang === "en" ? soba.tip_en || soba.tip : soba.tip}
+                        {language === "en" ? soba.tip_en || soba.tip : soba.tip}
                       </p>
                     </div>
 
                     {/* Description */}
                     <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                      {lang === "en" ? soba.opis_en || soba.opis : soba.opis}
+                      {language === "en" ? soba.opis_en || soba.opis : soba.opis}
                     </p>
 
                     {/* Features */}
@@ -94,7 +91,7 @@ export default function SobeContent({
                           <path d="M9 6a1 1 0 11-2 0 1 1 0 012 0ZM9 12a1 1 0 11-2 0 1 1 0 012 0ZM10.5 1.5H5.75A2.75 2.75 0 003 4.25v11.5A2.75 2.75 0 005.75 18.5h8.5A2.75 2.75 0 0017 15.75V4.25A2.75 2.75 0 0014.25 1.5Z" />
                         </svg>
                         <div>
-                          <p className="text-xs text-gray-500">{t.capacity || "Kapacitet"}</p>
+                          <p className="text-xs text-gray-500">{tr('capacity')}</p>
                           <p className="font-semibold text-gray-900">{soba.kapacitet}</p>
                         </div>
                       </div>
@@ -104,7 +101,7 @@ export default function SobeContent({
                           <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                         </svg>
                         <div>
-                          <p className="text-xs text-gray-500">{t.price || "Cijena"}</p>
+                          <p className="text-xs text-gray-500">{tr('price')}</p>
                           <p className="font-semibold text-gray-900">€{soba.cena}</p>
                         </div>
                       </div>
@@ -113,7 +110,7 @@ export default function SobeContent({
                     {/* CTA Button */}
                     <Button asChild className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold">
                       <a href={`/rezervacije?soba=${soba.broj}`}>
-                        {lang === "sr" ? "Rezerviriši" : "Book Now"}
+                        {tr('book_room')}
                       </a>
                     </Button>
                   </div>

@@ -1,5 +1,7 @@
 {
 "title": "Reservations",
+"hero_title": "Find Your Perfect Room",
+"hero_subtitle": "Search available rooms and book now",
 "book_now": "Book Now",
 "check_in": "Check-in",
 "check_out": "Check-out",
@@ -61,9 +63,12 @@
 "capacity": "Capacity",
 "price": "Price",
 "book_room": "Book this room",
+"no_image": "No image",
 "reservation_details": "Reservation Details",
 "successAddedWithGuest": "Reservation and guest successfully added.",
 "successUpdatedWithGuest": "Reservation and guest successfully updated.",
+"reservation_id_missing": "Reservation ID not found.",
+"guest_not_found": "Selected guest does not exist.",
 "emailExists": "A guest with this email address already exists.",
 "postojeci_gost_error": "Please select an existing guest.",
 "odjava_mora_biti_nakon_prijave": "Check-out date must be after check-in date.",
@@ -83,5 +88,14 @@
     "payment_completed": "Payment Completed Successfully",
     "secure_payment": "Secure payment powered by Stripe",
     "paid": "Paid",
-    "payment_failed": "Payment Failed"
+    "payment_failed": "Payment Failed",
+    "payment_error": "There was an error during payment.",
+    "payment_update_failed": "Payment succeeded but failed to update the reservation.",
+    "payment_unexpected_error": "An unexpected error occurred.",
+    "payment_generic_error": "An error occurred.",
+    "payment_security_ssl": "SSL",
+    "payment_security_encryption": "256-bit encryption",
+    "special_offers": "Special Offers",
+    "search_title": "Find Your Perfect Room",
+    "price_per_night": "Price per night"
 }

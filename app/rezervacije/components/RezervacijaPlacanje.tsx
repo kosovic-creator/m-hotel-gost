@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
 import { RezervacijaPlacanjeForms } from './RezervacijaPlacanjeForms';
+import { useI18n } from '@/i18n/I18nProvider';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -20,8 +21,6 @@ interface RezervacijaPlacanjeProps {
     gost: { ime: string; prezime: string };
   };
   ukupnaCena: number;
-  lang: 'en' | 'sr';
-  t: Record<string, string>;
   onPaymentSuccess?: (paymentIntent: any) => void;
   onCancel?: () => void;
 }
@@ -29,17 +28,18 @@ interface RezervacijaPlacanjeProps {
 export default function RezervacijaPlacanje({
   rezervacija,
   ukupnaCena,
-  lang,
-  t,
   onPaymentSuccess,
   onCancel,
 }: RezervacijaPlacanjeProps) {
+  const { language, t } = useI18n();
   const [clientSecret, setClientSecret] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
 
+  const tr = (key: string) => t('rezervacije', key);
+
   const formatPrice = (value: number) =>
-    new Intl.NumberFormat(lang === 'sr' ? 'sr-ME' : 'en-US', {
+    new Intl.NumberFormat(language === 'sr' ? 'sr-ME' : 'en-US', {
       style: 'currency',
       currency: 'EUR'
     }).format(value);
@@ -75,7 +75,7 @@ export default function RezervacijaPlacanje({
 
       setClientSecret(data.clientSecret);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err instanceof Error ? err.message : tr('payment_generic_error'));
     } finally {
       setLoading(false);
     }
@@ -95,7 +95,7 @@ export default function RezervacijaPlacanje({
         borderRadius: '6px',
       },
     },
-    locale: lang === 'sr' ? 'hr' : 'en',
+    locale: language === 'sr' ? 'hr' : 'en',
   };
 
   if (!clientSecret) {
@@ -103,16 +103,16 @@ export default function RezervacijaPlacanje({
       <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            {t.payment_title || 'Plaćanje Rezervacije'}
+            {tr('payment_title')}
           </h2>
           <div className="text-3xl font-bold text-green-600 mb-4">
             {formatPrice(ukupnaCena)}
           </div>
           <p className="text-gray-600 text-sm">
-            {t.payment_description || 'Reserved for'} {rezervacija.gost.ime} {rezervacija.gost.prezime}
+            {tr('payment_description')} {rezervacija.gost.ime} {rezervacija.gost.prezime}
           </p>
           <p className="text-gray-600 text-sm">
-            {t.room}: {rezervacija.soba.broj}
+            {tr('room')}: {rezervacija.soba.broj}
           </p>
         </div>
 
@@ -129,8 +129,8 @@ export default function RezervacijaPlacanje({
             className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition-colors"
           >
             {loading
-              ? (t.processing || 'Processing...')
-              : (t.proceed_to_payment || 'Proceed to Payment')
+              ? tr('processing')
+              : tr('proceed_to_payment')
             }
           </button>
 
@@ -140,7 +140,7 @@ export default function RezervacijaPlacanje({
               disabled={loading}
               className="w-full bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:cursor-not-allowed text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors"
             >
-              {t.cancel || 'Cancel'}
+              {tr('cancel')}
             </button>
           )}
         </div>
@@ -153,8 +153,6 @@ export default function RezervacijaPlacanje({
       <RezervacijaPlacanjeForms
         rezervacija={rezervacija}
         ukupnaCena={ukupnaCena}
-        lang={lang}
-        t={t}
         onPaymentSuccess={onPaymentSuccess}
         onCancel={onCancel}
       />

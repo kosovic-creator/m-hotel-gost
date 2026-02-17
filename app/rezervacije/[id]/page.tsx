@@ -64,9 +64,6 @@ export default async function RezervacijaPage({ params, searchParams }: Rezervac
                       <div className="bg-white">
                           <RezervacijaWithPayment
                               rezervacija={rezervacija}
-                              lang={lang}
-                              t={t}
-                              commonT={commonT}
                               showPaymentOption={true}
                           />
                       </div>

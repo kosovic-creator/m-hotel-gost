@@ -2,6 +2,7 @@
 
 import { dajPodatkeORezervaciji } from '@/lib/helpers/rezervacije';
 import PaymentStatusBadge from './PaymentStatusBadge';
+import { useI18n } from '@/i18n/I18nProvider';
 
 interface RezervacijaDetaljiProps {
   rezervacija: {
@@ -14,13 +15,13 @@ interface RezervacijaDetaljiProps {
     soba: { cena: number; broj: string };
     gost: { ime: string; prezime: string };
   };
-  lang: 'en' | 'sr';
-    t: Record<string, string>;
 }
 
-export default function RezervacijaDetalji({ rezervacija, lang, t }: RezervacijaDetaljiProps) {
+export default function RezervacijaDetalji({ rezervacija }: RezervacijaDetaljiProps) {
+  const { language, t } = useI18n();
+  const tr = (key: string) => t('rezervacije', key);
   const formatPrice = (value: number) =>
-    new Intl.NumberFormat(lang === 'sr' ? 'sr-ME' : 'en-US', {
+    new Intl.NumberFormat(language === 'sr' ? 'sr-ME' : 'en-US', {
       style: 'currency',
       currency: 'EUR'
     }).format(value);
@@ -28,7 +29,7 @@ export default function RezervacijaDetalji({ rezervacija, lang, t }: Rezervacija
   const formatDate = (date: Date | string) => {
     const dateObj = new Date(date);
 
-    if (lang === 'sr') {
+    if (language === 'sr') {
     // Custom formatting for Serbian Latin script
       const monthsLatinFull = [
         'januar', 'februar', 'mart', 'april', 'maj', 'juni',
@@ -72,59 +73,59 @@ export default function RezervacijaDetalji({ rezervacija, lang, t }: Rezervacija
       {/* Osnovni podaci */}
       <div className="space-y-3 mb-6">
         <div className="flex justify-between">
-          <span className="text-gray-600">{t.guest_name}:</span>
+          <span className="text-gray-600">{tr('guest_name')}:</span>
           <span className="font-medium">{rezervacija.gost.ime} {rezervacija.gost.prezime}</span>
         </div>
 
         <div className="flex justify-between">
-          <span className="text-gray-600">{t.room}:</span>
+          <span className="text-gray-600">{tr('room')}:</span>
           <span className="font-medium">{rezervacija.soba.broj}</span>
         </div>
 
         <div className="flex justify-between">
-          <span className="text-gray-600">{t.check_in}:</span>
+          <span className="text-gray-600">{tr('check_in')}:</span>
           <span className="font-medium">{formatDate(prijava)}</span>
         </div>
 
         <div className="flex justify-between">
-          <span className="text-gray-600">{t.check_out}:</span>
+          <span className="text-gray-600">{tr('check_out')}:</span>
           <span className="font-medium">{formatDate(odjava)}</span>
         </div>
 
         <div className="flex justify-between">
-          <span className="text-gray-600">{t.broj_dana}:</span>
+          <span className="text-gray-600">{tr('broj_dana')}:</span>
           <span className="font-medium">{podaci.brojDana}</span>
         </div>
 
         <div className="flex justify-between">
-          <span className="text-gray-600">{t.number_of_guests_label}:</span>
+          <span className="text-gray-600">{tr('number_of_guests_label')}:</span>
           <span className="font-medium">{rezervacija.broj_osoba}</span>
         </div>
       </div>
 
       {/* Računanje cene */}
       <div className="border-t pt-4 space-y-2">
-        <h3 className="font-semibold text-gray-900 mb-3">{t.price_breakdown || 'Raspored Cene'}</h3>
+        <h3 className="font-semibold text-gray-900 mb-3">{tr('price_breakdown')}</h3>
 
         <div className="flex justify-between text-sm">
-          <span className="text-gray-600">{t.cena_po_danu}:</span>
+          <span className="text-gray-600">{tr('cena_po_danu')}:</span>
           <span>{formatPrice(podaci.cenaPoDanu)}</span>
         </div>
 
         <div className="flex justify-between text-sm">
-          <span className="text-gray-600">{t.broj_dana}:</span>
+          <span className="text-gray-600">{tr('broj_dana')}:</span>
           <span>{podaci.brojDana}</span>
         </div>
 
         <div className="flex justify-between text-sm">
-          <span className="text-gray-600">{t.osnovna_cena}:</span>
+          <span className="text-gray-600">{tr('osnovna_cena')}:</span>
           <span>{formatPrice(podaci.osnovnaCena)}</span>
         </div>
 
         {podaci.popustProcenat > 0 && (
           <>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-600">{t.popust} ({podaci.popustProcenat}%):</span>
+              <span className="text-gray-600">{tr('popust')} ({podaci.popustProcenat}%):</span>
               <span className="text-red-600">-{formatPrice(podaci.iznosPopusta)}</span>
             </div>
           </>
@@ -132,7 +133,7 @@ export default function RezervacijaDetalji({ rezervacija, lang, t }: Rezervacija
 
         <div className="border-t pt-2 mt-3">
           <div className="flex justify-between font-bold text-lg">
-            <span className="text-gray-900">{t.ukupna_cena}:</span>
+            <span className="text-gray-900">{tr('ukupna_cena')}:</span>
             <span className="text-green-600">{formatPrice(podaci.ukupnaCena)}</span>
           </div>
         </div>
@@ -141,10 +142,9 @@ export default function RezervacijaDetalji({ rezervacija, lang, t }: Rezervacija
       {/* Status */}
       <div className="mt-6 pt-4 border-t">
         <div className="text-center space-y-2">
-          <p className="text-sm text-gray-600">{t.status}:</p>
+          <p className="text-sm text-gray-600">{tr('status')}:</p>
           <PaymentStatusBadge
             status={rezervacija.status || 'pending'}
-            t={t}
           />
         </div>
       </div>

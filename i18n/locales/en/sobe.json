@@ -1,4 +1,9 @@
 {
   "title": "Rooms",
-  "subtitle": "Choose your perfect room"
+  "subtitle": "Choose your perfect room",
+  "room": "Room",
+  "no_image": "No image",
+  "capacity": "Capacity",
+  "price": "Price",
+  "book_room": "Book this room"
 }

@@ -14,8 +14,13 @@ const IzmeniStrana = async ({
     const params = await searchParams;
     const id = params?.id ? Number(params.id) : undefined;
 
+    const lang = await getLocale();
+    const messages = await getLocaleMessages(lang, 'rezervacije');
+    const gostMessages = await getLocaleMessages(lang, 'gosti');
+    const commonMessages = await getLocaleMessages(lang, 'common');
+
     if (id === undefined) {
-        return <div>Nije pronađen ID rezervacije.</div>;
+        return <div>{messages.reservation_id_missing}</div>;
     }
 
     const [rezervacije, sobe, gosti] = await Promise.all([
@@ -26,11 +31,6 @@ const IzmeniStrana = async ({
 
     // Ektauj greške iz query parametara
     const errors = extractErrors(params);
-    const lang = await getLocale();
-    const messages = await getLocaleMessages(lang, 'rezervacije');
-    const gostMessages = await getLocaleMessages(lang, 'gosti');
-    const commonMessages = await getLocaleMessages(lang, 'common');
-
     // Popuni formData iz query parametara ili iz baze
     const formData: Record<string, string> = {
         // Rezervacija podaci
@@ -60,7 +60,7 @@ const IzmeniStrana = async ({
 
     return (
       <FormWrapper
-          title={`${messages.editReservation} ID: ${rezervacije?.id}`}
+            title={`${messages.editReservation} ${commonMessages.id_label}: ${rezervacije?.id}`}
             action={izmeniRezervacijuSaGostom}
           submitLabel={messages.saveChanges}
           cancelLabel={messages.cancel}
@@ -192,10 +192,10 @@ const IzmeniStrana = async ({
                         defaultValue={formData.gost_titula}
                         error={errors.gost_titula}
                         options={[
-                            { value: "Mr", label: "Mr" },
-                            { value: "Mrs", label: "Mrs" },
-                            { value: "Ms", label: "Ms" },
-                            { value: "Dr", label: "Dr" }
+                            { value: "Mr", label: gostMessages.title_mr },
+                            { value: "Mrs", label: gostMessages.title_mrs },
+                            { value: "Ms", label: gostMessages.title_ms },
+                            { value: "Dr", label: gostMessages.title_dr }
                         ]}
                     />
 
@@ -274,10 +274,10 @@ const IzmeniStrana = async ({
                             defaultValue={formData.gost_titula_drugog_gosta}
                             error={errors.gost_titula_drugog_gosta}
                             options={[
-                                { value: "Mr", label: "Mr" },
-                                { value: "Mrs", label: "Mrs" },
-                                { value: "Ms", label: "Ms" },
-                                { value: "Dr", label: "Dr" }
+                                { value: "Mr", label: gostMessages.title_mr },
+                                { value: "Mrs", label: gostMessages.title_mrs },
+                                { value: "Ms", label: gostMessages.title_ms },
+                                { value: "Dr", label: gostMessages.title_dr }
                             ]}
                         />
 

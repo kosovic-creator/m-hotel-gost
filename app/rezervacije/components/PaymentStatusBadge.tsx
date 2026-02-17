@@ -1,47 +1,49 @@
 'use client';
 
+import { useI18n } from '@/i18n/I18nProvider';
+
 interface PaymentStatusBadgeProps {
   status: string;
-  t: Record<string, string>;
   className?: string;
 }
 
 export default function PaymentStatusBadge({
   status,
-  t,
   className = ''
 }: PaymentStatusBadgeProps) {
+  const { t } = useI18n();
+  const tr = (key: string) => t('rezervacije', key);
   const getStatusDisplay = (status: string) => {
     const normalizedStatus = status.toLowerCase();
 
     const statusMap: Record<string, { label: string; color: string; icon: string }> = {
       'pending': {
-        label: t.pending || 'Pending',
+        label: tr('pending'),
         color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
         icon: '⏳'
       },
       'confirmed': {
-        label: t.confirmed || 'Confirmed',
+        label: tr('confirmed'),
         color: 'bg-blue-100 text-blue-800 border-blue-200',
         icon: '✓'
       },
       'paid': {
-        label: t.paid || 'Paid',
+        label: tr('paid'),
         color: 'bg-green-100 text-green-800 border-green-200',
         icon: '💳'
       },
       'cancelled': {
-        label: t.cancelled || 'Cancelled',
+        label: tr('cancelled'),
         color: 'bg-red-100 text-red-800 border-red-200',
         icon: '❌'
       },
       'completed': {
-        label: t.completed || 'Completed',
+        label: tr('completed'),
         color: 'bg-purple-100 text-purple-800 border-purple-200',
         icon: '🎉'
       },
       'payment_failed': {
-        label: t.payment_failed || 'Payment Failed',
+        label: tr('payment_failed'),
         color: 'bg-red-100 text-red-800 border-red-200',
         icon: '⚠️'
       }

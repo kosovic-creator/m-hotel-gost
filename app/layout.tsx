@@ -42,7 +42,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1280"><defs><linearGradient id="grad1" x1="0%25" y1="0%25" x2="100%25" y2="100%25"><stop offset="0%25" style="stop-color:%23D4A574;stop-opacity:1" /><stop offset="50%25" style="stop-color:%238B7355;stop-opacity:1" /><stop offset="100%25" style="stop-color:%23654321;stop-opacity:1" /></linearGradient></defs><rect fill="url(%23grad1)" width="1920" height="1280"/><path fill="%23F5DEB3" opacity="0.3" d="M0 0 L1920 400 L1920 0 Z"/><circle cx="200" cy="300" r="80" fill="%2327AE60" opacity="0.2"/><circle cx="1800" cy="400" r="120" fill="%2327AE60" opacity="0.15"/><rect x="300" y="800" width="400" height="300" fill="%23D2B48C" opacity="0.4" rx="20"/><circle cx="700" cy="900" r="60" fill="%23FFFFFF" opacity="0.3"/><path fill="%23E8D5C4" opacity="0.25" d="M100 1100 Q480 900 960 1100 T1820 1100 L1920 1280 L0 1280 Z"/></svg>')`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/hotel2.jpg')`,
           backgroundAttachment: 'fixed',
           backgroundSize: 'cover',
           backgroundPosition: 'center',

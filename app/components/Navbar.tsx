@@ -7,7 +7,8 @@ import { useI18n } from "@/i18n/I18nProvider";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { language, setLanguage } = useI18n();
+  const { language, setLanguage, t } = useI18n();
+  const tr = (key: string) => t('navbar', key);
 
   const handleChangeLanguage = (lng: "en" | "sr") => {
     setLanguage(lng);
@@ -33,7 +34,7 @@ export default function Navbar() {
             className="text-amber-500 hover:text-gray-600"
           >
             <Link href="/sobe">
-              {language === "sr" ? "Sobe" : "Rooms"}
+              {tr('rooms')}
             </Link>
           </Button>
           <Button
@@ -44,7 +45,7 @@ export default function Navbar() {
             className="text-amber-500 hover:text-gray-300"
           >
             <Link href="/o_hotelu">
-              {language === "sr" ? "O hotelu" : "About"}
+              {tr('about')}
             </Link>
           </Button>
         </div>
@@ -69,7 +70,7 @@ export default function Navbar() {
             className="text-amber-500 hover:text-gray-300"
           >
             <Link href="/sobe">
-              {language === "sr" ? "Sobe" : "Rooms"}
+              {tr('rooms')}
             </Link>
           </Button>
           <Button
@@ -80,7 +81,7 @@ export default function Navbar() {
             className="text-amber-500 hover:text-gray-300"
           >
             <Link href="/o_hotelu">
-              {language === "sr" ? "O hotelu" : "About"}
+              {tr('about')}
             </Link>
           </Button>
           {/* Language buttons */}
@@ -119,7 +120,7 @@ export default function Navbar() {
       <button
         className="sm:hidden flex flex-col justify-center items-center w-10 h-10 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
         onClick={() => setMenuOpen((v) => !v)}
-        aria-label="Open menu"
+        aria-label={tr('open_menu')}
       >
         <span className="block w-6 h-0.5 bg-white mb-1"></span>
         <span className="block w-6 h-0.5 bg-white mb-1"></span>
@@ -136,7 +137,7 @@ export default function Navbar() {
           <span role="img" aria-label="EN">
             🇬🇧
           </span>{" "}
-          EN
+          {tr('language_en')}
         </Button>
         <Button
           variant="ghost"
@@ -146,7 +147,7 @@ export default function Navbar() {
           <span role="img" aria-label="MN">
             🇲🇪
           </span>{" "}
-          MN
+          {tr('language_sr')}
         </Button>
       </div>
     </nav>

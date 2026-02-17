@@ -6,7 +6,8 @@
     "dev": "next dev -p 4000",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint && npm run lint:i18n",
+    "lint:i18n": "node scripts/check-hardcoded-client-text.mjs"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

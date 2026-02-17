@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { X, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { useI18n } from '@/i18n/I18nProvider';
 
 interface ImageUploadProps {
   name: string;
@@ -13,6 +14,8 @@ interface ImageUploadProps {
 }
 
 export function ImageUpload({ name, defaultValue = '', error, label }: ImageUploadProps) {
+  const { t } = useI18n();
+  const tr = (key: string) => t('common', key);
   const [images, setImages] = useState<string[]>(
     defaultValue ? defaultValue.split(',').map(img => img.trim()).filter(Boolean) : []
   );
@@ -99,7 +102,7 @@ export function ImageUpload({ name, defaultValue = '', error, label }: ImageUplo
       >
         <Upload className="mx-auto mb-2 text-gray-400" size={40} />
         <p className="text-sm text-gray-600 mb-2">
-          Prevucite slike ovde ili kliknite da izaberete
+          {tr('image_upload_hint')}
         </p>
         <input
           type="file"
@@ -116,7 +119,7 @@ export function ImageUpload({ name, defaultValue = '', error, label }: ImageUplo
           onClick={() => document.getElementById(`file-input-${name}`)?.click()}
           disabled={uploading}
         >
-          {uploading ? 'Učitavanje...' : 'Izaberite slike'}
+          {uploading ? tr('uploading') : tr('image_upload_select')}
         </Button>
       </div>
 
@@ -126,7 +129,7 @@ export function ImageUpload({ name, defaultValue = '', error, label }: ImageUplo
             <div key={index} className="relative group">
               <Image
                 src={img.trim()}
-                alt={`Preview ${index + 1}`}
+                alt={`${tr('image_upload_preview')} ${index + 1}`}
                 width={100}
                 height={100}
                 className="w-full h-24 object-cover rounded border"

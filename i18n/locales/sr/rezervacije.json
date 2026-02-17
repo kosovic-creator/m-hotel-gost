@@ -1,5 +1,7 @@
 {
     "title": "Rezervacije",
+    "hero_title": "Pronađite svoju idealnu sobu",
+    "hero_subtitle": "Pretražite dostupne sobe i rezervišite sada",
     "book_now": "Rezerviši Sada",
     "check_in": "Prijava",
     "check_out": "Odjava",
@@ -63,9 +65,12 @@
     "capacity": "Kapacitet",
     "price": "Cena",
     "book_room": "Rezerviši sobu",
+    "no_image": "Nema slike",
     "reservation_details": "Detalji rezervacije",
     "successAddedWithGuest": "Rezervacija i gost su uspešno dodati.",
     "successUpdatedWithGuest": "Rezervacija i gost su uspešno izmenjeni.",
+    "reservation_id_missing": "Nije pronađen ID rezervacije.",
+    "guest_not_found": "Odabrani gost ne postoji.",
     "emailExists": "Gost sa ovom email adresom već postoji.",
     "postojeci_gost_error": "Molimo odaberite postojećeg gosta.",
     "odjava_mora_biti_nakon_prijave": "Datum odjave mora biti nakon datuma prijave.",
@@ -85,5 +90,14 @@
     "payment_completed": "Plaćanje Uspešno Završeno",
     "secure_payment": "Sigurno plaćanje omogućeno od strane Stripe",
     "paid": "Plaćeno",
-    "payment_failed": "Plaćanje Neuspešno"
+    "payment_failed": "Plaćanje Neuspešno",
+    "payment_error": "Došlo je do greške prilikom plaćanja.",
+    "payment_update_failed": "Plaćanje je uspelo, ali ažuriranje rezervacije nije uspelo.",
+    "payment_unexpected_error": "Došlo je do neočekivane greške.",
+    "payment_generic_error": "Došlo je do greške.",
+    "payment_security_ssl": "SSL",
+    "payment_security_encryption": "256-bit enkripcija",
+    "special_offers": "Specijalne ponude",
+    "search_title": "Pronađite vašu idealnu sobu",
+    "price_per_night": "Cena po noći"
 }

@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ucitajSobe } from '@/actions/sobe';
-import { getLocaleMessages } from '@/i18n/i18n';
-import { getLocale } from '@/i18n/locale';
 import { Metadata } from 'next';
 import { SuccessMessage, ErrorMessage } from '@/components/messages/MessageComponents';
 import SobeContent from './SobeContent';
@@ -18,8 +16,6 @@ export default async function SobeStrana({ searchParams }: { searchParams: Promi
   }));
 
   const params = await searchParams;
-  const lang = await getLocale();
-  const t = getLocaleMessages(lang, 'sobe');
   const successParam = params.success;
   const errorParam = params.error;
 
@@ -33,8 +29,6 @@ export default async function SobeStrana({ searchParams }: { searchParams: Promi
       )}
       <SobeContent
         sobe={sobe}
-        lang={lang}
-        t={t}
       />
     </>
   );

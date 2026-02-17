@@ -34,6 +34,7 @@ export function MessageBanner({
   const router = useRouter();
   const pathname = usePathname();
   const { t } = useTranslation(namespace);
+  const { t: tCommon } = useTranslation('common');
 
   const handleClose = useCallback(() => {
     setIsVisible(false);
@@ -77,7 +78,7 @@ export function MessageBanner({
       <button
         onClick={handleClose}
         className="text-current hover:opacity-70 ml-4"
-        aria-label="Close"
+        aria-label={tCommon('close')}
       >
         ✕
       </button>
@@ -97,7 +98,7 @@ export function MessageBanner({
             <button
               onClick={handleClose}
               className="text-current hover:opacity-70 ml-4"
-              aria-label="Close"
+              aria-label={tCommon('close')}
             >
               ✕
             </button>

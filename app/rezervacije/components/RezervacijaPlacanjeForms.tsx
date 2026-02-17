@@ -7,6 +7,7 @@ import {
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js';
+import { useI18n } from '@/i18n/I18nProvider';
 
 interface RezervacijaPlacanjeFormsProps {
   rezervacija: {
@@ -20,8 +21,6 @@ interface RezervacijaPlacanjeFormsProps {
     gost: { ime: string; prezime: string };
   };
   ukupnaCena: number;
-  lang: 'en' | 'sr';
-  t: Record<string, string>;
   onPaymentSuccess?: (paymentIntent: any) => void;
   onCancel?: () => void;
 }
@@ -29,19 +28,20 @@ interface RezervacijaPlacanjeFormsProps {
 export function RezervacijaPlacanjeForms({
   rezervacija,
   ukupnaCena,
-  lang,
-  t,
   onPaymentSuccess,
   onCancel,
 }: RezervacijaPlacanjeFormsProps) {
+  const { language, t } = useI18n();
   const stripe = useStripe();
   const elements = useElements();
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
+  const tr = (key: string) => t('rezervacije', key);
+
   const formatPrice = (value: number) =>
-    new Intl.NumberFormat(lang === 'sr' ? 'sr-ME' : 'en-US', {
+    new Intl.NumberFormat(language === 'sr' ? 'sr-ME' : 'en-US', {
       style: 'currency',
       currency: 'EUR'
     }).format(value);
@@ -66,7 +66,7 @@ export function RezervacijaPlacanjeForms({
       });
 
       if (error) {
-        setErrorMessage(error.message || 'An error occurred during payment');
+        setErrorMessage(error.message || tr('payment_error'));
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
         // Confirm payment in our database
         try {
@@ -84,15 +84,15 @@ export function RezervacijaPlacanjeForms({
           if (confirmResponse.ok) {
             onPaymentSuccess?.(paymentIntent);
           } else {
-            setErrorMessage('Payment succeeded but failed to update reservation');
+            setErrorMessage(tr('payment_update_failed'));
           }
         } catch (confirmError) {
-          setErrorMessage('Payment succeeded but failed to update reservation');
+          setErrorMessage(tr('payment_update_failed'));
           console.error('Confirmation error:', confirmError);
         }
       }
     } catch {
-      setErrorMessage('An unexpected error occurred');
+      setErrorMessage(tr('payment_unexpected_error'));
     } finally {
       setIsLoading(false);
     }
@@ -102,14 +102,14 @@ export function RezervacijaPlacanjeForms({
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          {t.complete_payment || 'Complete Payment'}
+          {tr('complete_payment')}
         </h2>
         <div className="text-3xl font-bold text-green-600 mb-4">
           {formatPrice(ukupnaCena)}
         </div>
         <div className="text-sm text-gray-600 space-y-1">
           <p>{rezervacija.gost.ime} {rezervacija.gost.prezime}</p>
-          <p>{t.room}: {rezervacija.soba.broj}</p>
+          <p>{tr('room')}: {rezervacija.soba.broj}</p>
         </div>
       </div>
 
@@ -140,10 +140,10 @@ export function RezervacijaPlacanjeForms({
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                {t.processing_payment || 'Processing Payment...'}
+                {tr('processing_payment')}
               </>
             ) : (
-              `${t.pay_now || 'Pay Now'} ${formatPrice(ukupnaCena)}`
+                `${tr('pay_now')} ${formatPrice(ukupnaCena)}`
             )}
           </button>
 
@@ -154,19 +154,19 @@ export function RezervacijaPlacanjeForms({
               disabled={isLoading}
               className="w-full bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:cursor-not-allowed text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors"
             >
-              {t.cancel || 'Cancel'}
+              {tr('cancel')}
             </button>
           )}
         </div>
       </form>
 
       <div className="mt-6 text-center text-xs text-gray-500">
-        <p>{t.secure_payment || 'Secure payment powered by Stripe'}</p>
+        <p>{tr('secure_payment')}</p>
         <div className="flex justify-center items-center mt-2 space-x-2">
           <span>🔒</span>
-          <span>SSL</span>
+          <span>{tr('payment_security_ssl')}</span>
           <span>•</span>
-          <span>256-bit encryption</span>
+          <span>{tr('payment_security_encryption')}</span>
         </div>
       </div>
     </div>

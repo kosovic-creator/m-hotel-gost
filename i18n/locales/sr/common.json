@@ -26,6 +26,7 @@
   "form_description": "Popunite sva obavezna polja označena sa *",
   "print": "Štampaj"
   ,
+  "id_label": "ID",
   "footer_rights": "Sva prava zadržana.",
   "footer_brand": "M-Hotel",
   "payment_missing_params": "Nedostaju parametri",
@@ -42,4 +43,10 @@
   "footer_contact": "Kontaktirajte nas",
   "footer_privacy": "Politika privatnosti",
   "footer_terms": "Uvjeti korištenja"
+  ,
+  "close": "Zatvori",
+  "image_upload_hint": "Prevucite slike ovde ili kliknite da izaberete",
+  "image_upload_select": "Izaberite slike",
+  "image_upload_preview": "Pregled",
+  "uploading": "Ucitavanje..."
 }

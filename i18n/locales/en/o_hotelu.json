@@ -1,6 +1,4 @@
 {
-    "o_hotelu": {
-        "title": "O hotelu",
-        "description": "Naš hotel je modernog enterijera sa prefinjenim luksuzom, prostranih i raskošno opremljenih soba i apartmana uz unikatna kupatila koja su za svaku sobu posebno rađena. Vaš potpuni ugođaj će upotpuniti naš ostali sadržaj."
-    }
+    "title": "About the Hotel",
+    "description": "Our hotel features a modern interior with refined luxury, spacious and lavishly equipped rooms and suites, and unique bathrooms designed for each room. Your complete experience will be enhanced by our other amenities."
 }

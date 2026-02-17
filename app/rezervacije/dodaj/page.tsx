@@ -1,5 +1,5 @@
 import { dodajRezervacijuSaGostom } from '@/actions/rezervacije';
-import { InputField, HiddenField, SelectField, FormActions } from '@/components/form/FormComponents';
+import { InputField, SelectField, FormActions } from '@/components/form/FormComponents';
 import { getLocaleMessages } from '@/i18n/i18n';
 import { getLocale } from '@/i18n/locale';
 import prisma from '@/lib/prisma';
@@ -32,8 +32,8 @@ const DodajRezervacijuPage = async ({
         <div className="mb-4 p-3 rounded bg-red-100 text-red-800 border border-red-300">
           <div>
             {(() => {
-              if (params.error === 'guestNotFound') return 'Selected guest does not exist.';
-              return messages[params.error] || commonMessages.error_general || 'An error occurred.';
+              if (params.error === 'guestNotFound') return messages.guest_not_found;
+              return messages[params.error] || commonMessages.errorGeneral;
             })()}
           </div>
           {/* Prikaz svih polja greške */}
@@ -57,8 +57,8 @@ const DodajRezervacijuPage = async ({
               <h3 className="text-lg font-medium text-gray-900 mb-4">{messages.reservation_details}</h3>
               <SelectField
                 name="soba"
-                label={messages.room || "Soba"}
-                placeholder={messages.select_room || "Izaberi sobu"}
+                label={messages.room}
+                placeholder={messages.select_room}
                 defaultValue={formData.soba}
                 error={errors.soba}
                 required
@@ -70,7 +70,7 @@ const DodajRezervacijuPage = async ({
               <InputField
                 name="prijava"
                 type="date"
-                label={messages.check_in || "Datum prijave"}
+                label={messages.check_in}
                 defaultValue={formData.prijava}
                 error={errors.prijava}
                 required
@@ -78,7 +78,7 @@ const DodajRezervacijuPage = async ({
               <InputField
                 name="odjava"
                 type="date"
-                label={messages.check_out || "Datum odjave"}
+                label={messages.check_out}
                 defaultValue={formData.odjava}
                 error={errors.odjava}
                 required
@@ -86,7 +86,7 @@ const DodajRezervacijuPage = async ({
               <InputField
                 name="broj_osoba"
                 type="number"
-                label={messages.number_of_guests_label || "Broj osoba"}
+                label={messages.number_of_guests_label}
                 defaultValue={formData.broj_osoba}
                 error={errors.broj_osoba}
                 required
@@ -95,7 +95,7 @@ const DodajRezervacijuPage = async ({
               <InputField
                 name="popust"
                 type="number"
-                label={messages.popust || "Popust (%)"}
+                label={messages.popust}
                 defaultValue={getFieldValue(params?.popust, '0')}
                 error={errors.popust}
                 min="0"
@@ -104,18 +104,18 @@ const DodajRezervacijuPage = async ({
               />
               <SelectField
                 name="status"
-                label={messages.status || "Status"}
-                placeholder={messages.select_status || "Izaberi status"}
+                label={messages.status}
+                placeholder={messages.select_status}
                 defaultValue={formData.status}
                 error={errors.status}
                 required
                 options={[
-                  { value: "pending", label: messages.pending || "Na čekanju", statusColor: 'bg-yellow-100 text-yellow-800' },
-                  { value: "confirmed", label: messages.confirmed || "Potvrđeno", statusColor: 'bg-green-400 text-green-800' },
-                  { value: "cancelled", label: messages.cancelled || "Otkazano", statusColor: 'bg-red-100 text-red-800' },
-                  { value: "completed", label: messages.completed || "Završeno", statusColor: 'bg-blue-100 text-blue-800' },
-                  { value: "free_rooms", label: messages.free_rooms || "Slobodne sobe", statusColor: 'bg-green-100 text-green-800' },
-                  { value: "no_free_rooms", label: messages.no_free_rooms || "Nema slobodnih soba", statusColor: 'bg-red-100 text-red-800' }
+                  { value: "pending", label: messages.pending, statusColor: 'bg-yellow-100 text-yellow-800' },
+                  { value: "confirmed", label: messages.confirmed, statusColor: 'bg-green-400 text-green-800' },
+                  { value: "cancelled", label: messages.cancelled, statusColor: 'bg-red-100 text-red-800' },
+                  { value: "completed", label: messages.completed, statusColor: 'bg-blue-100 text-blue-800' },
+                  { value: "free_rooms", label: messages.free_rooms, statusColor: 'bg-green-100 text-green-800' },
+                  { value: "no_free_rooms", label: messages.no_free_rooms, statusColor: 'bg-red-100 text-red-800' }
                 ]}
               />
             </div>
@@ -124,93 +124,93 @@ const DodajRezervacijuPage = async ({
               <h3 className="text-lg font-medium text-gray-900 mb-4">{gostMessages.guest_details}</h3>
               <SelectField
                 name="gost_titula"
-                label={gostMessages.title || "Titula"}
+                label={gostMessages.title}
                 defaultValue={formData.gost_titula}
                 error={errors.gost_titula}
                 options={[
-                  { value: "", label: gostMessages.select_title || "Odaberi titulu" },
-                  { value: "Mr", label: "Mr" },
-                  { value: "Mrs", label: "Mrs" },
-                  { value: "Ms", label: "Ms" },
-                  { value: "Dr", label: "Dr" },
+                  { value: "", label: gostMessages.select_title },
+                  { value: "Mr", label: gostMessages.title_mr },
+                  { value: "Mrs", label: gostMessages.title_mrs },
+                  { value: "Ms", label: gostMessages.title_ms },
+                  { value: "Dr", label: gostMessages.title_dr },
                 ]}
               />
               <InputField
                 name="gost_ime"
-                label={gostMessages.first_name || "Ime"}
+                label={gostMessages.first_name}
                 defaultValue={formData.gost_ime}
                 error={errors.gost_ime}
                 required
               />
               <InputField
                 name="gost_prezime"
-                label={gostMessages.last_name || "Prezime"}
+                label={gostMessages.last_name}
                 defaultValue={formData.gost_prezime}
                 error={errors.gost_prezime}
                 required
               />
               <InputField
                 name="gost_email"
-                label={gostMessages.email || "Email"}
+                label={gostMessages.email}
                 defaultValue={formData.gost_email}
                 error={errors.gost_email}
                 required
               />
               <InputField
                 name="gost_telefon"
-                label={gostMessages.phone || "Telefon"}
+                label={gostMessages.phone}
                 defaultValue={formData.gost_telefon}
                 error={errors.gost_telefon}
               />
               <InputField
                 name="gost_adresa"
-                label={gostMessages.address || "Adresa"}
+                label={gostMessages.address}
                 defaultValue={formData.gost_adresa}
                 error={errors.gost_adresa}
               />
               <InputField
                 name="gost_grad"
-                label={gostMessages.city || "Grad"}
+                label={gostMessages.city}
                 defaultValue={formData.gost_grad}
                 error={errors.gost_grad}
               />
               <InputField
                 name="gost_drzava"
-                label={gostMessages.country || "Država"}
+                label={gostMessages.country}
                 defaultValue={formData.gost_drzava}
                 error={errors.gost_drzava}
               />
               {/* Drugi gost polja */}
               <SelectField
                 name="gost_titula_drugog_gosta"
-                label={gostMessages.second_guest_title || "Titula drugog gosta"}
+                label={gostMessages.second_guest_title}
                 defaultValue={formData.gost_titula_drugog_gosta}
                 error={errors.gost_titula_drugog_gosta}
                 options={[
-                  { value: "", label: gostMessages.select_title || "Odaberi titulu" },
-                  { value: "Mr", label: "Mr" },
-                  { value: "Mrs", label: "Mrs" },
-                  { value: "Ms", label: "Ms" },
-                  { value: "Dr", label: "Dr" },
+                  { value: "", label: gostMessages.select_title },
+                  { value: "Mr", label: gostMessages.title_mr },
+                  { value: "Mrs", label: gostMessages.title_mrs },
+                  { value: "Ms", label: gostMessages.title_ms },
+                  { value: "Dr", label: gostMessages.title_dr },
                 ]}
               />
               <InputField
                 name="gost_ime_drugog_gosta"
-                label={gostMessages.second_guest_first_name || "Ime drugog gosta"}
+                label={gostMessages.second_guest_first_name}
                 defaultValue={formData.gost_ime_drugog_gosta}
                 error={errors.gost_ime_drugog_gosta}
               />
               <InputField
                 name="gost_prezime_drugog_gosta"
-                label={gostMessages.second_guest_last_name || "Prezime drugog gosta"}
+                label={gostMessages.second_guest_last_name}
                 defaultValue={formData.gost_prezime_drugog_gosta}
                 error={errors.gost_prezime_drugog_gosta}
               />
             </div>
             {/* Dugmad za akcije forme */}
             <FormActions
-              submitLabel={messages.book_now || "Rezerviši"}
-              cancelLabel={messages.cancel || "Otkaži"}
+              submitLabel={messages.book_now}
+              cancelLabel={messages.cancel}
               cancelHref="/rezervacije"
             />
           </form>

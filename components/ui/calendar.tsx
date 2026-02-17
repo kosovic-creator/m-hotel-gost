@@ -14,16 +14,7 @@ import {
 
 import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
-
-const getClientLocale = () => {
-  if (typeof document === "undefined") return "en"
-
-  const docLang = document.documentElement.lang
-  if (docLang === "sr" || docLang === "en") return docLang
-
-  const match = document.cookie.match(/(?:^|; )lang=(sr|en)(?:;|$)/)
-  return match?.[1] ?? "en"
-}
+import { useI18n } from "@/i18n/I18nProvider"
 
 function Calendar({
   className,
@@ -38,6 +29,7 @@ function Calendar({
   buttonVariant?: React.ComponentProps<typeof Button>["variant"]
 }) {
   const defaultClassNames = getDefaultClassNames()
+  const { language } = useI18n()
 
   return (
     <DayPicker
@@ -52,9 +44,7 @@ function Calendar({
       formatters={{
         formatMonthDropdown: (date) => {
           // Custom formatter for Serbian to ensure Latin script
-          const locale = getClientLocale()
-
-          if (locale === 'sr') {
+          if (language === 'sr') {
             const monthsLatin = [
               'Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun',
               'Jul', 'Avg', 'Sep', 'Okt', 'Nov', 'Dec'
@@ -66,9 +56,7 @@ function Calendar({
         },
         formatCaption: (date) => {
           // Custom formatter for Serbian caption to ensure Latin script
-          const locale = getClientLocale()
-
-          if (locale === 'sr') {
+          if (language === 'sr') {
             const monthsLatinFull = [
               'Januar', 'Februar', 'Mart', 'April', 'Maj', 'Juni',
               'Juli', 'Avgust', 'Septembar', 'Oktobar', 'Novembar', 'Decembar'

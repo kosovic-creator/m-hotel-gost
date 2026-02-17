@@ -1,4 +1,9 @@
 {
     "title": "Sobe",
-    "subtitle": "Izaberite svoju savršenu sobu"
+    "subtitle": "Izaberite svoju savršenu sobu",
+    "room": "Soba",
+    "no_image": "Nema slike",
+    "capacity": "Kapacitet",
+    "price": "Cena",
+    "book_room": "Rezerviši sobu"
 }
