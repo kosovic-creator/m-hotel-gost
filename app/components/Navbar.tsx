@@ -18,7 +18,7 @@ export default function Navbar() {
   return (
     <nav className="w-full bg-transparent px-4 py-3 flex justify-between items-center md:px-6 md:py-4 relative z-20 print:hidden">
       {/* Logo & desktop nav */}
-      <div className="flex flex-row items-center gap-4">
+      <div className="flex flex-row items-center gap-2 sm:gap-4">
         <Link href="/" className="text-xl font-bold">
           <span className="font-bold text-sm sm:text-base truncate ">
             <span className="text-gray-800">⭕️ </span>
@@ -26,17 +26,21 @@ export default function Navbar() {
             <span className="text-red-600">{"M-HOTEL Gost".slice(7)}</span>
           </span>
         </Link>
+
+        {/* Rooms link - mobile & desktop */}
+        <Button
+          variant="ghost"
+          size="sm"
+          asChild
+          className="text-amber-500 hover:text-gray-600"
+        >
+          <Link href="/sobe">
+            {tr('rooms')}
+          </Link>
+        </Button>
+
+        {/* Desktop navigation */}
         <div className="hidden sm:block">
-          <Button
-            variant="ghost"
-            size="sm"
-            asChild
-            className="text-amber-500 hover:text-gray-600"
-          >
-            <Link href="/sobe">
-              {tr('rooms')}
-            </Link>
-          </Button>
           <Button
             variant="ghost"
             size="sm"
@@ -62,17 +66,6 @@ export default function Navbar() {
         style={{ willChange: "transform" }}
       >
         <div className="flex flex-col h-full p-4 gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            asChild
-            onClick={() => setMenuOpen(false)}
-            className="text-amber-500 hover:text-gray-300"
-          >
-            <Link href="/sobe">
-              {tr('rooms')}
-            </Link>
-          </Button>
           <Button
             variant="ghost"
             size="sm"
@@ -116,16 +109,41 @@ export default function Navbar() {
         />
       )}
 
-      {/* Hamburger icon for mobile */}
-      <button
-        className="sm:hidden flex flex-col justify-center items-center w-10 h-10 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
-        onClick={() => setMenuOpen((v) => !v)}
-        aria-label={tr('open_menu')}
-      >
-        <span className="block w-6 h-0.5 bg-white mb-1"></span>
-        <span className="block w-6 h-0.5 bg-white mb-1"></span>
-        <span className="block w-6 h-0.5 bg-white"></span>
-      </button>
+      {/* Mobile nav controls */}
+      <div className="sm:hidden flex items-center gap-2">
+        {/* Language buttons for mobile */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => handleChangeLanguage("en")}
+          className={`px-2 py-1 text-xs font-medium ${language === "en" ? "text-amber-500" : "text-gray-300"} hover:text-amber-400`}
+        >
+          <span role="img" aria-label="EN">
+            🇬🇧
+          </span>
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => handleChangeLanguage("sr")}
+          className={`px-2 py-1 text-xs font-medium ${language === "sr" ? "text-amber-500" : "text-gray-300"} hover:text-amber-400`}
+        >
+          <span role="img" aria-label="SR">
+            🇲🇪
+          </span>
+        </Button>
+
+        {/* Hamburger icon */}
+        <button
+          className="flex flex-col justify-center items-center w-10 h-10 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-label={tr('open_menu')}
+        >
+          <span className="block w-6 h-0.5 bg-white mb-1"></span>
+          <span className="block w-6 h-0.5 bg-white mb-1"></span>
+          <span className="block w-6 h-0.5 bg-white"></span>
+        </button>
+      </div>
 
       {/* Desktop nav */}
       <div className="hidden sm:flex items-center gap-4">

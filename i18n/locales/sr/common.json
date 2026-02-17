@@ -48,5 +48,16 @@
   "image_upload_hint": "Prevucite slike ovde ili kliknite da izaberete",
   "image_upload_select": "Izaberite slike",
   "image_upload_preview": "Pregled",
-  "uploading": "Ucitavanje..."
+  "uploading": "Ucitavanje...",
+  "footer_description": "Vaš omiljeni hotel za udoban i luksuzni boravak sa najjednostavnijom rezervacijom",
+  "footer_quick_links": "Brze veze",
+  "footer_home": "Početna",
+  "footer_rooms": "Sobe",
+  "footer_reservations": "Rezervacije",
+  "footer_about": "O hotelu",
+  "footer_email": "info@mhotel.com",
+  "footer_phone": "+381 60 123 4567",
+  "footer_follow_us": "Pratite nas",
+  "footer_privacy_policy": "Politika privatnosti",
+  "footer_terms_conditions": "Uslovi korišćenja"
 }

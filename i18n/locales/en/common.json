@@ -39,5 +39,16 @@
   "image_upload_hint": "Drag images here or click to select",
   "image_upload_select": "Select images",
   "image_upload_preview": "Preview",
-  "uploading": "Uploading..."
+  "uploading": "Uploading...",
+  "footer_description": "Your favorite hotel for a comfortable and luxurious stay with the simplest reservations",
+  "footer_quick_links": "Quick Links",
+  "footer_home": "Home",
+  "footer_rooms": "Rooms",
+  "footer_reservations": "Reservations",
+  "footer_about": "About Hotel",
+  "footer_email": "info@mhotel.com",
+  "footer_phone": "+381 60 123 4567",
+  "footer_follow_us": "Follow Us",
+  "footer_privacy_policy": "Privacy Policy",
+  "footer_terms_conditions": "Terms of Service"
 }
