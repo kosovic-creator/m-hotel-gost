@@ -21,12 +21,19 @@ export function I18nProvider({
   children: ReactNode;
   initialLang?: Language;
 }) {
+  // Synchronously set the language before first render to avoid hydration mismatch
+  if (i18n.language !== initialLang) {
+    i18n.changeLanguage(initialLang);
+  }
+
   const [language, setLanguageState] = useState<Language>(initialLang);
   const router = useRouter();
 
-  // Inicijalizuj i18next sa početnim jezikom
+  // Keep i18next in sync when language state changes (for language switching)
   useEffect(() => {
-    i18n.changeLanguage(language);
+    if (i18n.language !== language) {
+      i18n.changeLanguage(language);
+    }
   }, [language]);
 
   const setLanguage = (lang: Language) => {

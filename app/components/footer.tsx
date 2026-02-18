@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { useI18n } from '@/i18n/I18nProvider';
 import Link from 'next/link';
-
+import { FaMapLocationDot, FaPhone, FaEnvelope, FaFacebook, FaInstagram, FaLinkedin } from 'react-icons/fa6';
 export function Footer() {
   const { t } = useI18n();
   const tr = (key: string) => t('common', key);
@@ -52,14 +53,22 @@ export function Footer() {
                   <span className="text-amber-500">›</span> {tr('footer_reservations')}
                 </Link>
               </li>
-              <li>
-                <Link href="/mapa" className="text-gray-400 hover:text-amber-500 transition-colors text-sm flex items-center gap-2">
-                  <span className="text-amber-500">›</span> {tr('footer_map')}
-                </Link>
-              </li>
+
               <li>
                 <Link href="/o_hotelu" className="text-gray-400 hover:text-amber-500 transition-colors text-sm flex items-center gap-2">
                   <span className="text-amber-500">›</span> {tr('footer_about')}
+                </Link>
+              </li>
+              <li>
+                {/* <Link href="/mapa" className="text-gray-400 hover:text-amber-500 transition-colors text-sm flex items-center gap-2">
+                  <span className="text-amber-500">›</span> {tr('footer_map')}
+                </Link> */}
+                <Link href="/mapa" className="text-slate-400 hover:text-amber-400 transition-colors duration-200 text-sm flex items-center gap-2">
+                  <svg className="w-5 h-5 text-amber-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 11.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 10.5c0 5.5-7 11-7 11s-7-5.5-7-11a7 7 0 1114 0z" />
+                  </svg>
+                  {tr('footer_map')}
                 </Link>
               </li>
             </ul>
