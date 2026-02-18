@@ -8,9 +8,9 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative mt-auto bg-gradient-to-b from-black/80 to-black border-t border-amber-600/30 text-gray-300">
+    <footer className="relative mt-auto bg-linear-to-b from-black/80 to-black border-t border-amber-600/30 text-gray-300">
       {/* Decorative top line */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-transparent via-amber-500 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Main Footer Content */}
@@ -53,6 +53,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/mapa" className="text-gray-400 hover:text-amber-500 transition-colors text-sm flex items-center gap-2">
+                  <span className="text-amber-500">›</span> {tr('footer_map')}
+                </Link>
+              </li>
+              <li>
                 <Link href="/o_hotelu" className="text-gray-400 hover:text-amber-500 transition-colors text-sm flex items-center gap-2">
                   <span className="text-amber-500">›</span> {tr('footer_about')}
                 </Link>
@@ -68,7 +73,7 @@ export function Footer() {
             </h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-amber-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
                 <span className="text-gray-400 text-sm hover:text-amber-500 transition-colors cursor-pointer">
@@ -76,7 +81,7 @@ export function Footer() {
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-amber-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
                 <span className="text-gray-400 text-sm hover:text-amber-500 transition-colors cursor-pointer">

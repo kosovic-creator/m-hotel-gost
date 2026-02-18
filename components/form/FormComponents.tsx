@@ -37,7 +37,7 @@ export function FormWrapper({
             </p>
           )}
         </div>
-        <form action={action} className="space-y-6" noValidate={noValidate}>
+        <form action={action} className="space-y-4" noValidate={noValidate}>
           {children}
           <FormActions
             submitLabel={submitLabel}
@@ -89,7 +89,7 @@ export function FormField({ label, error, required, className = '', children }: 
   return (
     <div className={className}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
@@ -194,8 +194,8 @@ export function SelectField({
   onChange,
 }: SelectFieldProps) {
   const selectClassName = readOnly
-    ? `h-9 w-full rounded-md border border-Input px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive disabled:cursor-not-allowed disabled:opacity-50 dark:bg-Input/30 bg-gray-100 cursor-not-allowed pointer-events-none ${className}`
-    : `h-9 w-full rounded-md border border-Input bg-transparent px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive disabled:cursor-not-allowed disabled:opacity-50 dark:bg-Input/30 ${className}`;
+    ? `h-8 w-full rounded-md border border-Input px-2.5 py-0.5 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive disabled:cursor-not-allowed disabled:opacity-50 dark:bg-Input/30 bg-gray-100 cursor-not-allowed pointer-events-none ${className}`
+    : `h-8 w-full rounded-md border border-Input bg-transparent px-2.5 py-0.5 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive disabled:cursor-not-allowed disabled:opacity-50 dark:bg-Input/30 ${className}`;
 
   // Ako koristimo value (kontrolisana komponenta), osiguraj da je string
   const selectValue = value !== undefined ? String(value) : (defaultValue !== undefined ? String(defaultValue) : '');

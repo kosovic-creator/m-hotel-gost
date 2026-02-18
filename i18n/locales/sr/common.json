@@ -24,8 +24,8 @@
   "errorExists": "Zapis već postoji",
   "errorNotFound": "Zapis nije pronađen",
   "form_description": "Popunite sva obavezna polja označena sa *",
-  "print": "Štampaj"
-  ,
+  "print": "Štampaj",
+  "footer_map": "Mapa",
   "id_label": "ID",
   "footer_rights": "Sva prava zadržana.",
   "footer_brand": "M-Hotel",

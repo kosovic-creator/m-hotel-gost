@@ -43,7 +43,7 @@ export default function Navbar() {
         </Button>
 
         {/* Desktop navigation */}
-        <div className="hidden sm:block">
+        {/* <div className="hidden sm:block">
           <Button
             variant="ghost"
             size="sm"
@@ -55,7 +55,7 @@ export default function Navbar() {
               {tr('about')}
             </Link>
           </Button>
-        </div>
+        </div> */}
       </div>
 
       {/* Mobile nav sidebar */}
@@ -68,7 +68,7 @@ export default function Navbar() {
         `}
         style={{ willChange: "transform" }}
       >
-        <div className="flex flex-col h-full p-4 gap-2">
+        {/* <div className="flex flex-col h-full p-4 gap-2">
           <Button
             variant="ghost"
             size="sm"
@@ -80,7 +80,7 @@ export default function Navbar() {
               {tr('about')}
             </Link>
           </Button>
-        </div>
+        </div> */}
       </div>
 
       {/* Overlay for sidebar */}
