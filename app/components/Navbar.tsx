@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useState } from "react";
+import Image from "next/image";
 import { useI18n } from "@/i18n/I18nProvider";
 
 export default function Navbar() {
@@ -20,11 +21,13 @@ export default function Navbar() {
       {/* Logo & desktop nav */}
       <div className="flex flex-row items-center gap-2 sm:gap-4">
         <Link href="/" className="text-xl font-bold">
-          <span className="font-bold text-sm sm:text-base truncate ">
-            <span className="text-gray-800">⭕️ </span>
-            <span className="text-gray-800">{"M-HOTEL Gost".slice(0, 7)}</span>
-            <span className="text-red-600">{"M-HOTEL Gost".slice(7)}</span>
-          </span>
+          <Image
+            src="/apple-touch-icon.png"
+            alt="M-HOTEL Gost"
+            width={40}
+            height={40}
+            className="w-8 h-8 sm:w-10 sm:h-10"
+          />
         </Link>
 
         {/* Rooms link - mobile & desktop */}
@@ -32,7 +35,7 @@ export default function Navbar() {
           variant="ghost"
           size="sm"
           asChild
-          className="text-amber-500 hover:text-gray-600"
+          className="text-amber-500 hover:text-gray-600 text-lg sm:text-base"
         >
           <Link href="/sobe">
             {tr('rooms')}
@@ -46,7 +49,7 @@ export default function Navbar() {
             size="sm"
             asChild
             onClick={() => setMenuOpen(false)}
-            className="text-amber-500 hover:text-gray-300"
+            className="text-amber-500 hover:text-gray-300 text-lg"
           >
             <Link href="/o_hotelu">
               {tr('about')}
@@ -77,27 +80,6 @@ export default function Navbar() {
               {tr('about')}
             </Link>
           </Button>
-          {/* Language buttons */}
-          <div className="flex flex-col gap-2 border-t border-gray-700 pt-4 mt-4">
-            <Button
-              variant="ghost"
-              onClick={() => handleChangeLanguage("en")}
-              className={`flex items-center gap-1 text-white hover:text-gray-400 ${language === "en" ? "font-bold" : ""}`}
-            >
-              <span role="img" aria-label="EN">
-                🇬🇧
-              </span>
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() => handleChangeLanguage("sr")}
-              className={`flex items-center gap-1 text-white hover:text-gray-400 ${language === "sr" ? "font-bold" : ""}`}
-            >
-              <span role="img" aria-label="MN">
-                🇲🇪
-              </span>
-            </Button>
-          </div>
         </div>
       </div>
 
@@ -116,7 +98,7 @@ export default function Navbar() {
           variant="ghost"
           size="sm"
           onClick={() => handleChangeLanguage("en")}
-          className={`px-2 py-1 text-xs font-medium ${language === "en" ? "text-amber-500" : "text-gray-300"} hover:text-amber-400`}
+          className={`px-2 py-1 text-lg font-medium ${language === "en" ? "text-amber-500" : "text-gray-300"} hover:text-amber-400`}
         >
           <span role="img" aria-label="EN">
             🇬🇧
@@ -126,7 +108,7 @@ export default function Navbar() {
           variant="ghost"
           size="sm"
           onClick={() => handleChangeLanguage("sr")}
-          className={`px-2 py-1 text-xs font-medium ${language === "sr" ? "text-amber-500" : "text-gray-300"} hover:text-amber-400`}
+          className={`px-2 py-1 text-lg font-medium ${language === "sr" ? "text-amber-500" : "text-gray-300"} hover:text-amber-400`}
         >
           <span role="img" aria-label="SR">
             🇲🇪
@@ -150,22 +132,20 @@ export default function Navbar() {
         <Button
           variant="ghost"
           onClick={() => handleChangeLanguage("en")}
-          className={`flex items-center gap-1 text-white hover:text-gray-400 ${language === "en" ? "font-bold" : ""}`}
+          className={`flex items-center gap-1 text-2xl text-white hover:text-gray-400 ${language === "en" ? "font-bold" : ""}`}
         >
           <span role="img" aria-label="EN">
             🇬🇧
-          </span>{" "}
-          {tr('language_en')}
+          </span>
         </Button>
         <Button
           variant="ghost"
           onClick={() => handleChangeLanguage("sr")}
-          className={`flex items-center gap-1 text-white hover:text-gray-400 ${language === "sr" ? "font-bold" : ""}`}
+          className={`flex items-center gap-1 text-2xl text-white hover:text-gray-400 ${language === "sr" ? "font-bold" : ""}`}
         >
           <span role="img" aria-label="MN">
             🇲🇪
-          </span>{" "}
-          {tr('language_sr')}
+          </span>
         </Button>
       </div>
     </nav>
