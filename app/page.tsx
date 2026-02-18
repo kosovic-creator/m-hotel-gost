@@ -48,7 +48,7 @@ export default async function HomePage() {
             </div>
 
             {/* Stats Section */}
-            <div className="flex flex-col md:flex-row justify-center gap-8 md:gap-16 mt-16 pt-8 border-t border-white/20">
+            {/* <div className="flex flex-col md:flex-row justify-center gap-8 md:gap-16 mt-16 pt-8 border-t border-white/20">
               <div>
                 <p className="text-3xl md:text-4xl font-bold">25+</p>
                 <p className="text-sm text-gray-200">
@@ -67,12 +67,12 @@ export default async function HomePage() {
                   {t.home_reviews}
                 </p>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        {/* <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
           <svg
             className="w-6 h-6 text-white opacity-70"
             fill="none"
@@ -86,7 +86,7 @@ export default async function HomePage() {
               d="M19 14l-7 7m0 0l-7-7m7 7V3"
             />
           </svg>
-        </div>
+        </div> */}
       </div>
     </>
   );
