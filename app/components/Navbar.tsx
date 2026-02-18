@@ -42,20 +42,6 @@ export default function Navbar() {
           </Link>
         </Button>
 
-        {/* Desktop navigation */}
-        {/* <div className="hidden sm:block">
-          <Button
-            variant="ghost"
-            size="sm"
-            asChild
-            onClick={() => setMenuOpen(false)}
-            className="text-amber-500 hover:text-gray-300 text-lg"
-          >
-            <Link href="/o_hotelu">
-              {tr('about')}
-            </Link>
-          </Button>
-        </div> */}
       </div>
 
       {/* Mobile nav sidebar */}
@@ -68,19 +54,7 @@ export default function Navbar() {
         `}
         style={{ willChange: "transform" }}
       >
-        {/* <div className="flex flex-col h-full p-4 gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            asChild
-            onClick={() => setMenuOpen(false)}
-            className="text-amber-500 hover:text-gray-300"
-          >
-            <Link href="/o_hotelu">
-              {tr('about')}
-            </Link>
-          </Button>
-        </div> */}
+       
       </div>
 
       {/* Overlay for sidebar */}
