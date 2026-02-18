@@ -13,7 +13,7 @@ cp .env.example .env.local
 ### 2. Unesite email kredencijale
 
 Za **Gmail** (preporučeno):
-
+a
 ```env
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
