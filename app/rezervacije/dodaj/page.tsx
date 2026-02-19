@@ -74,6 +74,7 @@ const DodajRezervacijuPage = async ({
                 defaultValue={formData.prijava}
                 error={errors.prijava}
                 required
+                className="text-center sm:text-left"
               />
               <InputField
                 name="odjava"
@@ -82,6 +83,7 @@ const DodajRezervacijuPage = async ({
                 defaultValue={formData.odjava}
                 error={errors.odjava}
                 required
+                className="text-center sm:text-left"
               />
               <InputField
                 name="broj_osoba"
